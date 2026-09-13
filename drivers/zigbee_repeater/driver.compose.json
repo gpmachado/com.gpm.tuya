@@ -1,0 +1,28 @@
+{
+  "id": "zigbee_repeater",
+  "name": {
+    "en": "Zigbee Repeater",
+    "es": "Repetidor Zigbee",
+    "it": "Ripetitore Zigbee",
+    "de": "Zigbee-Repeater"
+  },
+  "class": "other",
+  "capabilities": ["is_availability"],
+  "zigbee": {
+    "manufacturerName": ["_TZ3000_nkkl7uzv"],
+    "productId": ["TS0207"],
+    "endpoints": {
+      "1": { "clusters": [0, 3, 10] }
+    },
+    "learnmode": {
+      "image": "{{driverAssetsPath}}/icon.svg",
+      "instruction": {
+        "en": "Put the device in a USB slot and let it power up.",
+        "es": "Introduce el dispositivo en un puerto USB y deja que se encienda.",
+        "it": "Inserisci il dispositivo in una porta USB e lascia che si accenda.",
+        "de": "Stecke das Gerät in einen USB-Anschluss und lass es hochfahren."
+      }
+    }
+  },
+  "$extends": ["zigbee-local"]
+}

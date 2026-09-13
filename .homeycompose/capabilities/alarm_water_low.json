@@ -1,0 +1,13 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Low Liquid Level",
+    "de": "Niedriger Flüssigkeitsstand",
+    "es": "Nivel bajo de líquido",
+    "it": "Livello basso del liquido"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/capabilities/water-level-down.svg"
+}

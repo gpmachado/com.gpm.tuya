@@ -1,0 +1,95 @@
+'use strict';
+
+const { ZigBeeDevice } = require('homey-zigbeedriver');
+const AvailabilityManager = require('../../lib/AvailabilityManager');
+const { AvailabilityManagerPassive } = AvailabilityManager;
+const { readAttrCatch } = require('../../lib/errorUtils');
+const { HEARTBEAT_MEDIUM_MS, ZIGBEE_REPEATER_PING_INTERVAL_MS } = require('../../lib/constants');
+const { TimeServerBoundCluster } = require('../../lib/TimeCluster');
+
+
+class ZigbeeRepeaterDevice extends ZigBeeDevice {
+
+  async onNodeInit({ zclNode }) {
+    this.log('Repeater init:', this.getName());
+
+    // Migrate existing paired devices: add is_availability if missing
+    if (!this.hasCapability('is_availability'))
+      await this.addCapability('is_availability').catch(err => this.error('addCapability is_availability:', err));
+
+    // Passive availability watchdog — install FIRST so the ZCL response to
+    // readAttributes below updates last_seen_ts and fires onBecameAvailable.
+    this._availability = new AvailabilityManagerPassive(this, {
+      timeout: HEARTBEAT_MEDIUM_MS,
+    });
+    await this._availability.install();
+
+    // Read basic attributes once to confirm communication on first contact.
+    await zclNode.endpoints[1].clusters.basic
+      .readAttributes(['manufacturerName', 'modelId', 'appVersion'])
+      .then(attrs => this.log('[basic]', attrs))
+      .catch(readAttrCatch(this, '[basic] readAttributes', { markOffline: true }));
+
+    // Silence ZCL time cluster frames (repeater probes coordinator's time cluster)
+    try { zclNode.endpoints[1].bind('time', new TimeServerBoundCluster()); } catch {}
+
+    // TS0207 sends no spontaneous ZCL frames — active ping every 30 min keeps
+    // the availability watchdog alive (same pattern as Hubitat generic repeater).
+    this._pingInterval = this.homey.setInterval(() => {
+      if (!this.zclNode) return;
+      this.zclNode.endpoints[1].clusters.basic
+        .readAttributes(['manufacturerName'])
+        .catch(() => {});
+    }, ZIGBEE_REPEATER_PING_INTERVAL_MS);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Availability helpers
+  // ---------------------------------------------------------------------------
+
+  onEndDeviceAnnounce() {
+    // ZDO Device Announce is a reliable "I'm back" signal. Actively restore
+    // availability instead of waiting for a spontaneous frame — a quiet router
+    // (further silenced by TimeServerBoundCluster) may not send one, leaving it
+    // stuck as unavailable after it physically returns to the network.
+    this.log('Rejoined (ZDO announce) — restoring availability');
+    this._availability?.notifyActivity('rejoin').catch(() => {});
+  }
+
+  // onUninit fires on re-init/restart (onDeleted only on user removal).
+  async onUninit() {
+    await this._teardown();
+  }
+
+  onDeleted() {
+    this._teardown();
+    this.log('Repeater removed');
+  }
+
+  /** Idempotent cleanup — safe to call from both onUninit and onDeleted. */
+  async _teardown() {
+    if (this._pingInterval) {
+      this.homey.clearInterval(this._pingInterval);
+      this._pingInterval = null;
+    }
+    await this._availability?.uninstall().catch(() => {});
+  }
+
+  // ---------------------------------------------------------------------------
+  // Availability Flow Engine
+  // ---------------------------------------------------------------------------
+
+  async onBecameAvailable() {
+    this.log('Device became available');
+    if (super.onBecameAvailable) await super.onBecameAvailable();
+    // AvailabilityManager._markAllAvailable already fires the flow trigger.
+  }
+
+  async onBecameUnavailable(reason) {
+    this.log(`Device became unavailable (${reason})`);
+    if (super.onBecameUnavailable) await super.onBecameUnavailable(reason);
+    // AvailabilityManager._markAllUnavailable already fires the flow trigger.
+  }
+}
+
+module.exports = ZigbeeRepeaterDevice;

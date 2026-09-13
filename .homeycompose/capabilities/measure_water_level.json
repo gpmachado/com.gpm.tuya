@@ -1,0 +1,23 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Liquid Depth",
+    "de": "Flüssigkeitstiefe",
+    "es": "Profundidad del líquido",
+    "it": "Profondità del liquido"
+  },
+  "units": {
+    "en": "cm",
+    "de": "cm",
+    "es": "cm",
+    "it": "cm"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/capabilities/water-depth.svg",
+  "insights": true,
+  "decimals": 1,
+  "min": 0,
+  "max": 400
+}

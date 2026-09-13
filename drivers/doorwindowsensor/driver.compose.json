@@ -1,0 +1,60 @@
+{
+  "id": "doorwindowsensor",
+  "name": {
+    "en": "Door & Window Sensor",
+    "de": "Tür- und Fenstersensor",
+    "es": "Sensor de puerta y ventana",
+    "it": "Sensore porta e finestra"
+  },
+  "class": "sensor",
+  "platforms": ["local"],
+  "connectivity": ["zigbee"],
+  "capabilities": [
+    "alarm_contact",
+    "measure_battery",
+    "alarm_battery",
+    "is_availability"
+  ],
+  "energy": {
+    "batteries": [
+      "CR2032"
+    ]
+  },
+  "images": {
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "small": "{{driverAssetsPath}}/images/small.png"
+  },
+  "zigbee": {
+    "manufacturerName": [
+      "_TZ3000_7tbsruql",
+      "_TZ3000_osu834un"
+    ],
+    "productId": [
+      "TS0203"
+    ],
+    "endpoints": {
+      "1": {
+        "clusters": [
+          0,
+          1,
+          3,
+          1280
+        ],
+        "bindings": [
+          1,
+          1280
+        ]
+      }
+    },
+    "learnmode": {
+      "image": "{{driverAssetsPath}}/icon.svg",
+      "instruction": {
+        "en": "Open the device and press the reset button gently for aprox 10 seconds until the LED blinks rapidly. After pairing completes, open and close the sensor a few times — this helps it set up reliable battery and status reporting.",
+        "de": "Öffne das Gerät und drücke die Reset-Taste vorsichtig etwa 10 Sekunden lang, bis die LED schnell blinkt. Öffne und schließe den Sensor nach Abschluss der Kopplung ein paar Mal — das hilft, eine zuverlässige Batterie- und Statusmeldung einzurichten.",
+        "es": "Abre el dispositivo y pulsa suavemente el botón de reinicio durante aprox. 10 segundos hasta que el LED parpadee rápidamente. Cuando termine el emparejamiento, abre y cierra el sensor varias veces — esto ayuda a establecer un reporte fiable de batería y estado.",
+        "it": "Apri il dispositivo e premi delicatamente il pulsante di reset per circa 10 secondi finché il LED non lampeggia rapidamente. Al termine dell'associazione, apri e chiudi il sensore alcune volte — questo aiuta a stabilire un report affidabile di batteria e stato."
+      }
+    }
+  }
+}

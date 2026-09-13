@@ -1,0 +1,116 @@
+{
+  "id": "com.gpm.tuya",
+  "version": "1.0.0",
+  "compatibility": ">=12.4.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "My Tuya Devices",
+    "es": "My Tuya Devices",
+    "it": "My Tuya Devices",
+    "de": "My Tuya Devices"
+  },
+  "description": {
+    "en": "Add support for Tuya Zigbee devices: switches, sirens, sensors and more",
+    "es": "Añade compatibilidad con dispositivos Tuya Zigbee: interruptores, sirenas, sensores y más",
+    "it": "Aggiunge il supporto per dispositivi Tuya Zigbee: interruttori, sirene, sensori e altro",
+    "de": "Fügt Unterstützung für Tuya-Zigbee-Geräte hinzu: Schalter, Sirenen, Sensoren und mehr"
+  },
+  "category": [
+    "appliances"
+  ],
+  "tags": {
+    "en": [
+      "zigbee",
+      "tuya",
+      "switch",
+      "sensor",
+      "smart plug",
+      "power strip",
+      "power metering",
+      "temperature",
+      "humidity",
+      "gas detector",
+      "siren",
+      "door sensor",
+      "window sensor"
+    ],
+    "es": [
+      "zigbee",
+      "tuya",
+      "interruptor",
+      "sensor",
+      "enchufe inteligente",
+      "regleta",
+      "medición de energía",
+      "temperatura",
+      "humedad",
+      "detector de gas",
+      "sirena",
+      "sensor de puerta",
+      "sensor de ventana"
+    ],
+    "it": [
+      "zigbee",
+      "tuya",
+      "interruttore",
+      "sensore",
+      "presa intelligente",
+      "ciabatta",
+      "misurazione energia",
+      "temperatura",
+      "umidità",
+      "rilevatore gas",
+      "sirena",
+      "sensore porta",
+      "sensore finestra"
+    ],
+    "de": [
+      "zigbee",
+      "tuya",
+      "schalter",
+      "sensor",
+      "smart plug",
+      "steckdosenleiste",
+      "energiemessung",
+      "temperatur",
+      "feuchtigkeit",
+      "gasdetektor",
+      "sirene",
+      "türsensor",
+      "fenstersensor"
+    ]
+  },
+  "brandColor": "#FF4800",
+  "support": "mailto:g.machado@me.com",
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Gabriel Pedrosa Machado",
+    "email": "g.machado@me.com"
+  },
+  "api": {
+    "getMessageStats": {
+      "method": "GET",
+      "path": "/message-stats"
+    },
+    "resetMessageStats": {
+      "method": "POST",
+      "path": "/message-stats/reset"
+    },
+    "resetRejoinStats": {
+      "method": "POST",
+      "path": "/rejoin-stats/reset"
+    }
+  },
+  "dependencies": {
+    "homey-zigbeedriver": "^2.2.17",
+    "zigbee-clusters": "^3.2.1"
+  }
+}

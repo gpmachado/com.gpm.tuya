@@ -1,0 +1,2873 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "com.gpm.tuya",
+  "version": "1.0.0",
+  "compatibility": ">=12.4.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "My Tuya Devices",
+    "es": "My Tuya Devices",
+    "it": "My Tuya Devices",
+    "de": "My Tuya Devices"
+  },
+  "description": {
+    "en": "Add support for Tuya Zigbee devices: switches, sirens, sensors and more",
+    "es": "Añade compatibilidad con dispositivos Tuya Zigbee: interruptores, sirenas, sensores y más",
+    "it": "Aggiunge il supporto per dispositivi Tuya Zigbee: interruttori, sirene, sensori e altro",
+    "de": "Fügt Unterstützung für Tuya-Zigbee-Geräte hinzu: Schalter, Sirenen, Sensoren und mehr"
+  },
+  "category": [
+    "appliances"
+  ],
+  "tags": {
+    "en": [
+      "zigbee",
+      "tuya",
+      "switch",
+      "sensor",
+      "smart plug",
+      "power strip",
+      "power metering",
+      "temperature",
+      "humidity",
+      "gas detector",
+      "siren",
+      "door sensor",
+      "window sensor"
+    ],
+    "es": [
+      "zigbee",
+      "tuya",
+      "interruptor",
+      "sensor",
+      "enchufe inteligente",
+      "regleta",
+      "medición de energía",
+      "temperatura",
+      "humedad",
+      "detector de gas",
+      "sirena",
+      "sensor de puerta",
+      "sensor de ventana"
+    ],
+    "it": [
+      "zigbee",
+      "tuya",
+      "interruttore",
+      "sensore",
+      "presa intelligente",
+      "ciabatta",
+      "misurazione energia",
+      "temperatura",
+      "umidità",
+      "rilevatore gas",
+      "sirena",
+      "sensore porta",
+      "sensore finestra"
+    ],
+    "de": [
+      "zigbee",
+      "tuya",
+      "schalter",
+      "sensor",
+      "smart plug",
+      "steckdosenleiste",
+      "energiemessung",
+      "temperatur",
+      "feuchtigkeit",
+      "gasdetektor",
+      "sirene",
+      "türsensor",
+      "fenstersensor"
+    ]
+  },
+  "brandColor": "#FF4800",
+  "support": "mailto:g.machado@me.com",
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Gabriel Pedrosa Machado",
+    "email": "g.machado@me.com"
+  },
+  "api": {
+    "getMessageStats": {
+      "method": "GET",
+      "path": "/message-stats"
+    },
+    "resetMessageStats": {
+      "method": "POST",
+      "path": "/message-stats/reset"
+    },
+    "resetRejoinStats": {
+      "method": "POST",
+      "path": "/rejoin-stats/reset"
+    }
+  },
+  "dependencies": {
+    "homey-zigbeedriver": "^2.2.17",
+    "zigbee-clusters": "^3.2.1"
+  },
+  "flow": {
+    "conditions": [
+      {
+        "id": "availability_is_on",
+        "title": {
+          "en": "Availability is on",
+          "es": "Disponibilidad activada",
+          "it": "Disponibilità attiva",
+          "de": "Verfügbarkeit ist aktiv"
+        },
+        "titleFormatted": {
+          "en": "[[device]] is available",
+          "es": "[[device]] está disponible",
+          "it": "[[device]] è disponibile",
+          "de": "[[device]] ist verfügbar"
+        },
+        "hint": {
+          "en": "True when the device is currently online",
+          "es": "Verdadero cuando el dispositivo está actualmente en línea",
+          "it": "Vero quando il dispositivo è attualmente online",
+          "de": "Wahr, wenn das Gerät aktuell online ist"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "capabilities=is_availability"
+          }
+        ]
+      },
+      {
+        "id": "is_playing",
+        "title": {
+          "en": "Siren is !{{playing|not playing}}",
+          "de": "Sirene ist !{{aktiv|inaktiv}}",
+          "es": "La sirena está !{{sonando|sin sonar}}",
+          "it": "La sirena è !{{attiva|non attiva}}"
+        },
+        "titleFormatted": {
+          "en": "[[device]] siren is !{{playing|not playing}}",
+          "de": "Die Sirene von [[device]] ist !{{aktiv|inaktiv}}",
+          "es": "La sirena de [[device]] está !{{sonando|sin sonar}}",
+          "it": "La sirena di [[device]] è !{{attiva|non attiva}}"
+        },
+        "hint": {
+          "en": "Check if the siren is currently active.",
+          "de": "Prüft, ob die Sirene derzeit aktiv ist.",
+          "es": "Comprueba si la sirena está activa actualmente.",
+          "it": "Controlla se la sirena è attualmente attiva."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ekaza_siren"
+          }
+        ]
+      }
+    ],
+    "triggers": [
+      {
+        "id": "doorwindowsensor_availability_turned_on",
+        "title": {
+          "en": "Became available",
+          "de": "Wurde verfügbar",
+          "es": "Pasó a estar disponible",
+          "it": "Disponibile"
+        },
+        "hint": {
+          "en": "Fires when this device becomes available.",
+          "de": "Wird ausgelöst, wenn dieses Gerät verfügbar wird.",
+          "es": "Se activa cuando este dispositivo pasa a estar disponible.",
+          "it": "Si attiva quando questo dispositivo diventa disponibile."
+        },
+        "tokens": [
+          {
+            "name": "device_name",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "de": "Gerätename",
+              "es": "Nombre del dispositivo",
+              "it": "Nome del dispositivo"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "title": {
+              "en": "Timestamp",
+              "de": "Zeitstempel",
+              "es": "Marca de tiempo",
+              "it": "Data e ora"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=doorwindowsensor"
+          }
+        ]
+      },
+      {
+        "id": "doorwindowsensor_availability_turned_off",
+        "title": {
+          "en": "Became unavailable",
+          "de": "Wurde nicht verfügbar",
+          "es": "Pasó a no estar disponible",
+          "it": "Non più disponibile"
+        },
+        "hint": {
+          "en": "Fires when this device becomes unavailable.",
+          "de": "Wird ausgelöst, wenn dieses Gerät nicht mehr verfügbar ist.",
+          "es": "Se activa cuando este dispositivo deja de estar disponible.",
+          "it": "Si attiva quando questo dispositivo non è più disponibile."
+        },
+        "tokens": [
+          {
+            "name": "device_name",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "de": "Gerätename",
+              "es": "Nombre del dispositivo",
+              "it": "Nome del dispositivo"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "title": {
+              "en": "Timestamp",
+              "de": "Zeitstempel",
+              "es": "Marca de tiempo",
+              "it": "Data e ora"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=doorwindowsensor"
+          }
+        ]
+      },
+      {
+        "id": "doorwindowsensor_2_availability_turned_on",
+        "title": {
+          "en": "Became available",
+          "de": "Wurde verfügbar",
+          "es": "Pasó a estar disponible",
+          "it": "Disponibile"
+        },
+        "hint": {
+          "en": "Fires when this device becomes available.",
+          "de": "Wird ausgelöst, wenn dieses Gerät verfügbar wird.",
+          "es": "Se activa cuando este dispositivo pasa a estar disponible.",
+          "it": "Si attiva quando questo dispositivo diventa disponibile."
+        },
+        "tokens": [
+          {
+            "name": "device_name",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "de": "Gerätename",
+              "es": "Nombre del dispositivo",
+              "it": "Nome del dispositivo"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "title": {
+              "en": "Timestamp",
+              "de": "Zeitstempel",
+              "es": "Marca de tiempo",
+              "it": "Data e ora"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=doorwindowsensor_2"
+          }
+        ]
+      },
+      {
+        "id": "doorwindowsensor_2_availability_turned_off",
+        "title": {
+          "en": "Became unavailable",
+          "de": "Wurde nicht verfügbar",
+          "es": "Pasó a no estar disponible",
+          "it": "Non più disponibile"
+        },
+        "hint": {
+          "en": "Fires when this device becomes unavailable.",
+          "de": "Wird ausgelöst, wenn dieses Gerät nicht mehr verfügbar ist.",
+          "es": "Se activa cuando este dispositivo deja de estar disponible.",
+          "it": "Si attiva quando questo dispositivo non è più disponibile."
+        },
+        "tokens": [
+          {
+            "name": "device_name",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "de": "Gerätename",
+              "es": "Nombre del dispositivo",
+              "it": "Nome del dispositivo"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "title": {
+              "en": "Timestamp",
+              "de": "Zeitstempel",
+              "es": "Marca de tiempo",
+              "it": "Data e ora"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=doorwindowsensor_2"
+          }
+        ]
+      },
+      {
+        "id": "ekaza_siren_availability_turned_on",
+        "title": {
+          "en": "Became available",
+          "de": "Wurde verfügbar",
+          "es": "Pasó a estar disponible",
+          "it": "Disponibile"
+        },
+        "hint": {
+          "en": "Fires when this device becomes available.",
+          "de": "Wird ausgelöst, wenn dieses Gerät verfügbar wird.",
+          "es": "Se activa cuando este dispositivo pasa a estar disponible.",
+          "it": "Si attiva quando questo dispositivo diventa disponibile."
+        },
+        "tokens": [
+          {
+            "name": "device_name",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "de": "Gerätename",
+              "es": "Nombre del dispositivo",
+              "it": "Nome del dispositivo"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "title": {
+              "en": "Timestamp",
+              "de": "Zeitstempel",
+              "es": "Marca de tiempo",
+              "it": "Data e ora"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ekaza_siren"
+          }
+        ]
+      },
+      {
+        "id": "ekaza_siren_availability_turned_off",
+        "title": {
+          "en": "Became unavailable",
+          "de": "Wurde nicht verfügbar",
+          "es": "Pasó a no estar disponible",
+          "it": "Non più disponibile"
+        },
+        "hint": {
+          "en": "Fires when this device becomes unavailable.",
+          "de": "Wird ausgelöst, wenn dieses Gerät nicht mehr verfügbar ist.",
+          "es": "Se activa cuando este dispositivo deja de estar disponible.",
+          "it": "Si attiva quando questo dispositivo non è più disponibile."
+        },
+        "tokens": [
+          {
+            "name": "device_name",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "de": "Gerätename",
+              "es": "Nombre del dispositivo",
+              "it": "Nome del dispositivo"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "title": {
+              "en": "Timestamp",
+              "de": "Zeitstempel",
+              "es": "Marca de tiempo",
+              "it": "Data e ora"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ekaza_siren"
+          }
+        ]
+      },
+      {
+        "id": "siren_activated",
+        "title": {
+          "en": "Siren activated",
+          "de": "Sirene aktiviert",
+          "es": "Sirena activada",
+          "it": "Sirena attivata"
+        },
+        "titleFormatted": {
+          "en": "[[device]] siren was activated",
+          "de": "Die Sirene von [[device]] wurde aktiviert",
+          "es": "La sirena de [[device]] se activó",
+          "it": "La sirena di [[device]] è stata attivata"
+        },
+        "hint": {
+          "en": "Triggered when the siren starts playing.",
+          "de": "Wird ausgelöst, wenn die Sirene zu spielen beginnt.",
+          "es": "Se activa cuando la sirena empieza a sonar.",
+          "it": "Si attiva quando la sirena inizia a suonare."
+        },
+        "tokens": [
+          {
+            "name": "duration",
+            "type": "number",
+            "title": {
+              "en": "Duration (seconds)",
+              "de": "Dauer (Sekunden)",
+              "es": "Duración (segundos)",
+              "it": "Durata (secondi)"
+            },
+            "example": 10
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ekaza_siren"
+          }
+        ]
+      },
+      {
+        "id": "siren_deactivated",
+        "title": {
+          "en": "Siren deactivated",
+          "de": "Sirene deaktiviert",
+          "es": "Sirena desactivada",
+          "it": "Sirena disattivata"
+        },
+        "titleFormatted": {
+          "en": "[[device]] siren was deactivated",
+          "de": "Die Sirene von [[device]] wurde deaktiviert",
+          "es": "La sirena de [[device]] se desactivó",
+          "it": "La sirena di [[device]] è stata disattivata"
+        },
+        "hint": {
+          "en": "Triggered when the siren stops playing (automatic or manual).",
+          "de": "Wird ausgelöst, wenn die Sirene aufhört zu spielen (automatisch oder manuell).",
+          "es": "Se activa cuando la sirena deja de sonar (automático o manual).",
+          "it": "Si attiva quando la sirena smette di suonare (automaticamente o manualmente)."
+        },
+        "tokens": [
+          {
+            "name": "reason",
+            "type": "string",
+            "title": {
+              "en": "Stop reason",
+              "de": "Stoppgrund",
+              "es": "Motivo de parada",
+              "it": "Motivo dell'arresto"
+            },
+            "example": "auto"
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ekaza_siren"
+          }
+        ]
+      },
+      {
+        "id": "gas_detector_availability_turned_on",
+        "title": {
+          "en": "Became available",
+          "de": "Wurde verfügbar",
+          "es": "Pasó a estar disponible",
+          "it": "Disponibile"
+        },
+        "hint": {
+          "en": "Fires when this device becomes available.",
+          "de": "Wird ausgelöst, wenn dieses Gerät verfügbar wird.",
+          "es": "Se activa cuando este dispositivo pasa a estar disponible.",
+          "it": "Si attiva quando questo dispositivo diventa disponibile."
+        },
+        "tokens": [
+          {
+            "name": "device_name",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "de": "Gerätename",
+              "es": "Nombre del dispositivo",
+              "it": "Nome del dispositivo"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "title": {
+              "en": "Timestamp",
+              "de": "Zeitstempel",
+              "es": "Marca de tiempo",
+              "it": "Data e ora"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=gas_detector"
+          }
+        ]
+      },
+      {
+        "id": "gas_detector_availability_turned_off",
+        "title": {
+          "en": "Became unavailable",
+          "de": "Wurde nicht verfügbar",
+          "es": "Pasó a no estar disponible",
+          "it": "Non più disponibile"
+        },
+        "hint": {
+          "en": "Fires when this device becomes unavailable.",
+          "de": "Wird ausgelöst, wenn dieses Gerät nicht mehr verfügbar ist.",
+          "es": "Se activa cuando este dispositivo deja de estar disponible.",
+          "it": "Si attiva quando questo dispositivo non è più disponibile."
+        },
+        "tokens": [
+          {
+            "name": "device_name",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "de": "Gerätename",
+              "es": "Nombre del dispositivo",
+              "it": "Nome del dispositivo"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "title": {
+              "en": "Timestamp",
+              "de": "Zeitstempel",
+              "es": "Marca de tiempo",
+              "it": "Data e ora"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=gas_detector"
+          }
+        ]
+      },
+      {
+        "id": "lcdtemphumidsensor_availability_turned_on",
+        "title": {
+          "en": "Became available",
+          "de": "Wurde verfügbar",
+          "es": "Pasó a estar disponible",
+          "it": "Disponibile"
+        },
+        "hint": {
+          "en": "Fires when this device becomes available.",
+          "de": "Wird ausgelöst, wenn dieses Gerät verfügbar wird.",
+          "es": "Se activa cuando este dispositivo pasa a estar disponible.",
+          "it": "Si attiva quando questo dispositivo diventa disponibile."
+        },
+        "tokens": [
+          {
+            "name": "device_name",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "de": "Gerätename",
+              "es": "Nombre del dispositivo",
+              "it": "Nome del dispositivo"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "title": {
+              "en": "Timestamp",
+              "de": "Zeitstempel",
+              "es": "Marca de tiempo",
+              "it": "Data e ora"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=lcdtemphumidsensor"
+          }
+        ]
+      },
+      {
+        "id": "lcdtemphumidsensor_availability_turned_off",
+        "title": {
+          "en": "Became unavailable",
+          "de": "Wurde nicht verfügbar",
+          "es": "Pasó a no estar disponible",
+          "it": "Non più disponibile"
+        },
+        "hint": {
+          "en": "Fires when this device becomes unavailable.",
+          "de": "Wird ausgelöst, wenn dieses Gerät nicht mehr verfügbar ist.",
+          "es": "Se activa cuando este dispositivo deja de estar disponible.",
+          "it": "Si attiva quando questo dispositivo non è più disponibile."
+        },
+        "tokens": [
+          {
+            "name": "device_name",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "de": "Gerätename",
+              "es": "Nombre del dispositivo",
+              "it": "Nome del dispositivo"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "title": {
+              "en": "Timestamp",
+              "de": "Zeitstempel",
+              "es": "Marca de tiempo",
+              "it": "Data e ora"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=lcdtemphumidsensor"
+          }
+        ]
+      },
+      {
+        "id": "socket_power_strip_availability_turned_on",
+        "title": {
+          "en": "Became available",
+          "de": "Wurde verfügbar",
+          "es": "Pasó a estar disponible",
+          "it": "Disponibile"
+        },
+        "hint": {
+          "en": "Fires when this device becomes available.",
+          "de": "Wird ausgelöst, wenn dieses Gerät verfügbar wird.",
+          "es": "Se activa cuando este dispositivo pasa a estar disponible.",
+          "it": "Si attiva quando questo dispositivo diventa disponibile."
+        },
+        "tokens": [
+          {
+            "name": "device_name",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "de": "Gerätename",
+              "es": "Nombre del dispositivo",
+              "it": "Nome del dispositivo"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "title": {
+              "en": "Timestamp",
+              "de": "Zeitstempel",
+              "es": "Marca de tiempo",
+              "it": "Data e ora"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=socket_power_strip"
+          }
+        ]
+      },
+      {
+        "id": "socket_power_strip_availability_turned_off",
+        "title": {
+          "en": "Became unavailable",
+          "de": "Wurde nicht verfügbar",
+          "es": "Pasó a no estar disponible",
+          "it": "Non più disponibile"
+        },
+        "hint": {
+          "en": "Fires when this device becomes unavailable.",
+          "de": "Wird ausgelöst, wenn dieses Gerät nicht mehr verfügbar ist.",
+          "es": "Se activa cuando este dispositivo deja de estar disponible.",
+          "it": "Si attiva quando questo dispositivo non è più disponibile."
+        },
+        "tokens": [
+          {
+            "name": "device_name",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "de": "Gerätename",
+              "es": "Nombre del dispositivo",
+              "it": "Nome del dispositivo"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "title": {
+              "en": "Timestamp",
+              "de": "Zeitstempel",
+              "es": "Marca de tiempo",
+              "it": "Data e ora"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=socket_power_strip"
+          }
+        ]
+      },
+      {
+        "id": "socket_power_strip_device_rejoined",
+        "title": {
+          "en": "Reconnected after power cut",
+          "de": "Nach Stromausfall wieder verbunden",
+          "es": "Reconectado tras un corte de energía",
+          "it": "Riconnesso dopo un'interruzione di corrente"
+        },
+        "hint": {
+          "en": "Fires when this device reconnects to the Zigbee network after a power cut.",
+          "de": "Wird ausgelöst, wenn sich dieses Gerät nach einem Stromausfall erneut mit dem Zigbee-Netzwerk verbindet.",
+          "es": "Se activa cuando este dispositivo se reconecta a la red Zigbee tras un corte de energía.",
+          "it": "Si attiva quando questo dispositivo si riconnette alla rete Zigbee dopo un'interruzione di corrente."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=socket_power_strip"
+          }
+        ]
+      },
+      {
+        "id": "temphumidclock_availability_turned_on",
+        "title": {
+          "en": "Became available",
+          "de": "Wurde verfügbar",
+          "es": "Pasó a estar disponible",
+          "it": "Disponibile"
+        },
+        "hint": {
+          "en": "Fires when this device becomes available.",
+          "de": "Wird ausgelöst, wenn dieses Gerät verfügbar wird.",
+          "es": "Se activa cuando este dispositivo pasa a estar disponible.",
+          "it": "Si attiva quando questo dispositivo diventa disponibile."
+        },
+        "tokens": [
+          {
+            "name": "device_name",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "de": "Gerätename",
+              "es": "Nombre del dispositivo",
+              "it": "Nome del dispositivo"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "title": {
+              "en": "Timestamp",
+              "de": "Zeitstempel",
+              "es": "Marca de tiempo",
+              "it": "Data e ora"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=temphumidclock"
+          }
+        ]
+      },
+      {
+        "id": "temphumidclock_availability_turned_off",
+        "title": {
+          "en": "Became unavailable",
+          "de": "Wurde nicht verfügbar",
+          "es": "Pasó a no estar disponible",
+          "it": "Non più disponibile"
+        },
+        "hint": {
+          "en": "Fires when this device becomes unavailable.",
+          "de": "Wird ausgelöst, wenn dieses Gerät nicht mehr verfügbar ist.",
+          "es": "Se activa cuando este dispositivo deja de estar disponible.",
+          "it": "Si attiva quando questo dispositivo non è più disponibile."
+        },
+        "tokens": [
+          {
+            "name": "device_name",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "de": "Gerätename",
+              "es": "Nombre del dispositivo",
+              "it": "Nome del dispositivo"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "title": {
+              "en": "Timestamp",
+              "de": "Zeitstempel",
+              "es": "Marca de tiempo",
+              "it": "Data e ora"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=temphumidclock"
+          }
+        ]
+      },
+      {
+        "id": "zigbee_repeater_availability_turned_on",
+        "title": {
+          "en": "Became available",
+          "de": "Wurde verfügbar",
+          "es": "Pasó a estar disponible",
+          "it": "Disponibile"
+        },
+        "hint": {
+          "en": "Fires when this device becomes available.",
+          "de": "Wird ausgelöst, wenn dieses Gerät verfügbar wird.",
+          "es": "Se activa cuando este dispositivo pasa a estar disponible.",
+          "it": "Si attiva quando questo dispositivo diventa disponibile."
+        },
+        "tokens": [
+          {
+            "name": "device_name",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "de": "Gerätename",
+              "es": "Nombre del dispositivo",
+              "it": "Nome del dispositivo"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "title": {
+              "en": "Timestamp",
+              "de": "Zeitstempel",
+              "es": "Marca de tiempo",
+              "it": "Data e ora"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=zigbee_repeater"
+          }
+        ]
+      },
+      {
+        "id": "zigbee_repeater_availability_turned_off",
+        "title": {
+          "en": "Became unavailable",
+          "de": "Wurde nicht verfügbar",
+          "es": "Pasó a no estar disponible",
+          "it": "Non più disponibile"
+        },
+        "hint": {
+          "en": "Fires when this device becomes unavailable.",
+          "de": "Wird ausgelöst, wenn dieses Gerät nicht mehr verfügbar ist.",
+          "es": "Se activa cuando este dispositivo deja de estar disponible.",
+          "it": "Si attiva quando questo dispositivo non è più disponibile."
+        },
+        "tokens": [
+          {
+            "name": "device_name",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "de": "Gerätename",
+              "es": "Nombre del dispositivo",
+              "it": "Nome del dispositivo"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "title": {
+              "en": "Timestamp",
+              "de": "Zeitstempel",
+              "es": "Marca de tiempo",
+              "it": "Data e ora"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=zigbee_repeater"
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "siren_play",
+        "title": {
+          "en": "Play siren with melody",
+          "de": "Sirene mit Melodie abspielen",
+          "es": "Reproducir sirena con melodía",
+          "it": "Riproduci sirena con melodia"
+        },
+        "titleFormatted": {
+          "en": "Play [[melody]] for [[duration]] seconds",
+          "de": "Spiele [[melody]] für [[duration]] Sekunden",
+          "es": "Reproducir [[melody]] durante [[duration]] segundos",
+          "it": "Riproduci [[melody]] per [[duration]] secondi"
+        },
+        "hint": {
+          "en": "Play a specific melody for the given duration (volume is taken from Settings).",
+          "de": "Spielt eine bestimmte Melodie für die angegebene Dauer ab (Lautstärke wird aus den Einstellungen übernommen).",
+          "es": "Reproduce una melodía específica durante la duración indicada (el volumen se toma de Ajustes).",
+          "it": "Riproduce una melodia specifica per la durata indicata (il volume viene preso dalle Impostazioni)."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ekaza_siren"
+          },
+          {
+            "name": "melody",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "0",
+                "label": {
+                  "en": "Doorbell Chime",
+                  "de": "Türklingel",
+                  "es": "Timbre de puerta",
+                  "it": "Campanello porta"
+                }
+              },
+              {
+                "id": "1",
+                "label": {
+                  "en": "Für Elise",
+                  "de": "Für Elise",
+                  "es": "Para Elisa",
+                  "it": "Per Elisa"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "Westminster Chimes",
+                  "de": "Westminster-Glocken",
+                  "es": "Carillón Westminster",
+                  "it": "Rintocchi Westminster"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "Fast Double Doorbell",
+                  "de": "Schnelle Doppelklingel",
+                  "es": "Timbre doble rápido",
+                  "it": "Doppio campanello veloce"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "William Tell Overture",
+                  "de": "Wilhelm Tell Ouvertüre",
+                  "es": "Obertura Guillermo Tell",
+                  "it": "Ouverture Guglielmo Tell"
+                }
+              },
+              {
+                "id": "5",
+                "label": {
+                  "en": "Turkish March",
+                  "de": "Türkischer Marsch",
+                  "es": "Marcha turca",
+                  "it": "Marcia turca"
+                }
+              },
+              {
+                "id": "6",
+                "label": {
+                  "en": "Safe / Security Alarm",
+                  "de": "Sicherheitsalarm",
+                  "es": "Alarma de seguridad",
+                  "it": "Allarme sicurezza"
+                }
+              },
+              {
+                "id": "7",
+                "label": {
+                  "en": "Chemical Spill Alert",
+                  "de": "Chemikalienalarm",
+                  "es": "Alerta de derrame químico",
+                  "it": "Allarme sostanze chimiche"
+                }
+              },
+              {
+                "id": "8",
+                "label": {
+                  "en": "Piercing Alarm Clock",
+                  "de": "Schriller Wecker",
+                  "es": "Despertador estridente",
+                  "it": "Sveglia acuta"
+                }
+              },
+              {
+                "id": "9",
+                "label": {
+                  "en": "Smoke Alarm",
+                  "de": "Rauchmelder",
+                  "es": "Alarma de humo",
+                  "it": "Allarme fumo"
+                }
+              },
+              {
+                "id": "10",
+                "label": {
+                  "en": "Dog Barking",
+                  "de": "Hundegebell",
+                  "es": "Ladrido de perro",
+                  "it": "Abbaiare di cane"
+                }
+              },
+              {
+                "id": "11",
+                "label": {
+                  "en": "Police Siren",
+                  "de": "Polizeisirene",
+                  "es": "Sirena policial",
+                  "it": "Sirena polizia"
+                }
+              },
+              {
+                "id": "12",
+                "label": {
+                  "en": "Doorbell Chime (reverb)",
+                  "de": "Türklingel (Hall)",
+                  "es": "Timbre con reverb",
+                  "it": "Campanello con riverbero"
+                }
+              },
+              {
+                "id": "13",
+                "label": {
+                  "en": "Mechanical Telephone",
+                  "de": "Mechanisches Telefon",
+                  "es": "Teléfono mecánico",
+                  "it": "Telefono meccanico"
+                }
+              },
+              {
+                "id": "14",
+                "label": {
+                  "en": "Fire / Ambulance",
+                  "de": "Feuerwehr / Krankenwagen",
+                  "es": "Bomberos / Ambulancia",
+                  "it": "Pompieri / Ambulanza"
+                }
+              },
+              {
+                "id": "15",
+                "label": {
+                  "en": "3/1 Elevator",
+                  "de": "Aufzug 3/1",
+                  "es": "Ascensor 3/1",
+                  "it": "Ascensore 3/1"
+                }
+              },
+              {
+                "id": "16",
+                "label": {
+                  "en": "Buzzing Alarm Clock",
+                  "de": "Summender Wecker",
+                  "es": "Despertador zumbador",
+                  "it": "Sveglia ronzante"
+                }
+              },
+              {
+                "id": "17",
+                "label": {
+                  "en": "School Bell",
+                  "de": "Schulklingel",
+                  "es": "Timbre escolar",
+                  "it": "Campanella scolastica"
+                }
+              }
+            ]
+          },
+          {
+            "name": "duration",
+            "type": "number",
+            "min": 1,
+            "max": 1800,
+            "step": 1,
+            "placeholder": {
+              "en": "10"
+            }
+          }
+        ]
+      },
+      {
+        "id": "siren_stop",
+        "title": {
+          "en": "Stop siren",
+          "de": "Sirene stoppen",
+          "es": "Detener sirena",
+          "it": "Ferma sirena"
+        },
+        "titleFormatted": {
+          "en": "Stop the siren",
+          "de": "Sirene stoppen",
+          "es": "Detener la sirena",
+          "it": "Ferma la sirena"
+        },
+        "hint": {
+          "en": "Immediately stop the siren if it is playing.",
+          "de": "Stoppt die Sirene sofort, wenn sie läuft.",
+          "es": "Detiene inmediatamente la sirena si está sonando.",
+          "it": "Ferma immediatamente la sirena se è in riproduzione."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ekaza_siren"
+          }
+        ]
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "id": "doorwindowsensor",
+      "name": {
+        "en": "Door & Window Sensor",
+        "de": "Tür- und Fenstersensor",
+        "es": "Sensor de puerta y ventana",
+        "it": "Sensore porta e finestra"
+      },
+      "class": "sensor",
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "zigbee"
+      ],
+      "capabilities": [
+        "alarm_contact",
+        "measure_battery",
+        "alarm_battery",
+        "is_availability"
+      ],
+      "energy": {
+        "batteries": [
+          "CR2032"
+        ]
+      },
+      "images": {
+        "xlarge": "/drivers/doorwindowsensor/assets/images/xlarge.png",
+        "large": "/drivers/doorwindowsensor/assets/images/large.png",
+        "small": "/drivers/doorwindowsensor/assets/images/small.png"
+      },
+      "zigbee": {
+        "manufacturerName": [
+          "_TZ3000_7tbsruql",
+          "_TZ3000_osu834un"
+        ],
+        "productId": [
+          "TS0203"
+        ],
+        "endpoints": {
+          "1": {
+            "clusters": [
+              0,
+              1,
+              3,
+              1280
+            ],
+            "bindings": [
+              1,
+              1280
+            ]
+          }
+        },
+        "learnmode": {
+          "image": "/drivers/doorwindowsensor/assets/icon.svg",
+          "instruction": {
+            "en": "Open the device and press the reset button gently for aprox 10 seconds until the LED blinks rapidly. After pairing completes, open and close the sensor a few times — this helps it set up reliable battery and status reporting.",
+            "de": "Öffne das Gerät und drücke die Reset-Taste vorsichtig etwa 10 Sekunden lang, bis die LED schnell blinkt. Öffne und schließe den Sensor nach Abschluss der Kopplung ein paar Mal — das hilft, eine zuverlässige Batterie- und Statusmeldung einzurichten.",
+            "es": "Abre el dispositivo y pulsa suavemente el botón de reinicio durante aprox. 10 segundos hasta que el LED parpadee rápidamente. Cuando termine el emparejamiento, abre y cierra el sensor varias veces — esto ayuda a establecer un reporte fiable de batería y estado.",
+            "it": "Apri il dispositivo e premi delicatamente il pulsante di reset per circa 10 secondi finché il LED non lampeggia rapidamente. Al termine dell'associazione, apri e chiudi il sensore alcune volte — questo aiuta a stabilire un report affidabile di batteria e stato."
+          }
+        }
+      }
+    },
+    {
+      "id": "doorwindowsensor_2",
+      "name": {
+        "en": "Door & Window Sensor 2",
+        "de": "Tür- und Fenstersensor 2",
+        "es": "Sensor de puerta y ventana 2",
+        "it": "Sensore porta e finestra 2"
+      },
+      "class": "sensor",
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "zigbee"
+      ],
+      "capabilities": [
+        "alarm_contact",
+        "measure_battery",
+        "alarm_battery",
+        "is_availability"
+      ],
+      "energy": {
+        "batteries": [
+          "AAA",
+          "AAA"
+        ]
+      },
+      "images": {
+        "xlarge": "/drivers/doorwindowsensor_2/assets/images/xlarge.png",
+        "large": "/drivers/doorwindowsensor_2/assets/images/large.png",
+        "small": "/drivers/doorwindowsensor_2/assets/images/small.png"
+      },
+      "zigbee": {
+        "manufacturerName": [
+          "_TZ3000_6zvw8ham",
+          "_TZ3000_decxrtwa"
+        ],
+        "productId": [
+          "TS0203"
+        ],
+        "endpoints": {
+          "1": {
+            "clusters": [
+              0,
+              1,
+              3,
+              1280
+            ],
+            "bindings": [
+              1,
+              1280
+            ]
+          }
+        },
+        "learnmode": {
+          "image": "/drivers/doorwindowsensor_2/assets/icon.svg",
+          "instruction": {
+            "en": "Open the device and press the reset button gently for aprox 10 seconds until the LED blinks rapidly. After pairing completes, open and close the sensor a few times — this helps it set up reliable battery and status reporting.",
+            "de": "Öffne das Gerät und drücke die Reset-Taste vorsichtig etwa 10 Sekunden lang, bis die LED schnell blinkt. Öffne und schließe den Sensor nach Abschluss der Kopplung ein paar Mal — das hilft, eine zuverlässige Batterie- und Statusmeldung einzurichten.",
+            "es": "Abre el dispositivo y pulsa suavemente el botón de reinicio durante aprox. 10 segundos hasta que el LED parpadee rápidamente. Cuando termine el emparejamiento, abre y cierra el sensor varias veces — esto ayuda a establecer un reporte fiable de batería y estado.",
+            "it": "Apri il dispositivo e premi delicatamente il pulsante di reset per circa 10 secondi finché il LED non lampeggia rapidamente. Al termine dell'associazione, apri e chiudi il sensore alcune volte — questo aiuta a stabilire un report affidabile di batteria e stato."
+          }
+        }
+      }
+    },
+    {
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "zigbee"
+      ],
+      "images": {
+        "xlarge": "/drivers/ekaza_siren/assets/images/xlarge.png",
+        "large": "/drivers/ekaza_siren/assets/images/large.png",
+        "small": "/drivers/ekaza_siren/assets/images/small.png"
+      },
+      "id": "ekaza_siren",
+      "name": {
+        "en": "Ekaza Smart Siren",
+        "es": "Sirena inteligente Ekaza",
+        "it": "Sirena smart Ekaza",
+        "de": "Ekaza Smart-Sirene"
+      },
+      "class": "siren",
+      "capabilities": [
+        "onoff",
+        "measure_battery",
+        "is_availability"
+      ],
+      "capabilitiesOptions": {
+        "onoff": {
+          "title": {
+            "en": "Siren",
+            "es": "Sirena",
+            "it": "Sirena",
+            "de": "Sirene"
+          },
+          "greyout": false
+        },
+        "measure_battery": {
+          "title": {
+            "en": "Battery Backup",
+            "es": "Batería de reserva",
+            "it": "Batteria di riserva",
+            "de": "Backup-Batterie"
+          }
+        }
+      },
+      "energy": {
+        "approximation": {
+          "usageOn": 10,
+          "usageOff": 1
+        },
+        "batteries": [
+          "AA",
+          "AA",
+          "AA"
+        ]
+      },
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Alarm Settings",
+            "es": "Configuración de alarma",
+            "it": "Impostazioni allarme",
+            "de": "Alarmeinstellungen"
+          },
+          "children": [
+            {
+              "id": "alarmvolume",
+              "type": "dropdown",
+              "label": {
+                "en": "Volume",
+                "es": "Volumen",
+                "it": "Volume",
+                "de": "Lautstärke"
+              },
+              "hint": {
+                "en": "Alarm volume level. Applied each time the siren is triggered.",
+                "es": "Nivel de volumen de la alarma. Se aplica cada vez que se activa la sirena.",
+                "it": "Livello di volume dell'allarme. Applicato ogni volta che la sirena viene attivata.",
+                "de": "Alarmlautstärke. Wird bei jeder Auslösung der Sirene angewendet."
+              },
+              "value": "2",
+              "values": [
+                {
+                  "id": "0",
+                  "label": {
+                    "en": "Low",
+                    "es": "Bajo",
+                    "it": "Basso",
+                    "de": "Niedrig"
+                  }
+                },
+                {
+                  "id": "1",
+                  "label": {
+                    "en": "Medium",
+                    "es": "Medio",
+                    "it": "Medio",
+                    "de": "Mittel"
+                  }
+                },
+                {
+                  "id": "2",
+                  "label": {
+                    "en": "High (default)",
+                    "es": "Alto (predeterminado)",
+                    "it": "Alto (predefinito)",
+                    "de": "Hoch (Standard)"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "alarmsoundtime",
+              "type": "number",
+              "label": {
+                "en": "Alarm Duration",
+                "es": "Duración de la alarma",
+                "it": "Durata allarme",
+                "de": "Alarmdauer"
+              },
+              "hint": {
+                "en": "How long the alarm plays in seconds (1–1800). Homey UI auto-resets 2 seconds after this time.",
+                "es": "Duración de la alarma en segundos (1–1800). El panel de Homey se reinicia automáticamente 2 segundos después.",
+                "it": "Durata dell'allarme in secondi (1–1800). L'interfaccia Homey si ripristina automaticamente 2 secondi dopo.",
+                "de": "Wie lange der Alarm in Sekunden läuft (1–1800). Die Homey-UI setzt sich 2 Sekunden danach automatisch zurück."
+              },
+              "value": 10,
+              "min": 1,
+              "max": 1800,
+              "step": 1,
+              "units": "s"
+            },
+            {
+              "id": "alarmtune",
+              "type": "dropdown",
+              "label": {
+                "en": "Melody",
+                "es": "Melodía",
+                "it": "Melodia",
+                "de": "Melodie"
+              },
+              "hint": {
+                "en": "Alarm sound type. Applied each time the siren is triggered.",
+                "es": "Tipo de sonido de alarma. Se aplica cada vez que se activa la sirena.",
+                "it": "Tipo di suono dell'allarme. Applicato ogni volta che la sirena viene attivata.",
+                "de": "Alarmtontyp. Wird bei jeder Auslösung der Sirene angewendet."
+              },
+              "value": "5",
+              "values": [
+                {
+                  "id": "0",
+                  "label": {
+                    "en": "Doorbell Chime",
+                    "es": "Timbre de puerta",
+                    "it": "Campanello porta",
+                    "de": "Türklingel"
+                  }
+                },
+                {
+                  "id": "1",
+                  "label": {
+                    "en": "Für Elise",
+                    "es": "Para Elisa",
+                    "it": "Per Elisa",
+                    "de": "Für Elise"
+                  }
+                },
+                {
+                  "id": "2",
+                  "label": {
+                    "en": "Westminster Chimes",
+                    "es": "Carillón Westminster",
+                    "it": "Rintocchi Westminster",
+                    "de": "Westminster-Glocken"
+                  }
+                },
+                {
+                  "id": "3",
+                  "label": {
+                    "en": "Fast Double Doorbell",
+                    "es": "Timbre doble rápido",
+                    "it": "Doppio campanello veloce",
+                    "de": "Schnelle Doppelklingel"
+                  }
+                },
+                {
+                  "id": "4",
+                  "label": {
+                    "en": "William Tell Overture",
+                    "es": "Obertura Guillermo Tell",
+                    "it": "Ouverture Guglielmo Tell",
+                    "de": "Wilhelm Tell Ouvertüre"
+                  }
+                },
+                {
+                  "id": "5",
+                  "label": {
+                    "en": "Turkish March (default)",
+                    "es": "Marcha turca (predeter.)",
+                    "it": "Marcia turca (predef.)",
+                    "de": "Türkischer Marsch (Std)"
+                  }
+                },
+                {
+                  "id": "6",
+                  "label": {
+                    "en": "Safe / Security Alarm",
+                    "es": "Alarma de seguridad",
+                    "it": "Allarme sicurezza",
+                    "de": "Sicherheitsalarm"
+                  }
+                },
+                {
+                  "id": "7",
+                  "label": {
+                    "en": "Chemical Spill Alert",
+                    "es": "Alerta de derrame químico",
+                    "it": "Allarme sostanze chimiche",
+                    "de": "Chemikalienalarm"
+                  }
+                },
+                {
+                  "id": "8",
+                  "label": {
+                    "en": "Piercing Alarm Clock",
+                    "es": "Despertador estridente",
+                    "it": "Sveglia acuta",
+                    "de": "Schriller Wecker"
+                  }
+                },
+                {
+                  "id": "9",
+                  "label": {
+                    "en": "Smoke Alarm",
+                    "es": "Alarma de humo",
+                    "it": "Allarme fumo",
+                    "de": "Rauchmelder"
+                  }
+                },
+                {
+                  "id": "10",
+                  "label": {
+                    "en": "Dog Barking",
+                    "es": "Ladrido de perro",
+                    "it": "Abbaiare di cane",
+                    "de": "Hundegebell"
+                  }
+                },
+                {
+                  "id": "11",
+                  "label": {
+                    "en": "Police Siren",
+                    "es": "Sirena policial",
+                    "it": "Sirena polizia",
+                    "de": "Polizeisirene"
+                  }
+                },
+                {
+                  "id": "12",
+                  "label": {
+                    "en": "Doorbell Chime (reverb)",
+                    "es": "Timbre con reverb",
+                    "it": "Campanello con riverbero",
+                    "de": "Türklingel (Hall)"
+                  }
+                },
+                {
+                  "id": "13",
+                  "label": {
+                    "en": "Mechanical Telephone",
+                    "es": "Teléfono mecánico",
+                    "it": "Telefono meccanico",
+                    "de": "Mechanisches Telefon"
+                  }
+                },
+                {
+                  "id": "14",
+                  "label": {
+                    "en": "Fire / Ambulance",
+                    "es": "Bomberos / Ambulancia",
+                    "it": "Pompieri / Ambulanza",
+                    "de": "Feuerwehr / Krankenwagen"
+                  }
+                },
+                {
+                  "id": "15",
+                  "label": {
+                    "en": "3/1 Elevator",
+                    "es": "Ascensor 3/1",
+                    "it": "Ascensore 3/1",
+                    "de": "Aufzug 3/1"
+                  }
+                },
+                {
+                  "id": "16",
+                  "label": {
+                    "en": "Buzzing Alarm Clock",
+                    "es": "Despertador zumbador",
+                    "it": "Sveglia ronzante",
+                    "de": "Summender Wecker"
+                  }
+                },
+                {
+                  "id": "17",
+                  "label": {
+                    "en": "School Bell",
+                    "es": "Timbre escolar",
+                    "it": "Campanella scolastica",
+                    "de": "Schulklingel"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "melody_name",
+              "type": "label",
+              "label": {
+                "en": "Current Melody",
+                "es": "Melodía actual",
+                "it": "Melodia attuale",
+                "de": "Aktuelle Melodie"
+              },
+              "value": "Turkish March"
+            }
+          ]
+        }
+      ],
+      "zigbee": {
+        "manufacturerName": [
+          "_TZE204_q76rtoa9"
+        ],
+        "productId": [
+          "TS0601"
+        ],
+        "endpoints": {
+          "1": {
+            "clusters": [
+              0,
+              4,
+              5,
+              61184
+            ],
+            "bindings": [
+              61184
+            ]
+          }
+        },
+        "learnmode": {
+          "image": "/drivers/ekaza_siren/assets/icon.svg",
+          "instruction": {
+            "en": "Press and hold the button inside the battery compartment for approximately 5 seconds until the LED blinks rapidly.",
+            "es": "Mantén pulsado el botón del compartimento de la batería durante aproximadamente 5 segundos hasta que el LED parpadee rápidamente.",
+            "it": "Tieni premuto il pulsante nel vano batterie per circa 5 secondi fino a quando il LED lampeggia rapidamente.",
+            "de": "Halte die Taste im Batteriefach ca. 5 Sekunden gedrückt, bis die LED schnell blinkt."
+          }
+        }
+      }
+    },
+    {
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "zigbee"
+      ],
+      "images": {
+        "xlarge": "/drivers/gas_detector/assets/images/xlarge.png",
+        "large": "/drivers/gas_detector/assets/images/large.png",
+        "small": "/drivers/gas_detector/assets/images/small.png"
+      },
+      "id": "gas_detector",
+      "name": {
+        "en": "Smart Gas Detector",
+        "es": "Detector de gas inteligente",
+        "it": "Rilevatore gas smart",
+        "de": "Intelligenter Gasdetektor"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "alarm_gas",
+        "alarm_problem",
+        "is_availability"
+      ],
+      "capabilitiesOptions": {
+        "alarm_gas": {
+          "title": {
+            "en": "Gas alarm",
+            "es": "Alarma de gas",
+            "it": "Allarme gas",
+            "de": "Gasalarm"
+          },
+          "uiComponent": "alarm",
+          "alarm": true,
+          "insightsTitleTrue": {
+            "en": "Gas detected!",
+            "es": "¡Gas detectado!",
+            "it": "Gas rilevato!",
+            "de": "Gas erkannt!"
+          },
+          "insightsTitleFalse": {
+            "en": "Gas alarm cleared",
+            "es": "Alarma de gas desactivada",
+            "it": "Allarme gas disattivato",
+            "de": "Gasalarm zurückgesetzt"
+          }
+        },
+        "alarm_problem": {
+          "title": {
+            "en": "Device fault",
+            "es": "Fallo del dispositivo",
+            "it": "Guasto dispositivo",
+            "de": "Gerätefehler"
+          },
+          "uiComponent": "alarm",
+          "alarm": true,
+          "insightsTitleTrue": {
+            "en": "Device fault detected",
+            "es": "Fallo del dispositivo detectado",
+            "it": "Guasto dispositivo rilevato",
+            "de": "Gerätefehler erkannt"
+          },
+          "insightsTitleFalse": {
+            "en": "Device fault cleared",
+            "es": "Fallo del dispositivo resuelto",
+            "it": "Guasto dispositivo risolto",
+            "de": "Gerätefehler behoben"
+          }
+        }
+      },
+      "energy": {
+        "approximation": {
+          "usageConstant": 1.5
+        }
+      },
+      "zigbee": {
+        "manufacturerName": [
+          "_TYZB01_0w3d5uw3"
+        ],
+        "productId": [
+          "TS0204"
+        ],
+        "endpoints": {
+          "1": {
+            "clusters": [
+              0,
+              3,
+              1280,
+              2821
+            ],
+            "bindings": [
+              3,
+              1280
+            ]
+          }
+        },
+        "learnmode": {
+          "image": "/drivers/gas_detector/assets/icon.svg",
+          "instruction": {
+            "en": "Insert a pin or paperclip into the reset pinhole and hold for 5 seconds until the LED flashes rapidly.",
+            "es": "Introduce un alfiler o clip en el orificio de reinicio y mantenlo durante 5 segundos hasta que el LED parpadee rápidamente.",
+            "it": "Inserisci un ago o una graffetta nel foro di reset e tieni premuto per 5 secondi fino a quando il LED lampeggia rapidamente.",
+            "de": "Stecke eine Nadel oder Büroklammer in das Reset-Loch und halte sie 5 Sekunden, bis die LED schnell blinkt."
+          }
+        }
+      },
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Alerts",
+            "de": "Warnungen",
+            "es": "Alertas",
+            "it": "Avvisi"
+          },
+          "children": [
+            {
+              "id": "alarm_problem_enabled",
+              "type": "checkbox",
+              "label": {
+                "en": "Enable device fault alert",
+                "de": "Gerätefehlerwarnung aktivieren",
+                "es": "Activar alerta de fallo del dispositivo",
+                "it": "Abilita avviso di guasto del dispositivo"
+              },
+              "hint": {
+                "en": "Show alert when the sensor reports a hardware fault.",
+                "de": "Zeigt eine Warnung an, wenn der Sensor einen Hardwarefehler meldet.",
+                "es": "Muestra una alerta cuando el sensor informa de un fallo de hardware.",
+                "it": "Mostra un avviso quando il sensore segnala un guasto hardware."
+              },
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "zigbee"
+      ],
+      "images": {
+        "xlarge": "/drivers/lcdtemphumidsensor/assets/images/xlarge.png",
+        "large": "/drivers/lcdtemphumidsensor/assets/images/large.png",
+        "small": "/drivers/lcdtemphumidsensor/assets/images/small.png"
+      },
+      "id": "lcdtemphumidsensor",
+      "name": {
+        "en": "LCD Temperature & Humidity Sensor",
+        "es": "Sensor de temperatura y humedad LCD",
+        "it": "Sensore temperatura e umidità LCD",
+        "de": "LCD Temperatur- und Feuchtigkeitssensor"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "measure_temperature",
+        "measure_humidity",
+        "measure_battery",
+        "is_availability"
+      ],
+      "capabilitiesOptions": {
+        "measure_temperature": {
+          "decimals": 1,
+          "title": {
+            "en": "Temperature",
+            "es": "Temperatura",
+            "it": "Temperatura",
+            "de": "Temperatur"
+          }
+        },
+        "measure_humidity": {
+          "decimals": 1,
+          "title": {
+            "en": "Humidity",
+            "es": "Humedad",
+            "it": "Umidità",
+            "de": "Feuchtigkeit"
+          }
+        },
+        "measure_battery": {
+          "title": {
+            "en": "Battery",
+            "es": "Batería",
+            "it": "Batteria",
+            "de": "Batterie"
+          }
+        }
+      },
+      "energy": {
+        "batteries": [
+          "CR2032"
+        ]
+      },
+      "zigbee": {
+        "manufacturerName": [
+          "_TZ3000_ywagc4rj"
+        ],
+        "productId": [
+          "TS0201"
+        ],
+        "endpoints": {
+          "1": {
+            "clusters": [
+              0,
+              1,
+              3,
+              1026,
+              1029
+            ],
+            "bindings": []
+          }
+        },
+        "learnmode": {
+          "image": "/drivers/lcdtemphumidsensor/assets/icon.svg",
+          "instruction": {
+            "en": "Hold reset 5s until LCD blinks",
+            "es": "Mantén el botón de reinicio 5 s hasta que el LCD parpadee",
+            "it": "Tieni premuto il reset per 5 s fino a quando il display LCD lampeggia",
+            "de": "Reset 5 s gedrückt halten, bis das LCD blinkt"
+          }
+        }
+      },
+      "settings": []
+    },
+    {
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "zigbee"
+      ],
+      "images": {
+        "xlarge": "/drivers/socket_power_strip/assets/images/xlarge.png",
+        "large": "/drivers/socket_power_strip/assets/images/large.png",
+        "small": "/drivers/socket_power_strip/assets/images/small.png"
+      },
+      "id": "socket_power_strip",
+      "name": {
+        "en": "Power Strip 4 Sockets + USB",
+        "es": "Regleta 4 enchufes + USB",
+        "it": "Ciabatta 4 prese + USB",
+        "de": "Steckdosenleiste 4 Steckdosen + USB"
+      },
+      "class": "socket",
+      "capabilities": [
+        "onoff",
+        "is_availability"
+      ],
+      "capabilitiesOptions": {
+        "onoff": {
+          "title": {
+            "en": "Power",
+            "es": "Corriente",
+            "it": "Alimentazione",
+            "de": "Strom"
+          }
+        }
+      },
+      "settings": [
+        {
+          "id": "device_siblings_info",
+          "type": "label",
+          "label": {
+            "en": "Connected Sockets",
+            "es": "Enchufes conectados",
+            "it": "Prese collegate",
+            "de": "Verbundene Steckdosen"
+          },
+          "hint": {
+            "en": "Other sockets sharing this power strip",
+            "es": "Otros enchufes que comparten esta regleta",
+            "it": "Altre prese che condividono questa ciabatta",
+            "de": "Andere Steckdosen, die diese Steckdosenleiste teilen"
+          },
+          "value": "-"
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Power-On Behavior",
+            "es": "Comportamiento al encender",
+            "it": "Comportamento all'accensione",
+            "de": "Einschaltverhalten"
+          },
+          "children": [
+            {
+              "id": "power_on_behavior_global",
+              "type": "dropdown",
+              "label": {
+                "en": "Power-On (all sockets)",
+                "es": "Encendido (todos los enchufes)",
+                "it": "Accensione (tutte le prese)",
+                "de": "Einschalten (alle Steckdosen)"
+              },
+              "hint": {
+                "en": "Behavior of all sockets when power is restored.",
+                "es": "Comportamiento de todos los enchufes al restaurar la corriente.",
+                "it": "Comportamento di tutte le prese quando viene ripristinata l'alimentazione.",
+                "de": "Verhalten aller Steckdosen bei Wiederherstellung der Stromversorgung."
+              },
+              "value": "lastState",
+              "values": [
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Always Off",
+                    "es": "Siempre apagado",
+                    "it": "Sempre spento",
+                    "de": "Immer aus"
+                  }
+                },
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "Always On",
+                    "es": "Siempre encendido",
+                    "it": "Sempre acceso",
+                    "de": "Immer ein"
+                  }
+                },
+                {
+                  "id": "lastState",
+                  "label": {
+                    "en": "Last State",
+                    "es": "Último estado",
+                    "it": "Ultimo stato",
+                    "de": "Letzter Zustand"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "power_on_current_global",
+              "type": "label",
+              "label": {
+                "en": "Current Power-On",
+                "es": "Encendido actual",
+                "it": "Accensione attuale",
+                "de": "Aktuelles Einschalten"
+              },
+              "hint": {
+                "en": "Read from device.",
+                "es": "Leído del dispositivo.",
+                "it": "Letto dal dispositivo.",
+                "de": "Vom Gerät gelesen."
+              },
+              "value": "—"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Physical Controls",
+            "es": "Controles físicos",
+            "it": "Controlli fisici",
+            "de": "Physische Bedienelemente"
+          },
+          "children": [
+            {
+              "id": "indicator_mode",
+              "type": "dropdown",
+              "label": {
+                "en": "LED Indicator",
+                "es": "Indicador LED",
+                "it": "Indicatore LED",
+                "de": "LED-Anzeige"
+              },
+              "hint": {
+                "en": "When to light the LED on the power strip.",
+                "es": "Cuándo encender el LED de la regleta.",
+                "it": "Quando accendere il LED della ciabatta.",
+                "de": "Wann die LED der Steckdosenleiste leuchten soll."
+              },
+              "value": "status",
+              "values": [
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Always Off",
+                    "es": "Siempre apagado",
+                    "it": "Sempre spento",
+                    "de": "Immer aus"
+                  }
+                },
+                {
+                  "id": "status",
+                  "label": {
+                    "en": "On when powered",
+                    "es": "Encendido con corriente",
+                    "it": "Acceso con corrente",
+                    "de": "Ein bei Strom"
+                  }
+                },
+                {
+                  "id": "position",
+                  "label": {
+                    "en": "Off when powered",
+                    "es": "Apagado con corriente",
+                    "it": "Spento con corrente",
+                    "de": "Aus bei Strom"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "child_lock",
+              "type": "checkbox",
+              "label": {
+                "en": "Child Lock",
+                "es": "Bloqueo infantil",
+                "it": "Blocco bambini",
+                "de": "Kindersicherung"
+              },
+              "hint": {
+                "en": "Disable the physical button on the power strip.",
+                "es": "Desactiva el botón físico de la regleta.",
+                "it": "Disabilita il pulsante fisico della ciabatta.",
+                "de": "Deaktiviert die physische Taste der Steckdosenleiste."
+              },
+              "value": false
+            }
+          ]
+        }
+      ],
+      "zigbee": {
+        "manufacturerName": [
+          "_TZ3000_cfnprab5"
+        ],
+        "productId": [
+          "TS011F"
+        ],
+        "endpoints": {
+          "1": {
+            "clusters": [
+              0,
+              3,
+              4,
+              5,
+              6,
+              57344
+            ],
+            "bindings": [
+              6
+            ]
+          },
+          "2": {
+            "clusters": [
+              0,
+              3,
+              4,
+              5,
+              6,
+              57344
+            ],
+            "bindings": [
+              6
+            ]
+          },
+          "3": {
+            "clusters": [
+              0,
+              3,
+              4,
+              5,
+              6,
+              57344
+            ],
+            "bindings": [
+              6
+            ]
+          },
+          "4": {
+            "clusters": [
+              0,
+              3,
+              4,
+              5,
+              6,
+              57344
+            ],
+            "bindings": [
+              6
+            ]
+          },
+          "5": {
+            "clusters": [
+              0,
+              3,
+              4,
+              5,
+              6,
+              57344
+            ],
+            "bindings": [
+              6
+            ]
+          }
+        },
+        "devices": {
+          "socket2": {
+            "class": "socket",
+            "capabilities": [
+              "onoff"
+            ],
+            "name": {
+              "en": "Socket 2/4",
+              "es": "Enchufe 2/4",
+              "it": "Presa 2/4",
+              "de": "Steckdose 2/4"
+            },
+            "energy": {
+              "approximation": {
+                "usageOn": 0,
+                "usageOff": 0
+              }
+            },
+            "settings": [
+              {
+                "id": "device_siblings_info",
+                "type": "label",
+                "label": {
+                  "en": "Connected Sockets",
+                  "es": "Enchufes conectados",
+                  "it": "Prese collegate",
+                  "de": "Verbundene Steckdosen"
+                },
+                "hint": {
+                  "en": "Other sockets sharing this power strip",
+                  "es": "Otros enchufes que comparten esta regleta",
+                  "it": "Altre prese che condividono questa ciabatta",
+                  "de": "Andere Steckdosen, die diese Steckdosenleiste teilen"
+                },
+                "value": "-"
+              }
+            ]
+          },
+          "socket3": {
+            "class": "socket",
+            "capabilities": [
+              "onoff"
+            ],
+            "name": {
+              "en": "Socket 3/4",
+              "es": "Enchufe 3/4",
+              "it": "Presa 3/4",
+              "de": "Steckdose 3/4"
+            },
+            "energy": {
+              "approximation": {
+                "usageOn": 0,
+                "usageOff": 0
+              }
+            },
+            "settings": [
+              {
+                "id": "device_siblings_info",
+                "type": "label",
+                "label": {
+                  "en": "Connected Sockets",
+                  "es": "Enchufes conectados",
+                  "it": "Prese collegate",
+                  "de": "Verbundene Steckdosen"
+                },
+                "hint": {
+                  "en": "Other sockets sharing this power strip",
+                  "es": "Otros enchufes que comparten esta regleta",
+                  "it": "Altre prese che condividono questa ciabatta",
+                  "de": "Andere Steckdosen, die diese Steckdosenleiste teilen"
+                },
+                "value": "-"
+              }
+            ]
+          },
+          "socket4": {
+            "class": "socket",
+            "capabilities": [
+              "onoff"
+            ],
+            "name": {
+              "en": "Socket 4/4",
+              "es": "Enchufe 4/4",
+              "it": "Presa 4/4",
+              "de": "Steckdose 4/4"
+            },
+            "energy": {
+              "approximation": {
+                "usageOn": 0,
+                "usageOff": 0
+              }
+            },
+            "settings": [
+              {
+                "id": "device_siblings_info",
+                "type": "label",
+                "label": {
+                  "en": "Connected Sockets",
+                  "es": "Enchufes conectados",
+                  "it": "Prese collegate",
+                  "de": "Verbundene Steckdosen"
+                },
+                "hint": {
+                  "en": "Other sockets sharing this power strip",
+                  "es": "Otros enchufes que comparten esta regleta",
+                  "it": "Altre prese che condividono questa ciabatta",
+                  "de": "Andere Steckdosen, die diese Steckdosenleiste teilen"
+                },
+                "value": "-"
+              }
+            ]
+          },
+          "usb": {
+            "class": "socket",
+            "capabilities": [
+              "onoff"
+            ],
+            "name": {
+              "en": "USB Port",
+              "es": "Puerto USB",
+              "it": "Porta USB",
+              "de": "USB-Anschluss"
+            },
+            "energy": {
+              "approximation": {
+                "usageOn": 5,
+                "usageOff": 0
+              }
+            },
+            "settings": [
+              {
+                "id": "device_siblings_info",
+                "type": "label",
+                "label": {
+                  "en": "Connected Sockets",
+                  "es": "Enchufes conectados",
+                  "it": "Prese collegate",
+                  "de": "Verbundene Steckdosen"
+                },
+                "hint": {
+                  "en": "Other sockets sharing this power strip",
+                  "es": "Otros enchufes que comparten esta regleta",
+                  "it": "Altre prese che condividono questa ciabatta",
+                  "de": "Andere Steckdosen, die diese Steckdosenleiste teilen"
+                },
+                "value": "-"
+              }
+            ]
+          }
+        },
+        "learnmode": {
+          "instruction": {
+            "en": "Press and hold on/off switch for 5 seconds until LED blinks.",
+            "es": "Mantén pulsado el interruptor on/off durante 5 segundos hasta que el LED parpadee.",
+            "it": "Tieni premuto l'interruttore on/off per 5 secondi fino a quando il LED lampeggia.",
+            "de": "Halte den Ein/Aus-Schalter 5 Sekunden gedrückt, bis die LED blinkt."
+          }
+        }
+      },
+      "energy": {
+        "approximation": {
+          "usageOn": 1,
+          "usageOff": 0.5
+        }
+      }
+    },
+    {
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "zigbee"
+      ],
+      "images": {
+        "xlarge": "/drivers/temphumidclock/assets/images/xlarge.png",
+        "large": "/drivers/temphumidclock/assets/images/large.png",
+        "small": "/drivers/temphumidclock/assets/images/small.png"
+      },
+      "id": "temphumidclock",
+      "name": {
+        "en": "Tuya Temperature & Humidity Sensor with Clock",
+        "es": "Sensor de temperatura y humedad Tuya con reloj",
+        "it": "Sensore Tuya temperatura e umidità con orologio",
+        "de": "Tuya Temperatur- und Feuchtigkeitssensor mit Uhr"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "measure_temperature",
+        "measure_humidity",
+        "measure_battery",
+        "is_availability"
+      ],
+      "capabilitiesOptions": {
+        "measure_temperature": {
+          "decimals": 1,
+          "title": {
+            "en": "Temperature",
+            "es": "Temperatura",
+            "it": "Temperatura",
+            "de": "Temperatur"
+          },
+          "units": {
+            "en": "°C",
+            "es": "°C",
+            "it": "°C",
+            "de": "°C"
+          }
+        },
+        "measure_humidity": {
+          "decimals": 1,
+          "title": {
+            "en": "Humidity",
+            "es": "Humedad",
+            "it": "Umidità",
+            "de": "Feuchtigkeit"
+          },
+          "units": {
+            "en": "%",
+            "es": "%",
+            "it": "%",
+            "de": "%"
+          }
+        },
+        "measure_battery": {
+          "title": {
+            "en": "Battery",
+            "es": "Batería",
+            "it": "Batteria",
+            "de": "Batterie"
+          }
+        }
+      },
+      "energy": {
+        "batteries": [
+          "AAA",
+          "AAA",
+          "AAA"
+        ]
+      },
+      "zigbee": {
+        "manufacturerName": [
+          "_TZE200_cirvgep4",
+          "_TZE204_cirvgep4"
+        ],
+        "productId": [
+          "TS0601"
+        ],
+        "endpoints": {
+          "1": {
+            "clusters": [
+              0,
+              4,
+              5,
+              61184
+            ],
+            "bindings": [
+              61184
+            ]
+          }
+        },
+        "learnmode": {
+          "image": "/drivers/temphumidclock/assets/learnmode.svg",
+          "instruction": {
+            "en": "Hold reset 10s until wireless icon blinks",
+            "es": "Mantén el botón de reinicio 10 s hasta que el icono inalámbrico parpadee",
+            "it": "Tieni premuto il reset per 10 s fino a quando l'icona wireless lampeggia",
+            "de": "Reset 10 s gedrückt halten, bis das WLAN-Symbol blinkt"
+          }
+        }
+      },
+      "settings": []
+    },
+    {
+      "name": {
+        "en": "Ultrasonic Liquid Level Sensor",
+        "de": "Ultraschall-Flüssigkeitsfüllstandssensor",
+        "es": "Sensor ultrasónico de nivel de líquido",
+        "it": "Sensore a ultrasuoni del livello del liquido"
+      },
+      "class": "sensor",
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "zigbee"
+      ],
+      "capabilities": [
+        "measure_water_percentage",
+        "measure_water_level",
+        "alarm_water_low",
+        "alarm_water_high"
+      ],
+      "images": {
+        "small": "/drivers/water_tank_monitor/assets/images/small.png",
+        "large": "/drivers/water_tank_monitor/assets/images/large.png"
+      },
+      "zigbee": {
+        "manufacturerName": [
+          "_TZE200_lvkk0hdg"
+        ],
+        "productId": [
+          "TS0601"
+        ],
+        "endpoints": {
+          "1": {
+            "clusters": [
+              0,
+              4,
+              5,
+              61184
+            ]
+          }
+        },
+        "learnmode": {
+          "image": "/drivers/water_tank_monitor/assets/icon.svg",
+          "instruction": {
+            "en": "Press and hold the pairing button until the indicator starts blinking.",
+            "de": "Halte die Pairing-Taste gedrückt, bis die Anzeige zu blinken beginnt.",
+            "es": "Mantén pulsado el botón de emparejamiento hasta que el indicador empiece a parpadear.",
+            "it": "Tieni premuto il pulsante di associazione finché l'indicatore non inizia a lampeggiare."
+          }
+        }
+      },
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Tank configuration",
+            "de": "Tankkonfiguration",
+            "es": "Configuración del depósito",
+            "it": "Configurazione del serbatoio"
+          },
+          "children": [
+            {
+              "id": "upper_limit",
+              "type": "number",
+              "label": {
+                "en": "High level alert",
+                "de": "Warnung bei hohem Füllstand",
+                "es": "Alerta de nivel alto",
+                "it": "Avviso livello alto"
+              },
+              "hint": {
+                "en": "The device reports a high-level state above this percentage (DP7).",
+                "de": "Das Gerät meldet einen Hochfüllstand oberhalb dieses Prozentsatzes (DP7).",
+                "es": "El dispositivo informa de un estado de nivel alto por encima de este porcentaje (DP7).",
+                "it": "Il dispositivo segnala uno stato di livello alto oltre questa percentuale (DP7)."
+              },
+              "value": 75,
+              "min": 0,
+              "max": 100,
+              "step": 1,
+              "units": "%"
+            },
+            {
+              "id": "lower_limit",
+              "type": "number",
+              "label": {
+                "en": "Low level alert",
+                "de": "Warnung bei niedrigem Füllstand",
+                "es": "Alerta de nivel bajo",
+                "it": "Avviso livello basso"
+              },
+              "hint": {
+                "en": "The device reports a low-level state below this percentage (DP8).",
+                "de": "Das Gerät meldet einen Niedrigfüllstand unterhalb dieses Prozentsatzes (DP8).",
+                "es": "El dispositivo informa de un estado de nivel bajo por debajo de este porcentaje (DP8).",
+                "it": "Il dispositivo segnala uno stato di livello basso al di sotto di questa percentuale (DP8)."
+              },
+              "value": 25,
+              "min": 0,
+              "max": 100,
+              "step": 1,
+              "units": "%"
+            },
+            {
+              "id": "installation_height",
+              "type": "number",
+              "label": {
+                "en": "Sensor to tank bottom",
+                "de": "Sensor bis Tankboden",
+                "es": "Sensor al fondo del depósito",
+                "it": "Sensore al fondo del serbatoio"
+              },
+              "hint": {
+                "en": "Vertical distance from the sensor face to the tank bottom (DP19).",
+                "de": "Vertikaler Abstand von der Sensorfläche bis zum Tankboden (DP19).",
+                "es": "Distancia vertical desde la cara del sensor hasta el fondo del depósito (DP19).",
+                "it": "Distanza verticale dalla faccia del sensore al fondo del serbatoio (DP19)."
+              },
+              "value": 2000,
+              "min": 10,
+              "max": 4000,
+              "step": 5,
+              "units": "mm"
+            },
+            {
+              "id": "full_level_distance",
+              "type": "number",
+              "label": {
+                "en": "Sensor to full level",
+                "de": "Sensor bis Vollfüllstand",
+                "es": "Sensor al nivel lleno",
+                "it": "Sensore al livello pieno"
+              },
+              "hint": {
+                "en": "Distance from the sensor face to the liquid surface when the tank is considered full (DP21).",
+                "de": "Abstand von der Sensorfläche bis zur Flüssigkeitsoberfläche, wenn der Tank als voll gilt (DP21).",
+                "es": "Distancia desde la cara del sensor hasta la superficie del líquido cuando el depósito se considera lleno (DP21).",
+                "it": "Distanza dalla faccia del sensore alla superficie del liquido quando il serbatoio è considerato pieno (DP21)."
+              },
+              "value": 100,
+              "min": 10,
+              "max": 4000,
+              "step": 5,
+              "units": "mm"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Event filtering",
+            "de": "Ereignisfilterung",
+            "es": "Filtrado de eventos",
+            "it": "Filtro eventi"
+          },
+          "children": [
+            {
+              "id": "level_change_threshold",
+              "type": "number",
+              "label": {
+                "en": "Minimum level change",
+                "de": "Minimale Füllstandsänderung",
+                "es": "Cambio mínimo de nivel",
+                "it": "Variazione minima di livello"
+              },
+              "hint": {
+                "en": "Only update Homey when the fill level changes by at least this many percentage points. This does not change Zigbee reporting.",
+                "de": "Homey nur aktualisieren, wenn sich der Füllstand um mindestens so viele Prozentpunkte ändert. Das ändert die Zigbee-Berichte nicht.",
+                "es": "Solo actualiza Homey cuando el nivel de llenado cambie al menos esta cantidad de puntos porcentuales. Esto no cambia el informe Zigbee.",
+                "it": "Aggiorna Homey solo quando il livello di riempimento cambia di almeno tanti punti percentuali. Questo non modifica il reporting Zigbee."
+              },
+              "value": 0,
+              "min": 0,
+              "max": 20,
+              "step": 1,
+              "units": "%"
+            },
+            {
+              "id": "depth_change_threshold",
+              "type": "number",
+              "label": {
+                "en": "Minimum depth change",
+                "de": "Minimale Tiefenänderung",
+                "es": "Cambio mínimo de profundidad",
+                "it": "Variazione minima di profondità"
+              },
+              "hint": {
+                "en": "Only update Homey when the measured liquid depth changes by at least this value.",
+                "de": "Homey nur aktualisieren, wenn sich die gemessene Flüssigkeitstiefe um mindestens diesen Wert ändert.",
+                "es": "Solo actualiza Homey cuando la profundidad medida del líquido cambie al menos este valor.",
+                "it": "Aggiorna Homey solo quando la profondità del liquido misurata cambia almeno di questo valore."
+              },
+              "value": 0,
+              "min": 0,
+              "max": 50,
+              "step": 0.1,
+              "decimals": 1,
+              "units": "cm"
+            },
+            {
+              "id": "minimum_update_interval",
+              "type": "number",
+              "label": {
+                "en": "Minimum update interval",
+                "de": "Mindestaktualisierungsintervall",
+                "es": "Intervalo mínimo de actualización",
+                "it": "Intervallo minimo di aggiornamento"
+              },
+              "hint": {
+                "en": "Minimum time between Homey updates for level and depth.",
+                "de": "Mindestzeit zwischen Homey-Aktualisierungen für Füllstand und Tiefe.",
+                "es": "Tiempo mínimo entre actualizaciones de Homey para nivel y profundidad.",
+                "it": "Tempo minimo tra gli aggiornamenti Homey per livello e profondità."
+              },
+              "value": 0,
+              "min": 0,
+              "max": 3600,
+              "step": 1,
+              "units": "s"
+            },
+            {
+              "id": "debug_logging",
+              "type": "checkbox",
+              "label": {
+                "en": "Log every Tuya report",
+                "de": "Jeden Tuya-Bericht protokollieren",
+                "es": "Registrar cada informe de Tuya",
+                "it": "Registra ogni report Tuya"
+              },
+              "hint": {
+                "en": "Diagnostic option. Leave disabled to avoid filling the app log with duplicate reports.",
+                "de": "Diagnoseoption. Deaktiviert lassen, um das App-Protokoll nicht mit doppelten Berichten zu füllen.",
+                "es": "Opción de diagnóstico. Déjalo desactivado para evitar llenar el registro de la app con informes duplicados.",
+                "it": "Opzione diagnostica. Lascia disabilitato per evitare di riempire il registro dell'app con report duplicati."
+              },
+              "value": false
+            }
+          ]
+        }
+      ],
+      "id": "water_tank_monitor"
+    },
+    {
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "zigbee"
+      ],
+      "images": {
+        "xlarge": "/drivers/zigbee_repeater/assets/images/xlarge.png",
+        "large": "/drivers/zigbee_repeater/assets/images/large.png",
+        "small": "/drivers/zigbee_repeater/assets/images/small.png"
+      },
+      "id": "zigbee_repeater",
+      "name": {
+        "en": "Zigbee Repeater",
+        "es": "Repetidor Zigbee",
+        "it": "Ripetitore Zigbee",
+        "de": "Zigbee-Repeater"
+      },
+      "class": "other",
+      "capabilities": [
+        "is_availability"
+      ],
+      "zigbee": {
+        "manufacturerName": [
+          "_TZ3000_nkkl7uzv"
+        ],
+        "productId": [
+          "TS0207"
+        ],
+        "endpoints": {
+          "1": {
+            "clusters": [
+              0,
+              3,
+              10
+            ]
+          }
+        },
+        "learnmode": {
+          "image": "/drivers/zigbee_repeater/assets/icon.svg",
+          "instruction": {
+            "en": "Put the device in a USB slot and let it power up.",
+            "es": "Introduce el dispositivo en un puerto USB y deja que se encienda.",
+            "it": "Inserisci il dispositivo in una porta USB e lascia che si accenda.",
+            "de": "Stecke das Gerät in einen USB-Anschluss und lass es hochfahren."
+          }
+        }
+      },
+      "settings": []
+    }
+  ],
+  "capabilities": {
+    "alarm_water_high": {
+      "type": "boolean",
+      "title": {
+        "en": "High Liquid Level",
+        "de": "Hoher Flüssigkeitsstand",
+        "es": "Nivel alto de líquido",
+        "it": "Livello alto del liquido"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/water-level-up.svg"
+    },
+    "alarm_water_low": {
+      "type": "boolean",
+      "title": {
+        "en": "Low Liquid Level",
+        "de": "Niedriger Flüssigkeitsstand",
+        "es": "Nivel bajo de líquido",
+        "it": "Livello basso del liquido"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/water-level-down.svg"
+    },
+    "is_availability": {
+      "type": "boolean",
+      "title": {
+        "en": "Is Available",
+        "es": "Disponible",
+        "it": "Disponibile",
+        "de": "Verfügbar"
+      },
+      "desc": {
+        "en": "true = device available, false = device unavailable. Used for availability flow triggers.",
+        "es": "true = dispositivo disponible, false = dispositivo no disponible. Usado para disparadores de flujo de disponibilidad.",
+        "it": "true = dispositivo disponibile, false = dispositivo non disponibile. Usato per i trigger di flusso di disponibilità.",
+        "de": "true = Gerät verfügbar, false = Gerät nicht verfügbar. Wird für Verfügbarkeits-Flow-Trigger verwendet."
+      },
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "uiComponent": null
+    },
+    "measure_water_level": {
+      "type": "number",
+      "title": {
+        "en": "Liquid Depth",
+        "de": "Flüssigkeitstiefe",
+        "es": "Profundidad del líquido",
+        "it": "Profondità del liquido"
+      },
+      "units": {
+        "en": "cm",
+        "de": "cm",
+        "es": "cm",
+        "it": "cm"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/water-depth.svg",
+      "insights": true,
+      "decimals": 1,
+      "min": 0,
+      "max": 400
+    },
+    "measure_water_percentage": {
+      "type": "number",
+      "title": {
+        "en": "Fill Level",
+        "de": "Füllstand",
+        "es": "Nivel de llenado",
+        "it": "Livello di riempimento"
+      },
+      "units": {
+        "en": "%",
+        "de": "%",
+        "es": "%",
+        "it": "%"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/water-level-fill.svg",
+      "insights": true,
+      "decimals": 0,
+      "min": 0,
+      "max": 100
+    }
+  }
+}
