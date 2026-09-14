@@ -1,0 +1,6 @@
+analise/
+.homeybuild/
+*.log
+*.pcapng
+.claude/
+.*
