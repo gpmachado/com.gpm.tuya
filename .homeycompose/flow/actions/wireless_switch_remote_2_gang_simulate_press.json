@@ -1,0 +1,41 @@
+{
+  "id": "wireless_switch_remote_2_gang_simulate_press",
+  "title": {
+    "en": "Simulate button press",
+    "de": "Tastendruck simulieren",
+    "es": "Simular pulsación de botón",
+    "it": "Simula pressione pulsante"
+  },
+  "titleFormatted": {
+    "en": "Simulate [[action]] press on button [[button]]",
+    "de": "[[action]]-Druck auf Taste [[button]] simulieren",
+    "es": "Simular pulsación [[action]] en el botón [[button]]",
+    "it": "Simula pressione [[action]] sul pulsante [[button]]"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=wireless_switch_remote_2_gang"
+    },
+    {
+      "name": "button",
+      "type": "dropdown",
+      "title": { "en": "Button", "de": "Taste", "es": "Botón", "it": "Pulsante" },
+      "values": [
+        { "id": "1", "label": { "en": "1", "de": "1", "es": "1", "it": "1" } },
+        { "id": "2", "label": { "en": "2", "de": "2", "es": "2", "it": "2" } }
+      ]
+    },
+    {
+      "name": "action",
+      "type": "dropdown",
+      "title": { "en": "Action", "de": "Aktion", "es": "Acción", "it": "Azione" },
+      "values": [
+        { "id": "single", "label": { "en": "Single", "de": "Einzelklick", "es": "Única", "it": "Singola" } },
+        { "id": "double", "label": { "en": "Double", "de": "Doppelklick", "es": "Doble", "it": "Doppia" } },
+        { "id": "long",   "label": { "en": "Hold", "de": "Halten", "es": "Mantener", "it": "Tieni premuto" } }
+      ]
+    }
+  ]
+}

@@ -173,6 +173,333 @@
         ]
       }
     ],
+    "actions": [
+      {
+        "id": "wireless_switch_remote_2_gang_simulate_press",
+        "title": {
+          "en": "Simulate button press",
+          "de": "Tastendruck simulieren",
+          "es": "Simular pulsación de botón",
+          "it": "Simula pressione pulsante"
+        },
+        "titleFormatted": {
+          "en": "Simulate [[action]] press on button [[button]]",
+          "de": "[[action]]-Druck auf Taste [[button]] simulieren",
+          "es": "Simular pulsación [[action]] en el botón [[button]]",
+          "it": "Simula pressione [[action]] sul pulsante [[button]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=wireless_switch_remote_2_gang"
+          },
+          {
+            "name": "button",
+            "type": "dropdown",
+            "title": {
+              "en": "Button",
+              "de": "Taste",
+              "es": "Botón",
+              "it": "Pulsante"
+            },
+            "values": [
+              {
+                "id": "1",
+                "label": {
+                  "en": "1",
+                  "de": "1",
+                  "es": "1",
+                  "it": "1"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "2",
+                  "de": "2",
+                  "es": "2",
+                  "it": "2"
+                }
+              }
+            ]
+          },
+          {
+            "name": "action",
+            "type": "dropdown",
+            "title": {
+              "en": "Action",
+              "de": "Aktion",
+              "es": "Acción",
+              "it": "Azione"
+            },
+            "values": [
+              {
+                "id": "single",
+                "label": {
+                  "en": "Single",
+                  "de": "Einzelklick",
+                  "es": "Única",
+                  "it": "Singola"
+                }
+              },
+              {
+                "id": "double",
+                "label": {
+                  "en": "Double",
+                  "de": "Doppelklick",
+                  "es": "Doble",
+                  "it": "Doppia"
+                }
+              },
+              {
+                "id": "long",
+                "label": {
+                  "en": "Hold",
+                  "de": "Halten",
+                  "es": "Mantener",
+                  "it": "Tieni premuto"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "siren_play",
+        "title": {
+          "en": "Play siren with melody",
+          "de": "Sirene mit Melodie abspielen",
+          "es": "Reproducir sirena con melodía",
+          "it": "Riproduci sirena con melodia"
+        },
+        "titleFormatted": {
+          "en": "Play [[melody]] for [[duration]] seconds",
+          "de": "Spiele [[melody]] für [[duration]] Sekunden",
+          "es": "Reproducir [[melody]] durante [[duration]] segundos",
+          "it": "Riproduci [[melody]] per [[duration]] secondi"
+        },
+        "hint": {
+          "en": "Play a specific melody for the given duration (volume is taken from Settings).",
+          "de": "Spielt eine bestimmte Melodie für die angegebene Dauer ab (Lautstärke wird aus den Einstellungen übernommen).",
+          "es": "Reproduce una melodía específica durante la duración indicada (el volumen se toma de Ajustes).",
+          "it": "Riproduce una melodia specifica per la durata indicata (il volume viene preso dalle Impostazioni)."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ekaza_siren"
+          },
+          {
+            "name": "melody",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "0",
+                "label": {
+                  "en": "Doorbell Chime",
+                  "de": "Türklingel",
+                  "es": "Timbre de puerta",
+                  "it": "Campanello porta"
+                }
+              },
+              {
+                "id": "1",
+                "label": {
+                  "en": "Für Elise",
+                  "de": "Für Elise",
+                  "es": "Para Elisa",
+                  "it": "Per Elisa"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "Westminster Chimes",
+                  "de": "Westminster-Glocken",
+                  "es": "Carillón Westminster",
+                  "it": "Rintocchi Westminster"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "Fast Double Doorbell",
+                  "de": "Schnelle Doppelklingel",
+                  "es": "Timbre doble rápido",
+                  "it": "Doppio campanello veloce"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "William Tell Overture",
+                  "de": "Wilhelm Tell Ouvertüre",
+                  "es": "Obertura Guillermo Tell",
+                  "it": "Ouverture Guglielmo Tell"
+                }
+              },
+              {
+                "id": "5",
+                "label": {
+                  "en": "Turkish March",
+                  "de": "Türkischer Marsch",
+                  "es": "Marcha turca",
+                  "it": "Marcia turca"
+                }
+              },
+              {
+                "id": "6",
+                "label": {
+                  "en": "Safe / Security Alarm",
+                  "de": "Sicherheitsalarm",
+                  "es": "Alarma de seguridad",
+                  "it": "Allarme sicurezza"
+                }
+              },
+              {
+                "id": "7",
+                "label": {
+                  "en": "Chemical Spill Alert",
+                  "de": "Chemikalienalarm",
+                  "es": "Alerta de derrame químico",
+                  "it": "Allarme sostanze chimiche"
+                }
+              },
+              {
+                "id": "8",
+                "label": {
+                  "en": "Piercing Alarm Clock",
+                  "de": "Schriller Wecker",
+                  "es": "Despertador estridente",
+                  "it": "Sveglia acuta"
+                }
+              },
+              {
+                "id": "9",
+                "label": {
+                  "en": "Smoke Alarm",
+                  "de": "Rauchmelder",
+                  "es": "Alarma de humo",
+                  "it": "Allarme fumo"
+                }
+              },
+              {
+                "id": "10",
+                "label": {
+                  "en": "Dog Barking",
+                  "de": "Hundegebell",
+                  "es": "Ladrido de perro",
+                  "it": "Abbaiare di cane"
+                }
+              },
+              {
+                "id": "11",
+                "label": {
+                  "en": "Police Siren",
+                  "de": "Polizeisirene",
+                  "es": "Sirena policial",
+                  "it": "Sirena polizia"
+                }
+              },
+              {
+                "id": "12",
+                "label": {
+                  "en": "Doorbell Chime (reverb)",
+                  "de": "Türklingel (Hall)",
+                  "es": "Timbre con reverb",
+                  "it": "Campanello con riverbero"
+                }
+              },
+              {
+                "id": "13",
+                "label": {
+                  "en": "Mechanical Telephone",
+                  "de": "Mechanisches Telefon",
+                  "es": "Teléfono mecánico",
+                  "it": "Telefono meccanico"
+                }
+              },
+              {
+                "id": "14",
+                "label": {
+                  "en": "Fire / Ambulance",
+                  "de": "Feuerwehr / Krankenwagen",
+                  "es": "Bomberos / Ambulancia",
+                  "it": "Pompieri / Ambulanza"
+                }
+              },
+              {
+                "id": "15",
+                "label": {
+                  "en": "3/1 Elevator",
+                  "de": "Aufzug 3/1",
+                  "es": "Ascensor 3/1",
+                  "it": "Ascensore 3/1"
+                }
+              },
+              {
+                "id": "16",
+                "label": {
+                  "en": "Buzzing Alarm Clock",
+                  "de": "Summender Wecker",
+                  "es": "Despertador zumbador",
+                  "it": "Sveglia ronzante"
+                }
+              },
+              {
+                "id": "17",
+                "label": {
+                  "en": "School Bell",
+                  "de": "Schulklingel",
+                  "es": "Timbre escolar",
+                  "it": "Campanella scolastica"
+                }
+              }
+            ]
+          },
+          {
+            "name": "duration",
+            "type": "number",
+            "min": 1,
+            "max": 1800,
+            "step": 1,
+            "placeholder": {
+              "en": "10"
+            }
+          }
+        ]
+      },
+      {
+        "id": "siren_stop",
+        "title": {
+          "en": "Stop siren",
+          "de": "Sirene stoppen",
+          "es": "Detener sirena",
+          "it": "Ferma sirena"
+        },
+        "titleFormatted": {
+          "en": "Stop the siren",
+          "de": "Sirene stoppen",
+          "es": "Detener la sirena",
+          "it": "Ferma la sirena"
+        },
+        "hint": {
+          "en": "Immediately stop the siren if it is playing.",
+          "de": "Stoppt die Sirene sofort, wenn sie läuft.",
+          "es": "Detiene inmediatamente la sirena si está sonando.",
+          "it": "Ferma immediatamente la sirena se è in riproduzione."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ekaza_siren"
+          }
+        ]
+      }
+    ],
     "triggers": [
       {
         "id": "doorwindowsensor_availability_turned_on",
@@ -895,6 +1222,97 @@
         ]
       },
       {
+        "id": "wireless_switch_remote_2_gang_button",
+        "title": {
+          "en": "Button action",
+          "de": "Tastenaktion",
+          "es": "Acción del botón",
+          "it": "Azione del pulsante"
+        },
+        "titleFormatted": {
+          "en": "Button [[button]] — [[action]]",
+          "de": "Taste [[button]] - [[action]]",
+          "es": "Botón [[button]] - [[action]]",
+          "it": "Pulsante [[button]] - [[action]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=wireless_switch_remote_2_gang"
+          },
+          {
+            "name": "button",
+            "type": "dropdown",
+            "title": {
+              "en": "Button",
+              "de": "Taste",
+              "es": "Botón",
+              "it": "Pulsante"
+            },
+            "values": [
+              {
+                "id": "1",
+                "label": {
+                  "en": "1",
+                  "de": "1",
+                  "es": "1",
+                  "it": "1"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "2",
+                  "de": "2",
+                  "es": "2",
+                  "it": "2"
+                }
+              }
+            ]
+          },
+          {
+            "name": "action",
+            "type": "dropdown",
+            "title": {
+              "en": "Action",
+              "de": "Aktion",
+              "es": "Acción",
+              "it": "Azione"
+            },
+            "values": [
+              {
+                "id": "single",
+                "label": {
+                  "en": "Single",
+                  "de": "Einzelklick",
+                  "es": "Única",
+                  "it": "Singola"
+                }
+              },
+              {
+                "id": "double",
+                "label": {
+                  "en": "Double",
+                  "de": "Doppelklick",
+                  "es": "Doble",
+                  "it": "Doppia"
+                }
+              },
+              {
+                "id": "long",
+                "label": {
+                  "en": "Hold",
+                  "de": "Halten",
+                  "es": "Mantener",
+                  "it": "Tieni premuto"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
         "id": "zigbee_repeater_availability_turned_on",
         "title": {
           "en": "Became available",
@@ -979,242 +1397,6 @@
             "type": "device",
             "name": "device",
             "filter": "driver_id=zigbee_repeater"
-          }
-        ]
-      }
-    ],
-    "actions": [
-      {
-        "id": "siren_play",
-        "title": {
-          "en": "Play siren with melody",
-          "de": "Sirene mit Melodie abspielen",
-          "es": "Reproducir sirena con melodía",
-          "it": "Riproduci sirena con melodia"
-        },
-        "titleFormatted": {
-          "en": "Play [[melody]] for [[duration]] seconds",
-          "de": "Spiele [[melody]] für [[duration]] Sekunden",
-          "es": "Reproducir [[melody]] durante [[duration]] segundos",
-          "it": "Riproduci [[melody]] per [[duration]] secondi"
-        },
-        "hint": {
-          "en": "Play a specific melody for the given duration (volume is taken from Settings).",
-          "de": "Spielt eine bestimmte Melodie für die angegebene Dauer ab (Lautstärke wird aus den Einstellungen übernommen).",
-          "es": "Reproduce una melodía específica durante la duración indicada (el volumen se toma de Ajustes).",
-          "it": "Riproduce una melodia specifica per la durata indicata (il volume viene preso dalle Impostazioni)."
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=ekaza_siren"
-          },
-          {
-            "name": "melody",
-            "type": "dropdown",
-            "values": [
-              {
-                "id": "0",
-                "label": {
-                  "en": "Doorbell Chime",
-                  "de": "Türklingel",
-                  "es": "Timbre de puerta",
-                  "it": "Campanello porta"
-                }
-              },
-              {
-                "id": "1",
-                "label": {
-                  "en": "Für Elise",
-                  "de": "Für Elise",
-                  "es": "Para Elisa",
-                  "it": "Per Elisa"
-                }
-              },
-              {
-                "id": "2",
-                "label": {
-                  "en": "Westminster Chimes",
-                  "de": "Westminster-Glocken",
-                  "es": "Carillón Westminster",
-                  "it": "Rintocchi Westminster"
-                }
-              },
-              {
-                "id": "3",
-                "label": {
-                  "en": "Fast Double Doorbell",
-                  "de": "Schnelle Doppelklingel",
-                  "es": "Timbre doble rápido",
-                  "it": "Doppio campanello veloce"
-                }
-              },
-              {
-                "id": "4",
-                "label": {
-                  "en": "William Tell Overture",
-                  "de": "Wilhelm Tell Ouvertüre",
-                  "es": "Obertura Guillermo Tell",
-                  "it": "Ouverture Guglielmo Tell"
-                }
-              },
-              {
-                "id": "5",
-                "label": {
-                  "en": "Turkish March",
-                  "de": "Türkischer Marsch",
-                  "es": "Marcha turca",
-                  "it": "Marcia turca"
-                }
-              },
-              {
-                "id": "6",
-                "label": {
-                  "en": "Safe / Security Alarm",
-                  "de": "Sicherheitsalarm",
-                  "es": "Alarma de seguridad",
-                  "it": "Allarme sicurezza"
-                }
-              },
-              {
-                "id": "7",
-                "label": {
-                  "en": "Chemical Spill Alert",
-                  "de": "Chemikalienalarm",
-                  "es": "Alerta de derrame químico",
-                  "it": "Allarme sostanze chimiche"
-                }
-              },
-              {
-                "id": "8",
-                "label": {
-                  "en": "Piercing Alarm Clock",
-                  "de": "Schriller Wecker",
-                  "es": "Despertador estridente",
-                  "it": "Sveglia acuta"
-                }
-              },
-              {
-                "id": "9",
-                "label": {
-                  "en": "Smoke Alarm",
-                  "de": "Rauchmelder",
-                  "es": "Alarma de humo",
-                  "it": "Allarme fumo"
-                }
-              },
-              {
-                "id": "10",
-                "label": {
-                  "en": "Dog Barking",
-                  "de": "Hundegebell",
-                  "es": "Ladrido de perro",
-                  "it": "Abbaiare di cane"
-                }
-              },
-              {
-                "id": "11",
-                "label": {
-                  "en": "Police Siren",
-                  "de": "Polizeisirene",
-                  "es": "Sirena policial",
-                  "it": "Sirena polizia"
-                }
-              },
-              {
-                "id": "12",
-                "label": {
-                  "en": "Doorbell Chime (reverb)",
-                  "de": "Türklingel (Hall)",
-                  "es": "Timbre con reverb",
-                  "it": "Campanello con riverbero"
-                }
-              },
-              {
-                "id": "13",
-                "label": {
-                  "en": "Mechanical Telephone",
-                  "de": "Mechanisches Telefon",
-                  "es": "Teléfono mecánico",
-                  "it": "Telefono meccanico"
-                }
-              },
-              {
-                "id": "14",
-                "label": {
-                  "en": "Fire / Ambulance",
-                  "de": "Feuerwehr / Krankenwagen",
-                  "es": "Bomberos / Ambulancia",
-                  "it": "Pompieri / Ambulanza"
-                }
-              },
-              {
-                "id": "15",
-                "label": {
-                  "en": "3/1 Elevator",
-                  "de": "Aufzug 3/1",
-                  "es": "Ascensor 3/1",
-                  "it": "Ascensore 3/1"
-                }
-              },
-              {
-                "id": "16",
-                "label": {
-                  "en": "Buzzing Alarm Clock",
-                  "de": "Summender Wecker",
-                  "es": "Despertador zumbador",
-                  "it": "Sveglia ronzante"
-                }
-              },
-              {
-                "id": "17",
-                "label": {
-                  "en": "School Bell",
-                  "de": "Schulklingel",
-                  "es": "Timbre escolar",
-                  "it": "Campanella scolastica"
-                }
-              }
-            ]
-          },
-          {
-            "name": "duration",
-            "type": "number",
-            "min": 1,
-            "max": 1800,
-            "step": 1,
-            "placeholder": {
-              "en": "10"
-            }
-          }
-        ]
-      },
-      {
-        "id": "siren_stop",
-        "title": {
-          "en": "Stop siren",
-          "de": "Sirene stoppen",
-          "es": "Detener sirena",
-          "it": "Ferma sirena"
-        },
-        "titleFormatted": {
-          "en": "Stop the siren",
-          "de": "Sirene stoppen",
-          "es": "Detener la sirena",
-          "it": "Ferma la sirena"
-        },
-        "hint": {
-          "en": "Immediately stop the siren if it is playing.",
-          "de": "Stoppt die Sirene sofort, wenn sie läuft.",
-          "es": "Detiene inmediatamente la sirena si está sonando.",
-          "it": "Ferma immediatamente la sirena se è in riproduzione."
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=ekaza_siren"
           }
         ]
       }
@@ -2726,6 +2908,79 @@
       "id": "water_tank_monitor"
     },
     {
+      "id": "wireless_switch_remote_2_gang",
+      "name": {
+        "en": "2 Gang Wireless Remote",
+        "de": "2-fach-Wireless-Fernbedienung",
+        "es": "Mando inalámbrico de 2 botones",
+        "it": "Telecomando wireless a 2 tasti"
+      },
+      "class": "remote",
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "zigbee"
+      ],
+      "capabilities": [
+        "measure_battery",
+        "last_button",
+        "last_action",
+        "last_click",
+        "button1_action",
+        "button2_action"
+      ],
+      "images": {
+        "xlarge": "/drivers/wireless_switch_remote_2_gang/assets/images/xlarge.png",
+        "large": "/drivers/wireless_switch_remote_2_gang/assets/images/large.png",
+        "small": "/drivers/wireless_switch_remote_2_gang/assets/images/small.png"
+      },
+      "energy": {
+        "batteries": [
+          "CR2032"
+        ]
+      },
+      "zigbee": {
+        "manufacturerName": [
+          "_TZ3000_tzvbimpq"
+        ],
+        "productId": [
+          "TS0042"
+        ],
+        "endpoints": {
+          "1": {
+            "clusters": [
+              0,
+              1,
+              6
+            ],
+            "bindings": [
+              6
+            ]
+          },
+          "2": {
+            "clusters": [
+              1,
+              6
+            ],
+            "bindings": [
+              6
+            ]
+          }
+        },
+        "learnmode": {
+          "image": "/drivers/wireless_switch_remote_2_gang/assets/icon.svg",
+          "instruction": {
+            "en": "Press either button for ~10 seconds until the LED starts blinking.",
+            "de": "Drücke eine der beiden Tasten etwa 10 Sekunden lang, bis die LED zu blinken beginnt.",
+            "es": "Pulsa cualquiera de los botones durante unos 10 segundos hasta que el LED empiece a parpadear.",
+            "it": "Premi uno dei due pulsanti per circa 10 secondi finché il LED non inizia a lampeggiare."
+          }
+        }
+      },
+      "settings": []
+    },
+    {
       "platforms": [
         "local"
       ],
@@ -2804,6 +3059,34 @@
       "uiComponent": "sensor",
       "icon": "/assets/capabilities/water-level-down.svg"
     },
+    "button1_action": {
+      "type": "string",
+      "title": {
+        "en": "Button 1",
+        "de": "Taste 1",
+        "es": "Botón 1",
+        "it": "Pulsante 1",
+        "fr": "Bouton 1"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/button1.svg"
+    },
+    "button2_action": {
+      "type": "string",
+      "title": {
+        "en": "Button 2",
+        "de": "Taste 2",
+        "es": "Botón 2",
+        "it": "Pulsante 2",
+        "fr": "Bouton 2"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/button2.svg"
+    },
     "is_availability": {
       "type": "boolean",
       "title": {
@@ -2822,6 +3105,49 @@
       "setable": false,
       "insights": false,
       "uiComponent": null
+    },
+    "last_action": {
+      "type": "string",
+      "title": {
+        "en": "Last action",
+        "de": "Letzte Aktion",
+        "es": "Última acción",
+        "it": "Ultima azione",
+        "fr": "Dernière action"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/last_action.svg"
+    },
+    "last_button": {
+      "type": "number",
+      "title": {
+        "en": "Last button",
+        "de": "Letzte Taste",
+        "es": "Último botón",
+        "it": "Ultimo pulsante",
+        "fr": "Dernier bouton"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/last_button.svg",
+      "decimals": 0
+    },
+    "last_click": {
+      "type": "string",
+      "title": {
+        "en": "Last click",
+        "de": "Letzter Klick",
+        "es": "Último clic",
+        "it": "Ultimo clic",
+        "fr": "Dernier clic"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/last_click.svg"
     },
     "measure_water_level": {
       "type": "number",

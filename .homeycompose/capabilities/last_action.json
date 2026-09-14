@@ -1,0 +1,14 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Last action",
+    "de": "Letzte Aktion",
+    "es": "Última acción",
+    "it": "Ultima azione",
+    "fr": "Dernière action"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/capabilities/last_action.svg"
+}
