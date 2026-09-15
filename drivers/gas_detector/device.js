@@ -70,8 +70,14 @@ class GasDetector extends ZigBeeDevice {
 
     await this._setupIASZone(zclNode);
 
-    // Availability: callback-driven (IAS Zone only reports on alarm, not periodically)
-    this._availability = new AvailabilityManagerCallback(this, { timeout: HEARTBEAT_SLOW_MS });
+    // Availability: callback-driven (IAS Zone only reports on alarm, not periodically).
+    // AC-powered (wall socket) — unlike a battery/sleepy device, it can safely
+    // answer an active poll, so keep pollBeforeOffline on (overrides the
+    // Callback class's battery-oriented false default).
+    this._availability = new AvailabilityManagerCallback(this, {
+      timeout: HEARTBEAT_SLOW_MS,
+      pollBeforeOffline: true,
+    });
     await this._availability.install();
 
     await this.ready();
