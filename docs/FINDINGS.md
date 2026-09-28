@@ -16,6 +16,7 @@ long-running use on Homey · `TODO` needs to be filled in by the author.
 
 - [Cross-cutting findings](#cross-cutting-findings)
   - [Tuya ZCL extensions on switches and plugs (0x0006, 0xE000, 0xE001)](#tuya-zcl-extensions-on-switches-and-plugs)
+  - [Time cluster (0x000A): Homey must act as time server](#time-cluster-0x000a-homey-must-act-as-time-server)
   - [Battery reporting needs a ZDO bind that Homey does not retry](#battery-reporting-needs-a-zdo-bind-that-homey-does-not-retry)
   - [Sleepy end devices: do not poll](#sleepy-end-devices-do-not-poll)
   - [Measuring Zigbee traffic per device](#measuring-zigbee-traffic-per-device)
@@ -30,6 +31,7 @@ long-running use on Homey · `TODO` needs to be filled in by the author.
   - [Power strip 4 + USB — TS011F / _TZ3000_cfnprab5](#power-strip-4--usb)
   - [Zigbee repeater — TS0207 / _TZ3000_nkkl7uzv](#zigbee-repeater)
 - [NovaDigital switches and plugs (companion app)](#novadigital-switches-and-plugs-companion-app)
+  - [Crosslink: one Homey command switching several gangs](#crosslink-one-homey-command-switching-several-gangs)
 
 ---
 
@@ -77,6 +79,45 @@ long-running use on Homey · `TODO` needs to be filled in by the author.
 
 Global (0x0006/0x8002) and per-gang (0xE001/0xD010) power-on behaviour are
 independent. Setting the global one does not update the per-gang values.
+
+### Time cluster (0x000A): Homey must act as time server
+
+**[field]** Confirmed via device interviews. Used by every driver in both apps.
+
+- Most Tuya (and Sonoff) devices have an **output** binding to the
+  coordinator's Time cluster and periodically ask Homey for the time.
+- With no bound cluster registered, zigbee-clusters answers every such query
+  with `binding_unavailable`. The result is log noise and devices that never
+  get a valid time.
+- Fix: register a shared time server on each endpoint,
+  `endpoint.bind('time', new TimeServerBoundCluster())`, answering with:
+  - `time`: live UTC in Zigbee epoch (seconds since 2000-01-01)
+  - `timeZone`: local offset in seconds
+  - `timeStatus`: synchronized
+  - `localTime` = time + timeZone
+- Some Sonoff devices (e.g. MINI-ZB1GP) also read `dstStart` / `dstEnd` /
+  `dstShift`. Without them zigbee-clusters logs `not_implemented`, so a
+  subclass adds those attributes.
+- The Time cluster schema itself is registered globally, so reads and writes
+  are parsed correctly.
+- Related: Tuya devices send unsolicited Basic cluster (0x0000) reports during
+  init. Binding a silent Basic bound cluster stops the "error while sending
+  default error response" spam when the device is already unreachable.
+- This is the ZCL Time cluster. TS0601 devices that request time through the
+  Tuya cluster (0xEF00 command 0x24) need a separate answer via that cluster.
+  Some devices use **both**, see the
+  [temperature/humidity clock](#temperaturehumidity-clock).
+
+**Tuya time sync (0xEF00, command 0x24)**
+
+- Payload, 10 bytes: `[seq: 2 bytes][UTC: uint32 BE][local time: uint32 BE]`.
+  `seq` echoes the first two bytes of the device's request.
+- When the request prefix is `00 06` or `00 00`, answer with the 8-byte form
+  (no `seq`).
+- **Epochs differ:** Tuya uses Unix seconds (since 1970); the ZCL Time cluster
+  uses seconds since 2000-01-01. Mixing them up shifts the clock by 30 years.
+
+Implementation: [`lib/TimeCluster.js`](../lib/TimeCluster.js).
 
 ### Battery reporting needs a ZDO bind that Homey does not retry
 
@@ -273,9 +314,17 @@ at the time of writing.
 | 9 | Temperature unit: 0 °C, 1 °F |
 
 - Sleepy. Sends bursts of repeated frames on each wake. Drop unchanged values.
-- Requests Tuya time on its own during pairing and rejoin. Answer it
-  immediately (local timezone) and send nothing else: extra commands during
-  rejoin can miss the short wake window.
+- **Uses both time paths [sniffer]:** Tuya command 0x24 on 0xEF00 and a ZCL
+  Time cluster (0x000A) read.
+  - On a Tuya time request, answer with 0x24 (local timezone) and then send the
+    gateway status command **0x10 with payload `[0x00, 0x36]`**, as the Tuya hub
+    does in the capture after a time sync.
+  - The ZCL Time read is answered by the shared time server, but it is also a
+    useful wake signal: if no Tuya time request arrives within 10 s, push the
+    Tuya time (0x24 + 0x10) anyway. Throttle this fallback to once per 2 min,
+    unless a new rejoin (Device Announce) happened.
+- Send nothing else while it is awake: extra commands during rejoin can miss
+  the short wake window.
 
 ### Power strip 4 + USB
 
@@ -316,9 +365,33 @@ These live in a separate, published app:
 (MIT). The same two structures cover every gang count from 1 to 6.
 
 **[field]** All wall switches below (1, 2, 3, 4 and 6 gang) were tested on
-real hardware, with no cross-talk between gangs: switching or reporting one gang
-never changes or misreports another. The findings apply to any Tuya wall switch
+real hardware, with no "crosslink". The findings apply to any Tuya wall switch
 with the same structure, not only the NovaDigital-branded units.
+
+### Crosslink: one Homey command switching several gangs
+
+**[field]** Took a long time to get right.
+
+- **Symptom:** turning on gang 1 **from Homey** also switched gang 2 (or all
+  gangs). Physical buttons on the wall never caused it; only Homey → device
+  commands did.
+- **Context:** a multi-gang switch is paired as EP1 (main device) plus one
+  Homey sub-device per extra gang, all sharing the same Zigbee node. Without
+  strict isolation, a command meant for one gang was not confined to that
+  gang's endpoint.
+- **What works** (used by every ZCL multi-gang driver in com.gpm.novadigital):
+  - Each device (main or sub-device) resolves **its own** endpoint once at init
+    (`this._endpoint`, from `subDeviceId`) and never touches another gang's
+    on/off.
+  - UI → device: only `registerCapabilityListener('onoff')`, which sends
+    `setOn()` / `setOff()` to `zclNode.endpoints[this._endpoint].clusters.onOff`.
+    No `registerCapability('onoff', …)` for on/off.
+  - Device → UI: an `attr.onOff` listener on that same endpoint's cluster, plus
+    an `OnOffBoundCluster` bound on that endpoint for commands the device sends.
+  - Settings shared by all gangs (backlight, global power-on) are read and
+    written only from EP1.
+- Implementation: `_setupOnOffEndpoint()` and `_onCapabilityOnOff()` in
+  [`lib/TuyaZclBase.js`](https://github.com/gpmachado/com.gpm.novadigital/blob/main/lib/TuyaZclBase.js).
 
 ### ZCL switches (TS0001 / TS0002 / TS0003 / TS0004)
 
