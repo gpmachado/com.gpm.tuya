@@ -2052,6 +2052,7 @@
         "measure_temperature",
         "measure_humidity",
         "measure_battery",
+        "alarm_battery",
         "is_availability"
       ],
       "capabilitiesOptions": {
@@ -2116,7 +2117,44 @@
           }
         }
       },
-      "settings": []
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Battery",
+            "de": "Batterie",
+            "es": "Batería",
+            "it": "Batteria"
+          },
+          "children": [
+            {
+              "id": "battery_low_threshold",
+              "type": "number",
+              "min": 1,
+              "max": 99,
+              "units": {
+                "en": "%",
+                "de": "%",
+                "es": "%",
+                "it": "%"
+              },
+              "label": {
+                "en": "Low battery threshold",
+                "de": "Schwellenwert für niedrigen Akkustand",
+                "es": "Umbral de batería baja",
+                "it": "Soglia batteria scarica"
+              },
+              "hint": {
+                "en": "Turn on the low-battery alert when the battery level drops below this percentage.",
+                "de": "Aktiviert die Warnung bei niedrigem Akkustand, sobald der Akkustand unter diesen Prozentsatz fällt.",
+                "es": "Activa la alerta de batería baja cuando el nivel de batería cae por debajo de este porcentaje.",
+                "it": "Attiva l'avviso di batteria scarica quando il livello scende sotto questa percentuale."
+              },
+              "value": 20
+            }
+          ]
+        }
+      ]
     },
     {
       "platforms": [
@@ -2583,6 +2621,7 @@
         "measure_temperature",
         "measure_humidity",
         "measure_battery",
+        "alarm_battery",
         "is_availability"
       ],
       "capabilitiesOptions": {
@@ -2663,7 +2702,44 @@
           }
         }
       },
-      "settings": []
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Battery",
+            "de": "Batterie",
+            "es": "Batería",
+            "it": "Batteria"
+          },
+          "children": [
+            {
+              "id": "battery_low_threshold",
+              "type": "number",
+              "min": 1,
+              "max": 99,
+              "units": {
+                "en": "%",
+                "de": "%",
+                "es": "%",
+                "it": "%"
+              },
+              "label": {
+                "en": "Low battery threshold",
+                "de": "Schwellenwert für niedrigen Akkustand",
+                "es": "Umbral de batería baja",
+                "it": "Soglia batteria scarica"
+              },
+              "hint": {
+                "en": "Turn on the low-battery alert when the battery level drops below this percentage.",
+                "de": "Aktiviert die Warnung bei niedrigem Akkustand, sobald der Akkustand unter diesen Prozentsatz fällt.",
+                "es": "Activa la alerta de batería baja cuando el nivel de batería cae por debajo de este porcentaje.",
+                "it": "Attiva l'avviso di batteria scarica quando il livello scende sotto questa percentuale."
+              },
+              "value": 20
+            }
+          ]
+        }
+      ]
     },
     {
       "name": {
@@ -2924,6 +3000,7 @@
       ],
       "capabilities": [
         "measure_battery",
+        "alarm_battery",
         "last_button",
         "last_action",
         "last_click",
@@ -2978,7 +3055,44 @@
           }
         }
       },
-      "settings": []
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Battery",
+            "de": "Batterie",
+            "es": "Batería",
+            "it": "Batteria"
+          },
+          "children": [
+            {
+              "id": "battery_low_threshold",
+              "type": "number",
+              "min": 1,
+              "max": 99,
+              "units": {
+                "en": "%",
+                "de": "%",
+                "es": "%",
+                "it": "%"
+              },
+              "label": {
+                "en": "Low battery threshold",
+                "de": "Schwellenwert für niedrigen Akkustand",
+                "es": "Umbral de batería baja",
+                "it": "Soglia batteria scarica"
+              },
+              "hint": {
+                "en": "Turn on the low-battery alert when the battery level drops below this percentage.",
+                "de": "Aktiviert die Warnung bei niedrigem Akkustand, sobald der Akkustand unter diesen Prozentsatz fällt.",
+                "es": "Activa la alerta de batería baja cuando el nivel de batería cae por debajo de este porcentaje.",
+                "it": "Attiva l'avviso di batteria scarica quando il livello scende sotto questa percentuale."
+              },
+              "value": 20
+            }
+          ]
+        }
+      ]
     },
     {
       "platforms": [

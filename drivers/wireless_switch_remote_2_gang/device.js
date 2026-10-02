@@ -13,6 +13,7 @@
 const { ZigBeeDevice } = require('homey-zigbeedriver');
 const { CLUSTER } = require('zigbee-clusters');
 const { TimeServerBoundCluster } = require('../../lib/TimeCluster');
+const { applyBatteryAlarm, reapplyBatteryAlarm } = require('../../lib/batteryAlarm');
 
 const ACTION = { 0: 'single', 1: 'double', 2: 'long' };
 
@@ -20,12 +21,21 @@ class WirelessSwitchRemote2Gang extends ZigBeeDevice {
 
   async onNodeInit({ zclNode }) {
 
+    // Migrate existing paired devices: add alarm_battery if missing
+    if (!this.hasCapability('alarm_battery'))
+      await this.addCapability('alarm_battery').catch(err => this.error('addCapability alarm_battery:', err));
+
     // Battery level (powerConfiguration, batteryPercentageRemaining: ZCL 0-200 -> %).
     // Sleepy device: don't read on start, just parse the spontaneous reports.
     if (this.hasCapability('measure_battery')) {
       this.registerCapability('measure_battery', CLUSTER.POWER_CONFIGURATION, {
         report: 'batteryPercentageRemaining',
-        reportParser: v => (typeof v === 'number' ? Math.round(v / 2) : null),
+        reportParser: v => {
+          if (typeof v !== 'number') return null;
+          const result = Math.round(v / 2);
+          applyBatteryAlarm(this, result);
+          return result;
+        },
         getOpts: { getOnStart: false },
       });
     }
@@ -98,6 +108,13 @@ class WirelessSwitchRemote2Gang extends ZigBeeDevice {
       timeStyle: 'medium',
     }).format(new Date());
     this.setCapabilityValue('last_click', timestamp).catch(this.error);
+  }
+
+  async onSettings({ changedKeys }) {
+    this.log('[Settings] Changed:', changedKeys);
+    if (changedKeys.includes('battery_low_threshold')) {
+      reapplyBatteryAlarm(this);
+    }
   }
 
   onDeleted() {

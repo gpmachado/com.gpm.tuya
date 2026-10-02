@@ -6,6 +6,7 @@ const { AvailabilityManagerPassive } = AvailabilityManager;
 const { isDeviceUnreachable } = require('../../lib/errorUtils');
 const { TimeServerBoundCluster } = require('../../lib/TimeCluster');
 const { APP_VERSION, HEARTBEAT_VERY_SLOW_MS } = require('../../lib/constants');
+const { applyBatteryAlarm, reapplyBatteryAlarm } = require('../../lib/batteryAlarm');
 
 const VERSION = APP_VERSION;
 
@@ -27,9 +28,11 @@ class TempHumidClock extends TuyaSpecificClusterDevice {
     this.log(`Tuya Temp/Hum Clock [v${VERSION}]`);
     this.log('Battery optimized - Auto timezone');
 
-    // Migrate existing paired devices: add is_availability if missing
+    // Migrate existing paired devices: add is_availability / alarm_battery if missing
     if (!this.hasCapability('is_availability'))
       await this.addCapability('is_availability').catch(err => this.error('addCapability is_availability:', err));
+    if (!this.hasCapability('alarm_battery'))
+      await this.addCapability('alarm_battery').catch(err => this.error('addCapability alarm_battery:', err));
 
     // Availability watchdog — install FIRST so inbound wake/rejoin frames mark
     // the sleepy device as available without needing active polling.
@@ -134,6 +137,7 @@ class TempHumidClock extends TuyaSpecificClusterDevice {
         if (batteryPercent !== undefined) {
           this.log(`Battery: ${batteryPercent}%`);
           this.setCapabilityValue('measure_battery', batteryPercent).catch(this.error);
+          applyBatteryAlarm(this, batteryPercent);
         } else {
           this.log(`Battery: unknown value ${value}`);
         }
@@ -206,6 +210,13 @@ class TempHumidClock extends TuyaSpecificClusterDevice {
     await new Promise(resolve => this.homey.setTimeout(resolve, 300));
     await tuyaCluster.gatewayStatus({ payload: Buffer.from([0x00, 0x36]) });
     this.log(`Clock handshake sent (${reason})`);
+  }
+
+  async onSettings({ changedKeys }) {
+    this.log('[Settings] Changed:', changedKeys);
+    if (changedKeys.includes('battery_low_threshold')) {
+      reapplyBatteryAlarm(this);
+    }
   }
 
   onDeleted() {

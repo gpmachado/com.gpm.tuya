@@ -2,6 +2,10 @@
   "name": "com.gpm.tuya",
   "version": "1.0.0",
   "main": "app.js",
+  "scripts": {
+    "update:supported-devices": "node scripts/generate-supported-devices.js",
+    "check:supported-devices": "node scripts/generate-supported-devices.js --check"
+  },
   "dependencies": {
     "homey-zigbeedriver": "^2.2.17",
     "zigbee-clusters": "^3.2.1"

@@ -18,6 +18,7 @@ const { CLUSTER } = require('zigbee-clusters');
 const { AvailabilityManagerCallback } = require('../../lib/AvailabilityManager');
 const { TimeServerBoundCluster } = require('../../lib/TimeCluster');
 const { HEARTBEAT_SLOW_MS, APP_VERSION } = require('../../lib/constants');
+const { applyBatteryAlarm, reapplyBatteryAlarm } = require('../../lib/batteryAlarm');
 
 const DRIVER_NAME = 'LCD Temp/Humidity Sensor';
 
@@ -33,9 +34,11 @@ class LCDTempHumidSensor extends ZigBeeDevice {
     this._registerHumidity();
     this._registerBattery();
 
-    // Migrate existing paired devices: add is_availability if missing
+    // Migrate existing paired devices: add is_availability / alarm_battery if missing
     if (!this.hasCapability('is_availability'))
       await this.addCapability('is_availability').catch(err => this.error('addCapability is_availability:', err));
+    if (!this.hasCapability('alarm_battery'))
+      await this.addCapability('alarm_battery').catch(err => this.error('addCapability alarm_battery:', err));
 
     // Availability: Callback watchdog — resets on each reportParser call.
     // cluster.on('report') is unreliable in some homey-zigbeedriver versions;
@@ -103,6 +106,7 @@ class LCDTempHumidSensor extends ZigBeeDevice {
         this._markAliveFromAvailability?.('battery');
         const result = Math.min(100, Math.max(0, Math.round(value / 2)));
         this.log(`[Battery] ${result}%`);
+        applyBatteryAlarm(this, result);
         return result;
       },
     });
@@ -132,7 +136,9 @@ class LCDTempHumidSensor extends ZigBeeDevice {
   async onSettings({ oldSettings, newSettings, changedKeys }) {
     this.log('[Settings] Changed:', changedKeys);
 
-
+    if (changedKeys.includes('battery_low_threshold')) {
+      reapplyBatteryAlarm(this);
+    }
   }
 
   // 
