@@ -1,6 +1,6 @@
 {
   "name": "com.gpm.tuya",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "app.js",
   "scripts": {
     "update:supported-devices": "node scripts/generate-supported-devices.js",

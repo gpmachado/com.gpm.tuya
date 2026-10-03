@@ -1,5 +1,8 @@
 {
   "1.0.0": {
     "en": "first version"
+  },
+  "1.0.1": {
+    "en": "Low-battery alert (configurable threshold) for the LCD temperature/humidity sensor, the temperature/humidity clock and the 2-gang wireless remote. Internal frame-handling refactor (FrameMiddleware). New 2-gang wireless remote driver."
   }
 }
