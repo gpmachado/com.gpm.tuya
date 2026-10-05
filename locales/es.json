@@ -21,7 +21,7 @@
     "previous_hour": "Hora anterior",
     "last_message": "Último mensaje",
     "loading": "Cargando estadísticas…",
-    "footnote": "“Tramas” son mensajes Zigbee sin procesar. “Actividad” representa devoluciones de llamada explícitas de sensores inactivos. Los datos se guardan como máximo una vez cada cinco minutos.",
+    "footnote": "“Tramas” son mensajes Zigbee sin procesar. “Actividad” representa devoluciones de llamada explícitas de sensores inactivos. Los datos se guardan en memoria y se reinician cuando la app se reinicia. El mando inalámbrico de 2 botones (batería) no tiene seguimiento de disponibilidad.",
     "no_devices": "No hay dispositivos supervisados activos.",
     "frames": "tramas",
     "activity": "actividad",
@@ -43,6 +43,10 @@
     "total_rejoins": "Reconexiones totales",
     "devices_with_rejoins": "Dispositivos afectados",
     "last_rejoin": "Última reconexión",
-    "no_rejoins": "Aún no se registraron reconexiones."
+    "no_rejoins": "Aún no se registraron reconexiones.",
+    "availability_switch": "Seguimiento de disponibilidad",
+    "availability_switch_hint": "Si está desactivado, los dispositivos nunca se marcan como no disponibles: las estadísticas de Tráfico y Reconexiones siguen registrándose y cualquier dispositivo no disponible se restaura de inmediato.",
+    "availability_switch_failed": "Error al cambiar:",
+    "availability_switch_partial_restore": "Desactivado, pero {n} dispositivo(s) no pudieron restaurarse de inmediato; deberían recuperarse solos pronto."
   }
 }

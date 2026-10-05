@@ -29,7 +29,6 @@ class WaterTankMonitorDevice extends TuyaSpecificClusterDevice {
     // A 12-hour timeout avoids treating normal end-device silence as offline.
     this._availability = new AvailabilityManagerPassive(this, {
       timeout: 12 * 60 * 60 * 1000,
-      pollBeforeOffline: false,
     });
     await this._availability.install();
 

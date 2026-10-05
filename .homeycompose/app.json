@@ -107,6 +107,14 @@
     "resetRejoinStats": {
       "method": "POST",
       "path": "/rejoin-stats/reset"
+    },
+    "getAvailabilitySetting": {
+      "method": "GET",
+      "path": "/availability-setting"
+    },
+    "setAvailabilitySetting": {
+      "method": "POST",
+      "path": "/availability-setting"
     }
   },
   "dependencies": {

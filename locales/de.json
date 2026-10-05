@@ -21,7 +21,7 @@
     "previous_hour": "Vorherige Stunde",
     "last_message": "Letzte Nachricht",
     "loading": "Statistik wird geladen…",
-    "footnote": "„Frames“ sind rohe Zigbee-Nachrichten. „Aktivität“ steht für explizite Rückmeldungen von schlafenden Sensoren. Daten werden höchstens einmal alle fünf Minuten gespeichert.",
+    "footnote": "„Frames“ sind rohe Zigbee-Nachrichten. „Aktivität“ steht für explizite Rückmeldungen von schlafenden Sensoren. Die Daten werden im Speicher gehalten und beginnen beim Neustart der App von vorn. Die 2-fach-Fernbedienung (Batterie) hat keine Verfügbarkeitsüberwachung.",
     "no_devices": "Keine überwachten Geräte sind aktiv.",
     "frames": "Frames",
     "activity": "Aktivität",
@@ -43,6 +43,10 @@
     "total_rejoins": "Wiederverbindungen gesamt",
     "devices_with_rejoins": "Betroffene Geräte",
     "last_rejoin": "Letzte Wiederverbindung",
-    "no_rejoins": "Noch keine Wiederverbindungen erfasst."
+    "no_rejoins": "Noch keine Wiederverbindungen erfasst.",
+    "availability_switch": "Verfügbarkeitsüberwachung",
+    "availability_switch_hint": "Wenn aus, werden Geräte nie als nicht verfügbar markiert – Traffic- und Rejoin-Statistiken laufen weiter, und derzeit nicht verfügbare Geräte werden sofort wiederhergestellt.",
+    "availability_switch_failed": "Änderung fehlgeschlagen:",
+    "availability_switch_partial_restore": "Ausgeschaltet, aber {n} Gerät(e) konnten nicht sofort wiederhergestellt werden – sie sollten sich bald von selbst melden."
   }
 }

@@ -57,7 +57,7 @@ class PowerStripDevice extends TuyaZclBase {
     if (this._isMainDevice) {
 
       // Install availability watchdog FIRST so any ZCL response during init reads
-      // updates last_seen_ts and triggers onBecameAvailable if device is reachable.
+      // counts as a frame and restores availability if the device is reachable.
       await this._installAvailability();
 
       // tuyaE000 boot listener: inchingTime (0xD001) fires on power-restore/reconnect.

@@ -6,7 +6,13 @@
  * Only devices with an AvailabilityManager are returned. Multi-gang drivers
  * install the manager on their main/EP1 device only, producing one row per
  * physical Zigbee node.
+ *
+ * getAvailabilitySetting/setAvailabilitySetting cover the app-wide on/off switch (see
+ * lib/AvailabilityManager.js, "Global on/off switch"). Turning it off also restores every
+ * device that is currently unavailable. Same contract as com.gpm.sonoff.
  */
+const { AVAILABILITY_ENABLED_SETTING_KEY } = require('./lib/constants');
+
 module.exports = {
   async getMessageStats({ homey }) {
     const rowsByPhysicalDevice = new Map();
@@ -109,5 +115,43 @@ module.exports = {
     homey.settings.set('rejoin_tracking_since', Date.now());
 
     return { since: homey.settings.get('rejoin_tracking_since') };
+  },
+
+  async getAvailabilitySetting({ homey }) {
+    return { enabled: homey.settings.get(AVAILABILITY_ENABLED_SETTING_KEY) !== false };
+  },
+
+  /**
+   * body.enabled must be an actual boolean, so {"enabled":"false"} errors instead of being
+   * read as truthy. The setting is persisted before any restore; a partial restore failure is
+   * reported back as `restoreFailures` rather than thrown.
+   */
+  async setAvailabilitySetting({ homey, body }) {
+    if (typeof body?.enabled !== 'boolean') {
+      throw new Error('enabled must be a boolean');
+    }
+    const { enabled } = body;
+    homey.settings.set(AVAILABILITY_ENABLED_SETTING_KEY, enabled);
+    homey.log(`[Availability] Global switch turned ${enabled ? 'on' : 'off'}`);
+
+    let restoreFailures = 0;
+    if (!enabled) {
+      const restores = [];
+      for (const driver of Object.values(homey.drivers.getDrivers())) {
+        for (const device of driver.getDevices()) {
+          const manager = device._availability;
+          if (manager && typeof manager.markAvailable === 'function' && !device.getAvailable()) {
+            restores.push(manager.markAvailable());
+          }
+        }
+      }
+      if (restores.length > 0) {
+        homey.log(`[Availability] Restoring ${restores.length} device(s) that were unavailable`);
+      }
+      const results = await Promise.allSettled(restores);
+      restoreFailures = results.filter(result => result.status === 'rejected').length;
+    }
+
+    return { enabled, restoreFailures };
   },
 };

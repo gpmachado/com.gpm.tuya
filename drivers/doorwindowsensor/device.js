@@ -96,7 +96,6 @@ class DoorWindowSensorDevice extends ZigBeeDevice {
 
     this._availability = new AvailabilityManagerPassive(this, {
       timeout: DOOR_SENSOR_HEARTBEAT_MS,
-      resetLastSeenOnInstall: true,
     });
     await this._availability.install();
 

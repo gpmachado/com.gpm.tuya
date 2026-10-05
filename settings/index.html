@@ -111,6 +111,30 @@
     .tab.active { color: var(--blue-dark); border-bottom-color: var(--blue); }
     .panel[hidden] { display: none; }
 
+    .availability-bar {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+    .switch { position: relative; flex: 0 0 auto; display: inline-block; margin-top: 2px; }
+    .switch input { position: absolute; width: 42px; height: 24px; margin: 0; opacity: 0; cursor: pointer; }
+    .switch input[disabled] { cursor: wait; }
+    .switch-track { display: block; width: 42px; height: 24px; border-radius: 999px; background: #e6f0f4; transition: background 0.15s ease; }
+    .switch-thumb { display: block; width: 18px; height: 18px; margin: 3px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(16, 42, 67, 0.3); transition: transform 0.15s ease; }
+    .switch input:checked ~ .switch-track { background: var(--blue); }
+    .switch input:checked ~ .switch-track .switch-thumb { transform: translateX(18px); }
+    .switch input:focus-visible ~ .switch-track { outline: 3px solid rgba(80, 120, 196, 0.28); outline-offset: 2px; }
+    .availability-text { min-width: 0; }
+    .availability-label { display: block; font-size: 14px; font-weight: 650; }
+    .availability-hint { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
+    .availability-error { margin-left: auto; align-self: center; color: var(--bad); font-size: 12px; text-align: right; }
+
     .summary {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -303,6 +327,18 @@
       </div>
     </header>
 
+    <section class="availability-bar" aria-label="Availability tracking">
+      <label class="switch">
+        <input type="checkbox" id="availability-toggle" checked>
+        <span class="switch-track"><span class="switch-thumb"></span></span>
+      </label>
+      <div class="availability-text">
+        <span class="availability-label" data-i18n="settings.availability_switch">Availability tracking</span>
+        <span class="availability-hint" data-i18n="settings.availability_switch_hint">When off, devices are never marked unavailable - Traffic and Rejoins statistics keep recording, and any device currently unavailable is restored right away.</span>
+      </div>
+      <span id="availability-error" class="availability-error" hidden></span>
+    </section>
+
     <nav class="tabs" role="tablist">
       <button type="button" class="tab active" data-tab="traffic" role="tab" aria-selected="true" data-i18n="settings.tab_traffic">Traffic</button>
       <button type="button" class="tab" data-tab="rejoins" role="tab" aria-selected="false" data-i18n="settings.tab_rejoins">Rejoins</button>
@@ -362,7 +398,7 @@
         </table>
       </section>
 
-      <p class="footnote" data-i18n="settings.footnote">“Frames” are raw Zigbee messages. “Activity” represents explicit callbacks from sleepy sensors. Data is persisted at most once every five minutes.</p>
+      <p class="footnote" data-i18n="settings.footnote">“Frames” are raw Zigbee messages. “Activity” represents explicit callbacks from sleepy sensors. Data is kept in memory and starts over when the app restarts. The 2-gang wireless remote (battery) has no availability tracking.</p>
     </div>
 
     <div id="panel-rejoins" class="panel" role="tabpanel" hidden>
@@ -410,6 +446,7 @@
     var devices = [];
     var currentSort = 'name-asc';
     var latestRequest = 0;
+    var latestAvailabilityRequest = 0;
     var resetInFlight = false;
     var activeTab = 'traffic';
 
@@ -719,6 +756,46 @@
         switchTab(button.getAttribute('data-tab'));
       });
     });
+    function loadAvailabilitySetting() {
+      if (!homeyApi) return;
+      var requestId = ++latestAvailabilityRequest;
+      homeyApi.api('GET', '/availability-setting?t=' + Date.now(), {}, function(error, result) {
+        if (requestId !== latestAvailabilityRequest) return;
+        if (error || !result || typeof result.enabled !== 'boolean') return;
+        document.getElementById('availability-toggle').checked = result.enabled;
+      });
+    }
+
+    function setAvailabilitySetting(enabled) {
+      var requestId = ++latestAvailabilityRequest;
+      var toggle = document.getElementById('availability-toggle');
+      var errorLabel = document.getElementById('availability-error');
+      toggle.disabled = true;
+      errorLabel.hidden = true;
+
+      homeyApi.api('POST', '/availability-setting', { enabled: enabled }, function(error, result) {
+        if (requestId !== latestAvailabilityRequest) return;
+        toggle.disabled = false;
+        if (error) {
+          toggle.checked = !enabled;
+          errorLabel.hidden = false;
+          errorLabel.textContent = translate('settings.availability_switch_failed') + ' ' + (error.message || error);
+          return;
+        }
+        toggle.checked = result && typeof result.enabled === 'boolean' ? result.enabled : enabled;
+        if (result && result.restoreFailures > 0) {
+          errorLabel.hidden = false;
+          errorLabel.textContent = translate('settings.availability_switch_partial_restore')
+            .replace('{n}', result.restoreFailures);
+        }
+        loadStats();
+      });
+    }
+
+    document.getElementById('availability-toggle').addEventListener('change', function(event) {
+      setAvailabilitySetting(event.target.checked);
+    });
+
     document.getElementById('refresh').addEventListener('click', loadStats);
     document.getElementById('reset').addEventListener('click', resetStats);
     document.getElementById('reset-rejoins').addEventListener('click', resetRejoinsStats);
@@ -738,6 +815,7 @@
       homeyApi = Homey;
       Homey.ready();
       loadStats();
+      loadAvailabilitySetting();
       setInterval(loadStats, 60 * 1000);
     }
   </script>

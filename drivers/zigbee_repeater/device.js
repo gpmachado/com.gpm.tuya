@@ -18,7 +18,7 @@ class ZigbeeRepeaterDevice extends ZigBeeDevice {
       await this.addCapability('is_availability').catch(err => this.error('addCapability is_availability:', err));
 
     // Passive availability watchdog — install FIRST so the ZCL response to
-    // readAttributes below updates last_seen_ts and fires onBecameAvailable.
+    // readAttributes below counts as a frame and restores availability if needed.
     this._availability = new AvailabilityManagerPassive(this, {
       timeout: HEARTBEAT_MEDIUM_MS,
     });

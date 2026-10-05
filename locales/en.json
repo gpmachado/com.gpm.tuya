@@ -21,7 +21,7 @@
     "previous_hour": "Previous hour",
     "last_message": "Last message",
     "loading": "Loading statistics…",
-    "footnote": "“Frames” are raw Zigbee messages. “Activity” represents explicit callbacks from sleepy sensors. Data is persisted at most once every five minutes.",
+    "footnote": "“Frames” are raw Zigbee messages. “Activity” represents explicit callbacks from sleepy sensors. Data is kept in memory and starts over when the app restarts. The 2-gang wireless remote (battery) has no availability tracking.",
     "no_devices": "No monitored devices are active.",
     "frames": "frames",
     "activity": "activity",
@@ -43,6 +43,10 @@
     "total_rejoins": "Total rejoins",
     "devices_with_rejoins": "Devices affected",
     "last_rejoin": "Last rejoin",
-    "no_rejoins": "No rejoins recorded yet."
+    "no_rejoins": "No rejoins recorded yet.",
+    "availability_switch": "Availability tracking",
+    "availability_switch_hint": "When off, devices are never marked unavailable - Traffic and Rejoins statistics keep recording, and any device currently unavailable is restored right away.",
+    "availability_switch_failed": "Failed to change:",
+    "availability_switch_partial_restore": "Switched off, but {n} device(s) could not be restored right away - they should catch up on their own soon."
   }
 }
