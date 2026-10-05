@@ -1,0 +1,177 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Melody",
+    "de": "Melodie",
+    "es": "Melodía",
+    "it": "Melodia"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker",
+  "icon": "/assets/capabilities/siren_melody.svg",
+  "values": [
+    {
+      "id": "0",
+      "title": {
+        "en": "Doorbell Chime",
+        "es": "Timbre de puerta",
+        "it": "Campanello porta",
+        "de": "Türklingel"
+      }
+    },
+    {
+      "id": "1",
+      "title": {
+        "en": "Für Elise",
+        "es": "Para Elisa",
+        "it": "Per Elisa",
+        "de": "Für Elise"
+      }
+    },
+    {
+      "id": "2",
+      "title": {
+        "en": "Westminster Chimes",
+        "es": "Carillón Westminster",
+        "it": "Rintocchi Westminster",
+        "de": "Westminster-Glocken"
+      }
+    },
+    {
+      "id": "3",
+      "title": {
+        "en": "Fast Double Doorbell",
+        "es": "Timbre doble rápido",
+        "it": "Doppio campanello veloce",
+        "de": "Schnelle Doppelklingel"
+      }
+    },
+    {
+      "id": "4",
+      "title": {
+        "en": "William Tell Overture",
+        "es": "Obertura Guillermo Tell",
+        "it": "Ouverture Guglielmo Tell",
+        "de": "Wilhelm Tell Ouvertüre"
+      }
+    },
+    {
+      "id": "5",
+      "title": {
+        "en": "Turkish March",
+        "es": "Marcha turca",
+        "it": "Marcia turca",
+        "de": "Türkischer Marsch"
+      }
+    },
+    {
+      "id": "6",
+      "title": {
+        "en": "Safe / Security Alarm",
+        "es": "Alarma de seguridad",
+        "it": "Allarme sicurezza",
+        "de": "Sicherheitsalarm"
+      }
+    },
+    {
+      "id": "7",
+      "title": {
+        "en": "Chemical Spill Alert",
+        "es": "Alerta de derrame químico",
+        "it": "Allarme sostanze chimiche",
+        "de": "Chemikalienalarm"
+      }
+    },
+    {
+      "id": "8",
+      "title": {
+        "en": "Piercing Alarm Clock",
+        "es": "Despertador estridente",
+        "it": "Sveglia acuta",
+        "de": "Schriller Wecker"
+      }
+    },
+    {
+      "id": "9",
+      "title": {
+        "en": "Smoke Alarm",
+        "es": "Alarma de humo",
+        "it": "Allarme fumo",
+        "de": "Rauchmelder"
+      }
+    },
+    {
+      "id": "10",
+      "title": {
+        "en": "Dog Barking",
+        "es": "Ladrido de perro",
+        "it": "Abbaiare di cane",
+        "de": "Hundegebell"
+      }
+    },
+    {
+      "id": "11",
+      "title": {
+        "en": "Police Siren",
+        "es": "Sirena policial",
+        "it": "Sirena polizia",
+        "de": "Polizeisirene"
+      }
+    },
+    {
+      "id": "12",
+      "title": {
+        "en": "Doorbell Chime (reverb)",
+        "es": "Timbre con reverb",
+        "it": "Campanello con riverbero",
+        "de": "Türklingel (Hall)"
+      }
+    },
+    {
+      "id": "13",
+      "title": {
+        "en": "Mechanical Telephone",
+        "es": "Teléfono mecánico",
+        "it": "Telefono meccanico",
+        "de": "Mechanisches Telefon"
+      }
+    },
+    {
+      "id": "14",
+      "title": {
+        "en": "Fire / Ambulance",
+        "es": "Bomberos / Ambulancia",
+        "it": "Pompieri / Ambulanza",
+        "de": "Feuerwehr / Krankenwagen"
+      }
+    },
+    {
+      "id": "15",
+      "title": {
+        "en": "3/1 Elevator",
+        "es": "Ascensor 3/1",
+        "it": "Ascensore 3/1",
+        "de": "Aufzug 3/1"
+      }
+    },
+    {
+      "id": "16",
+      "title": {
+        "en": "Buzzing Alarm Clock",
+        "es": "Despertador zumbador",
+        "it": "Sveglia ronzante",
+        "de": "Summender Wecker"
+      }
+    },
+    {
+      "id": "17",
+      "title": {
+        "en": "School Bell",
+        "es": "Timbre escolar",
+        "it": "Campanella scolastica",
+        "de": "Schulklingel"
+      }
+    }
+  ]
+}

@@ -39,6 +39,15 @@ const MELODY_NAMES = [
   'School Bell',              // 17
 ];
 
+const DEFAULT_MELODY = 5;  // Turkish March
+const DEFAULT_VOLUME = 2;  // high
+
+// The device has 3 volume levels (wire 0 low, 1 medium, 2 high). Homey's standard volume_set
+// capability is 0..1, driver.compose.json limits it to 3 stops (0, 0.5, 1) so the slider shows
+// the native speaker +/- volume control.
+const volumeToWire = v => (v < 0.34 ? 0 : v < 0.67 ? 1 : 2);
+const wireToVolume = w => w / 2;
+
 // ─────────────────────────────────────────────────────────────────────────────
 
 class EkazaSiren extends TuyaSpecificClusterDevice {
@@ -69,11 +78,28 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
 
     this._setupTuyaListeners(zclNode);
 
-    this.registerCapabilityListener('onoff', v => this._onCapabilityOnOff(v));
+    // Melody and volume used to be settings (alarmtune / alarmvolume). Melody is a picker on the
+    // device screen now and volume the standard volume_set slider with 3 stops (a second picker
+    // would be merged into the same dropdown as the melody one). Add them to devices paired
+    // before, seeded from the old settings when Homey still has them, else from the defaults
+    // (the device reports its real values on the next DP report and the controls follow).
+    // 'siren_volume' and 'siren_volume_level' only existed in development builds.
+    for (const stale of ['siren_volume', 'siren_volume_level']) {
+      if (this.hasCapability(stale))
+        await this.removeCapability(stale).catch(err => this.error(`removeCapability ${stale}:`, err));
+    }
+    if (!this.hasCapability('siren_melody')) {
+      await this.addCapability('siren_melody').catch(err => this.error('addCapability siren_melody:', err));
+      await this.setCapabilityValue('siren_melody', String(this.getSetting('alarmtune') ?? DEFAULT_MELODY)).catch(() => {});
+    }
+    if (!this.hasCapability('volume_set')) {
+      await this.addCapability('volume_set').catch(err => this.error('addCapability volume_set:', err));
+      await this.setCapabilityValue('volume_set', wireToVolume(Number(this.getSetting('alarmvolume') ?? DEFAULT_VOLUME))).catch(() => {});
+    }
 
-    // Populate melody name label from last-saved tune (before first device report arrives)
-    const savedTune = Number(this.getSetting('alarmtune') ?? '5');
-    this._syncSetting('melody_name', MELODY_NAMES[savedTune] ?? `Melody ${savedTune}`);
+    this.registerCapabilityListener('onoff', v => this._onCapabilityOnOff(v));
+    this.registerCapabilityListener('siren_melody', v => this._setMelody(Number(v)));
+    this.registerCapabilityListener('volume_set', v => this._setVolume(volumeToWire(Number(v))));
 
     this.log('Ekaza Siren ready');
   }
@@ -124,9 +150,9 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
         this.log(`Battery: ${value}%`);
         break;
 
-      // ── volume (sync setting from device, wire 0-2 stored as "0"/"1"/"2") ──
+      // ── volume (volume_set slider, wire 0-2 -> 0 / 0.5 / 1) ──
       case DP.VOLUME:
-        this._syncSetting('alarmvolume', String(value));
+        await this.setCapabilityValue('volume_set', wireToVolume(Number(value))).catch(e => this.error('volume update:', e));
         this.log(`Volume: ${value}`);
         break;
 
@@ -136,11 +162,10 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
         this.log(`Duration: ${value}s`);
         break;
 
-      // ── melody (sync setting from device, wire 0-17 stored as "0"-"17") ───
+      // ── melody (picker, wire 0-17 stored as "0"-"17") ───
       case DP.MELODY: {
         const name = MELODY_NAMES[value] ?? `Melody ${value}`;
-        this._syncSetting('alarmtune', String(value));
-        this._syncSetting('melody_name', name);
+        await this.setCapabilityValue('siren_melody', String(value)).catch(e => this.error('melody update:', e));
         this.log(`Melody: ${value} (${name})`);
         break;
       }
@@ -158,12 +183,12 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
   }
 
   /**
-   * Start siren using current Settings values.
+   * Start siren using the melody picker, the volume slider and the duration setting.
    * Sends melody + volume + duration before triggering.
    */
   async _startSiren() {
-    const melody   = Number(this.getSetting('alarmtune')      ?? '5');
-    const volume   = Number(this.getSetting('alarmvolume')    ?? '2');  // 2=high
+    const melody   = Number(this.getCapabilityValue('siren_melody') ?? DEFAULT_MELODY);
+    const volume   = this._currentVolumeWire();  // 2=high
     const duration = Number(this.getSetting('alarmsoundtime') ?? 10);
 
     await this._playSiren(melody, volume, duration);
@@ -204,6 +229,36 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
   }
 
   /**
+   * Change the melody used when the siren is switched on (picker and flow action).
+   * @param {number} melody Wire melody 0-17
+   */
+  async _setMelody(melody) {
+    if (!Number.isInteger(melody) || melody < 0 || melody > 17) throw new Error('Melody must be 0-17');
+    await this.writeEnum(DP.MELODY, melody)
+      .catch(err => { this.error('Melody write:', err.message); throw err; });
+    await this.setCapabilityValue('siren_melody', String(melody)).catch(() => {});
+    this.log(`Melody -> ${melody} (${MELODY_NAMES[melody] ?? melody})`);
+  }
+
+  /** Volume currently selected on the device screen, as the wire value 0-2. */
+  _currentVolumeWire() {
+    const v = this.getCapabilityValue('volume_set');
+    return typeof v === 'number' ? volumeToWire(v) : DEFAULT_VOLUME;
+  }
+
+  /**
+   * Change the volume used when the siren is switched on (slider and flow action).
+   * @param {number} volume Wire volume 0-2
+   */
+  async _setVolume(volume) {
+    if (!Number.isInteger(volume) || volume < 0 || volume > 2) throw new Error('Volume must be 0-2');
+    await this.writeEnum(DP.VOLUME, volume)
+      .catch(err => { this.error('Volume write:', err.message); throw err; });
+    await this.setCapabilityValue('volume_set', wireToVolume(volume)).catch(() => {});
+    this.log(`Volume -> ${volume}`);
+  }
+
+  /**
    * Stop siren immediately.
    */
   async _stopSiren() {
@@ -232,32 +287,12 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
     for (const key of changedKeys) {
       switch (key) {
 
-        case 'alarmvolume': {
-          const volume = Number(newSettings.alarmvolume);
-          if (volume < 0 || volume > 2) throw new Error('Volume must be 0-2');
-          await this.writeEnum(DP.VOLUME, volume)
-            .catch(err => { this.error('Volume write:', err.message); throw err; });
-          this.log(`Volume → ${volume}`);
-          break;
-        }
-
         case 'alarmsoundtime': {
           const duration = Number(newSettings.alarmsoundtime);
           if (duration < 1 || duration > 1800) throw new Error('Duration must be 1–1800s');
           await this.writeValue(DP.DURATION, duration)
             .catch(err => { this.error('Duration write:', err.message); throw err; });
           this.log(`Duration → ${duration}s`);
-          break;
-        }
-
-        case 'alarmtune': {
-          const melody = Number(newSettings.alarmtune);
-          if (melody < 0 || melody > 17) throw new Error('Melody must be 0–17');
-          await this.writeEnum(DP.MELODY, melody)
-            .catch(err => { this.error('Melody write:', err.message); throw err; });
-          const name = MELODY_NAMES[melody] ?? `Melody ${melody}`;
-          this._syncSetting('melody_name', name);
-          this.log(`Melody → ${melody} (${name})`);
           break;
         }
       }

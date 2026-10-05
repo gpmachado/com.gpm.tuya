@@ -116,10 +116,10 @@
         "it": "Riproduci [[melody]] per [[duration]] secondi"
       },
       "hint": {
-        "en": "Play a specific melody for the given duration (volume is taken from Settings).",
-        "de": "Spielt eine bestimmte Melodie für die angegebene Dauer ab (Lautstärke wird aus den Einstellungen übernommen).",
-        "es": "Reproduce una melodía específica durante la duración indicada (el volumen se toma de Ajustes).",
-        "it": "Riproduce una melodia specifica per la durata indicata (il volume viene preso dalle Impostazioni)."
+        "en": "Play a specific melody for the given duration (volume is the one selected on the device).",
+        "de": "Spielt eine bestimmte Melodie für die angegebene Dauer ab (Lautstärke wie am Gerät eingestellt).",
+        "es": "Reproduce una melodía específica durante la duración indicada (el volumen es el seleccionado en el dispositivo).",
+        "it": "Riproduce una melodia specifica per la durata indicata (il volume è quello selezionato sul dispositivo)."
       },
       "args": [
         {
@@ -299,6 +299,253 @@
           "placeholder": {
             "en": "10"
           }
+        }
+      ]
+    },
+    {
+      "id": "siren_set_melody",
+      "title": {
+        "en": "Set siren melody",
+        "de": "Sirenenmelodie einstellen",
+        "es": "Establecer melodía de la sirena",
+        "it": "Imposta melodia della sirena"
+      },
+      "titleFormatted": {
+        "en": "Set melody to [[melody]]",
+        "de": "Melodie auf [[melody]] einstellen",
+        "es": "Establecer melodía en [[melody]]",
+        "it": "Imposta melodia su [[melody]]"
+      },
+      "hint": {
+        "en": "Change the melody used when the siren is switched on. Does not start the siren.",
+        "de": "Ändert die Melodie, die beim Einschalten der Sirene verwendet wird. Startet die Sirene nicht.",
+        "es": "Cambia la melodía usada al encender la sirena. No inicia la sirena.",
+        "it": "Cambia la melodia usata quando la sirena viene accesa. Non avvia la sirena."
+      },
+      "args": [
+        {
+          "name": "melody",
+          "type": "dropdown",
+          "values": [
+            {
+              "id": "0",
+              "label": {
+                "en": "Doorbell Chime",
+                "es": "Timbre de puerta",
+                "it": "Campanello porta",
+                "de": "Türklingel"
+              }
+            },
+            {
+              "id": "1",
+              "label": {
+                "en": "Für Elise",
+                "es": "Para Elisa",
+                "it": "Per Elisa",
+                "de": "Für Elise"
+              }
+            },
+            {
+              "id": "2",
+              "label": {
+                "en": "Westminster Chimes",
+                "es": "Carillón Westminster",
+                "it": "Rintocchi Westminster",
+                "de": "Westminster-Glocken"
+              }
+            },
+            {
+              "id": "3",
+              "label": {
+                "en": "Fast Double Doorbell",
+                "es": "Timbre doble rápido",
+                "it": "Doppio campanello veloce",
+                "de": "Schnelle Doppelklingel"
+              }
+            },
+            {
+              "id": "4",
+              "label": {
+                "en": "William Tell Overture",
+                "es": "Obertura Guillermo Tell",
+                "it": "Ouverture Guglielmo Tell",
+                "de": "Wilhelm Tell Ouvertüre"
+              }
+            },
+            {
+              "id": "5",
+              "label": {
+                "en": "Turkish March",
+                "es": "Marcha turca",
+                "it": "Marcia turca",
+                "de": "Türkischer Marsch"
+              }
+            },
+            {
+              "id": "6",
+              "label": {
+                "en": "Safe / Security Alarm",
+                "es": "Alarma de seguridad",
+                "it": "Allarme sicurezza",
+                "de": "Sicherheitsalarm"
+              }
+            },
+            {
+              "id": "7",
+              "label": {
+                "en": "Chemical Spill Alert",
+                "es": "Alerta de derrame químico",
+                "it": "Allarme sostanze chimiche",
+                "de": "Chemikalienalarm"
+              }
+            },
+            {
+              "id": "8",
+              "label": {
+                "en": "Piercing Alarm Clock",
+                "es": "Despertador estridente",
+                "it": "Sveglia acuta",
+                "de": "Schriller Wecker"
+              }
+            },
+            {
+              "id": "9",
+              "label": {
+                "en": "Smoke Alarm",
+                "es": "Alarma de humo",
+                "it": "Allarme fumo",
+                "de": "Rauchmelder"
+              }
+            },
+            {
+              "id": "10",
+              "label": {
+                "en": "Dog Barking",
+                "es": "Ladrido de perro",
+                "it": "Abbaiare di cane",
+                "de": "Hundegebell"
+              }
+            },
+            {
+              "id": "11",
+              "label": {
+                "en": "Police Siren",
+                "es": "Sirena policial",
+                "it": "Sirena polizia",
+                "de": "Polizeisirene"
+              }
+            },
+            {
+              "id": "12",
+              "label": {
+                "en": "Doorbell Chime (reverb)",
+                "es": "Timbre con reverb",
+                "it": "Campanello con riverbero",
+                "de": "Türklingel (Hall)"
+              }
+            },
+            {
+              "id": "13",
+              "label": {
+                "en": "Mechanical Telephone",
+                "es": "Teléfono mecánico",
+                "it": "Telefono meccanico",
+                "de": "Mechanisches Telefon"
+              }
+            },
+            {
+              "id": "14",
+              "label": {
+                "en": "Fire / Ambulance",
+                "es": "Bomberos / Ambulancia",
+                "it": "Pompieri / Ambulanza",
+                "de": "Feuerwehr / Krankenwagen"
+              }
+            },
+            {
+              "id": "15",
+              "label": {
+                "en": "3/1 Elevator",
+                "es": "Ascensor 3/1",
+                "it": "Ascensore 3/1",
+                "de": "Aufzug 3/1"
+              }
+            },
+            {
+              "id": "16",
+              "label": {
+                "en": "Buzzing Alarm Clock",
+                "es": "Despertador zumbador",
+                "it": "Sveglia ronzante",
+                "de": "Summender Wecker"
+              }
+            },
+            {
+              "id": "17",
+              "label": {
+                "en": "School Bell",
+                "es": "Timbre escolar",
+                "it": "Campanella scolastica",
+                "de": "Schulklingel"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "siren_set_volume",
+      "title": {
+        "en": "Set siren volume",
+        "de": "Sirenenlautstärke einstellen",
+        "es": "Establecer volumen de la sirena",
+        "it": "Imposta volume della sirena"
+      },
+      "titleFormatted": {
+        "en": "Set volume to [[volume]]",
+        "de": "Lautstärke auf [[volume]] einstellen",
+        "es": "Establecer volumen en [[volume]]",
+        "it": "Imposta volume su [[volume]]"
+      },
+      "hint": {
+        "en": "Change the volume used when the siren is switched on. Does not start the siren.",
+        "de": "Ändert die Lautstärke, die beim Einschalten der Sirene verwendet wird. Startet die Sirene nicht.",
+        "es": "Cambia el volumen usado al encender la sirena. No inicia la sirena.",
+        "it": "Cambia il volume usato quando la sirena viene accesa. Non avvia la sirena."
+      },
+      "args": [
+        {
+          "name": "volume",
+          "type": "dropdown",
+          "values": [
+            {
+              "id": "0",
+              "label": {
+                "en": "Low",
+                "es": "Bajo",
+                "it": "Basso",
+                "de": "Niedrig"
+              }
+            },
+            {
+              "id": "1",
+              "label": {
+                "en": "Medium",
+                "es": "Medio",
+                "it": "Medio",
+                "de": "Mittel"
+              }
+            },
+            {
+              "id": "2",
+              "label": {
+                "en": "High",
+                "es": "Alto",
+                "it": "Alto",
+                "de": "Hoch"
+              }
+            }
+          ]
         }
       ]
     },
