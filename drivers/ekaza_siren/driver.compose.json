@@ -41,7 +41,7 @@
   },
   "energy": {
     "approximation": { "usageOn": 10, "usageOff": 1 },
-    "batteries": ["AA", "AA", "AA"]
+    "batteries": ["CR123A", "CR123A"]
   },
   "settings": [
     {

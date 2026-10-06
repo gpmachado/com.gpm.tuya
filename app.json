@@ -1900,9 +1900,8 @@
           "usageOff": 1
         },
         "batteries": [
-          "AA",
-          "AA",
-          "AA"
+          "CR123A",
+          "CR123A"
         ]
       },
       "settings": [
