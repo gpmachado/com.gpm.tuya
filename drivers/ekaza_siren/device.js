@@ -45,6 +45,12 @@ const DEFAULT_VOLUME = 2;  // high
 // The device has 3 volume levels (wire 0 low, 1 medium, 2 high). Homey's standard volume_set
 // capability is 0..1, driver.compose.json limits it to 3 stops (0, 0.5, 1) so the slider shows
 // the native speaker +/- volume control.
+// Presets of the siren_duration picker (seconds; the capability value is the seconds as a string).
+// Settings keep the exact seconds; the picker shows the nearest preset.
+const DURATION_PRESETS = [3, 5, 10, 30, 60, 120, 300, 600, 1800];
+const nearestDuration = sec => String(DURATION_PRESETS.reduce(
+  (best, p) => (Math.abs(p - sec) < Math.abs(best - sec) ? p : best), DURATION_PRESETS[0]));
+
 const volumeToWire = v => (v < 0.34 ? 0 : v < 0.67 ? 1 : 2);
 const wireToVolume = w => w / 2;
 
@@ -97,8 +103,15 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
       await this.setCapabilityValue('volume_set', wireToVolume(Number(this.getSetting('alarmvolume') ?? DEFAULT_VOLUME))).catch(() => {});
     }
 
+    if (!this.hasCapability('siren_duration')) {
+      await this.addCapability('siren_duration').catch(err => this.error('addCapability siren_duration:', err));
+    }
+    // The picker always mirrors the Settings value (the exact seconds live in Settings).
+    await this.setCapabilityValue('siren_duration', nearestDuration(Number(this.getSetting('alarmsoundtime') ?? 10))).catch(() => {});
+
     this.registerCapabilityListener('onoff', v => this._onCapabilityOnOff(v));
     this.registerCapabilityListener('siren_melody', v => this._setMelody(Number(v)));
+    this.registerCapabilityListener('siren_duration', v => this._setDuration(Number(v)));
     this.registerCapabilityListener('volume_set', v => this._setVolume(volumeToWire(Number(v))));
 
     this.log('Ekaza Siren ready');
@@ -130,6 +143,9 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
 
       // ── alarm active ──────────────────────────────────────────────────────
       case DP.ALARM:
+        // The OFF reported for the stop we send while retrying a start is not a real stop.
+        if (!value && this._retryingStart) { this.log('Alarm: OFF (start retry)'); break; }
+        if (value && this._alarmOnWaiter) this._alarmOnWaiter();
         if (this.getCapabilityValue('onoff') !== value)
           await this.setCapabilityValue('onoff', value)
             .catch(e => this.error('alarm update:', e));
@@ -151,24 +167,20 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
         break;
 
       // ── volume (volume_set slider, wire 0-2 -> 0 / 0.5 / 1) ──
+      // Volume, duration and melody reports are only logged. Homey (screen, Settings or a
+      // "Set ..." flow action) is the source of truth, and every start re-sends the three, so
+      // the device never overwrites what you chose (a flow's siren_play is a one-shot).
       case DP.VOLUME:
-        await this.setCapabilityValue('volume_set', wireToVolume(Number(value))).catch(e => this.error('volume update:', e));
-        this.log(`Volume: ${value}`);
+        this.log(`Volume: ${value} (device report, not mirrored)`);
         break;
 
-      // ── duration (sync setting from device) ───────────────────────────────
       case DP.DURATION:
-        this._syncSetting('alarmsoundtime', value);
-        this.log(`Duration: ${value}s`);
+        this.log(`Duration: ${value}s (device report, not mirrored)`);
         break;
 
-      // ── melody (picker, wire 0-17 stored as "0"-"17") ───
-      case DP.MELODY: {
-        const name = MELODY_NAMES[value] ?? `Melody ${value}`;
-        await this.setCapabilityValue('siren_melody', String(value)).catch(e => this.error('melody update:', e));
-        this.log(`Melody: ${value} (${name})`);
+      case DP.MELODY:
+        this.log(`Melody: ${value} (${MELODY_NAMES[value] ?? `Melody ${value}`}) (device report, not mirrored)`);
         break;
-      }
     }
   }
 
@@ -210,8 +222,12 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
       { type: 'data32', dp: DP.DURATION, value: duration },
     ], 200);
 
-    // Trigger alarm
-    await this.writeBool(DP.ALARM, true);
+    // Trigger alarm. The device sometimes ignores the first start right after a melody change
+    // (it answers SUCCESS but never reports the alarm as ON), so the start is confirmed.
+    if (!(await this._startAlarm())) {
+      this.error('Siren did not confirm the start');
+      throw new Error('The siren did not start');
+    }
 
     // Schedule UI auto-reset (device does not send DP13=false automatically)
     if (duration > 0) {
@@ -226,6 +242,56 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
 
     this._triggerFlow('siren_activated', { duration });
     this.log('Siren started');
+  }
+
+  /**
+   * Change the alarm duration (picker and flow action): Settings keep the exact seconds, the
+   * picker shows the nearest preset. The last change wins, wherever it was made.
+   * @param {number} seconds 1-1800
+   */
+  async _setDuration(seconds) {
+    if (!Number.isInteger(seconds) || seconds < 1 || seconds > 1800) throw new Error('Duration must be 1-1800 s');
+    await this.writeValue(DP.DURATION, seconds)
+      .catch(err => { this.error('Duration write:', err.message); throw err; });
+    await this.setSettings({ alarmsoundtime: seconds }).catch(err => this.error('Duration setting:', err.message));
+    await this.setCapabilityValue('siren_duration', nearestDuration(seconds)).catch(() => {});
+    this.log(`Duration -> ${seconds}s`);
+  }
+
+  /**
+   * Switch the alarm on and wait for the device to report it (DP13 = true, normally within
+   * ~100 ms). If it does not, retry once the way that works in practice: stop, then start.
+   * @returns {Promise<boolean>} true once the device reported the alarm as ON
+   */
+  async _startAlarm() {
+    try {
+      for (let attempt = 0; attempt < 2; attempt++) {
+        if (attempt > 0) {
+          this.log('Siren: start not confirmed, retrying (stop, then start)');
+          this._retryingStart = true;
+          await this.writeBool(DP.ALARM, false).catch(() => {});
+          await new Promise(resolve => this.homey.setTimeout(resolve, 300));
+        }
+        const confirmed = this._waitAlarmOn(1500);
+        await this.writeBool(DP.ALARM, true);
+        if (await confirmed) return true;
+      }
+      return false;
+    } finally {
+      this._retryingStart = false;
+    }
+  }
+
+  /** Resolves true when the device reports the alarm ON (see _processDatapoint), false on timeout. */
+  _waitAlarmOn(ms) {
+    return new Promise(resolve => {
+      const timer = this.homey.setTimeout(() => { this._alarmOnWaiter = null; resolve(false); }, ms);
+      this._alarmOnWaiter = () => {
+        this.homey.clearTimeout(timer);
+        this._alarmOnWaiter = null;
+        resolve(true);
+      };
+    });
   }
 
   /**
@@ -292,19 +358,11 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
           if (duration < 1 || duration > 1800) throw new Error('Duration must be 1–1800s');
           await this.writeValue(DP.DURATION, duration)
             .catch(err => { this.error('Duration write:', err.message); throw err; });
+          await this.setCapabilityValue('siren_duration', nearestDuration(duration)).catch(() => {});
           this.log(`Duration → ${duration}s`);
           break;
         }
       }
-    }
-  }
-
-  // ─── Helpers ──────────────────────────────────────────────────────────────
-
-  _syncSetting(key, value) {
-    const current = this.getSetting(key);
-    if (current != value) {
-      this.setSettings({ [key]: value }).catch(e => this.error(`Setting sync ${key}:`, e));
     }
   }
 

@@ -7,7 +7,7 @@
     "de": "Ekaza Smart-Sirene"
   },
   "class": "siren",
-  "capabilities": ["onoff", "siren_melody", "volume_set", "measure_battery", "is_availability"],
+  "capabilities": ["onoff", "siren_melody", "siren_duration", "volume_set", "measure_battery", "is_availability"],
   "capabilitiesOptions": {
     "onoff": {
       "title": {
@@ -63,10 +63,10 @@
             "de": "Alarmdauer"
           },
           "hint": {
-            "en": "How long the alarm plays in seconds (1–1800). Homey UI auto-resets 2 seconds after this time.",
-            "es": "Duración de la alarma en segundos (1–1800). El panel de Homey se reinicia automáticamente 2 segundos después.",
-            "it": "Durata dell'allarme in secondi (1–1800). L'interfaccia Homey si ripristina automaticamente 2 secondi dopo.",
-            "de": "Wie lange der Alarm in Sekunden läuft (1–1800). Die Homey-UI setzt sich 2 Sekunden danach automatisch zurück."
+            "en": "How long the alarm plays, in seconds (1–1800). Also selectable on the device screen: the last change wins. Homey UI auto-resets 2 seconds after this time.",
+            "es": "Duración de la alarma en segundos (1–1800). También se elige en la pantalla del dispositivo: gana el último cambio. El panel de Homey se reinicia automáticamente 2 segundos después.",
+            "it": "Durata dell'allarme in secondi (1–1800). Si sceglie anche dalla schermata del dispositivo: vale l'ultima modifica. L'interfaccia Homey si ripristina automaticamente 2 secondi dopo.",
+            "de": "Wie lange der Alarm in Sekunden läuft (1–1800). Auch auf dem Gerätebildschirm wählbar: die letzte Änderung gilt. Die Homey-UI setzt sich 2 Sekunden danach automatisch zurück."
           },
           "value": 10, "min": 1, "max": 1800, "step": 1, "units": "s"
         }

@@ -1,0 +1,95 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Alarm duration",
+    "de": "Alarmdauer",
+    "es": "Duración de la alarma",
+    "it": "Durata allarme"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker",
+  "values": [
+    {
+      "id": "3",
+      "title": {
+        "en": "3 sec",
+        "de": "3 Sek.",
+        "es": "3 s",
+        "it": "3 s"
+      }
+    },
+    {
+      "id": "5",
+      "title": {
+        "en": "5 sec",
+        "de": "5 Sek.",
+        "es": "5 s",
+        "it": "5 s"
+      }
+    },
+    {
+      "id": "10",
+      "title": {
+        "en": "10 sec",
+        "de": "10 Sek.",
+        "es": "10 s",
+        "it": "10 s"
+      }
+    },
+    {
+      "id": "30",
+      "title": {
+        "en": "30 sec",
+        "de": "30 Sek.",
+        "es": "30 s",
+        "it": "30 s"
+      }
+    },
+    {
+      "id": "60",
+      "title": {
+        "en": "1 min",
+        "de": "1 Min.",
+        "es": "1 min",
+        "it": "1 min"
+      }
+    },
+    {
+      "id": "120",
+      "title": {
+        "en": "2 min",
+        "de": "2 Min.",
+        "es": "2 min",
+        "it": "2 min"
+      }
+    },
+    {
+      "id": "300",
+      "title": {
+        "en": "5 min",
+        "de": "5 Min.",
+        "es": "5 min",
+        "it": "5 min"
+      }
+    },
+    {
+      "id": "600",
+      "title": {
+        "en": "10 min",
+        "de": "10 Min.",
+        "es": "10 min",
+        "it": "10 min"
+      }
+    },
+    {
+      "id": "1800",
+      "title": {
+        "en": "30 min",
+        "de": "30 Min.",
+        "es": "30 min",
+        "it": "30 min"
+      }
+    }
+  ]
+}

@@ -31,6 +31,12 @@ class EkazaSirenDriver extends ZigBeeDriver {
         await args.device._setVolume(Number(args.volume));
       });
 
+    this.homey.flow
+      .getActionCard('siren_set_duration')
+      .registerRunListener(async (args) => {
+        await args.device._setDuration(Number(args.duration));
+      });
+
     // Action: stop siren immediately
     this.homey.flow
       .getActionCard('siren_stop')

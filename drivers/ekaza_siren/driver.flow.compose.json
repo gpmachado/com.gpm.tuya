@@ -550,6 +550,39 @@
       ]
     },
     {
+      "id": "siren_set_duration",
+      "title": {
+        "en": "Set siren duration",
+        "de": "Sirenendauer einstellen",
+        "es": "Establecer duración de la sirena",
+        "it": "Imposta durata della sirena"
+      },
+      "titleFormatted": {
+        "en": "Set duration to [[duration]] seconds",
+        "de": "Dauer auf [[duration]] Sekunden einstellen",
+        "es": "Establecer duración en [[duration]] segundos",
+        "it": "Imposta durata su [[duration]] secondi"
+      },
+      "hint": {
+        "en": "Change the duration used when the siren is switched on. Does not start the siren.",
+        "de": "Ändert die Dauer, die beim Einschalten der Sirene verwendet wird. Startet die Sirene nicht.",
+        "es": "Cambia la duración usada al encender la sirena. No inicia la sirena.",
+        "it": "Cambia la durata usata quando la sirena viene accesa. Non avvia la sirena."
+      },
+      "args": [
+        {
+          "name": "duration",
+          "type": "number",
+          "min": 1,
+          "max": 1800,
+          "step": 1,
+          "placeholder": {
+            "en": "10"
+          }
+        }
+      ]
+    },
+    {
       "id": "siren_stop",
       "title": {
         "en": "Stop siren",

@@ -737,6 +737,44 @@
         ]
       },
       {
+        "id": "siren_set_duration",
+        "title": {
+          "en": "Set siren duration",
+          "de": "Sirenendauer einstellen",
+          "es": "Establecer duración de la sirena",
+          "it": "Imposta durata della sirena"
+        },
+        "titleFormatted": {
+          "en": "Set duration to [[duration]] seconds",
+          "de": "Dauer auf [[duration]] Sekunden einstellen",
+          "es": "Establecer duración en [[duration]] segundos",
+          "it": "Imposta durata su [[duration]] secondi"
+        },
+        "hint": {
+          "en": "Change the duration used when the siren is switched on. Does not start the siren.",
+          "de": "Ändert die Dauer, die beim Einschalten der Sirene verwendet wird. Startet die Sirene nicht.",
+          "es": "Cambia la duración usada al encender la sirena. No inicia la sirena.",
+          "it": "Cambia la durata usata quando la sirena viene accesa. Non avvia la sirena."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ekaza_siren"
+          },
+          {
+            "name": "duration",
+            "type": "number",
+            "min": 1,
+            "max": 1800,
+            "step": 1,
+            "placeholder": {
+              "en": "10"
+            }
+          }
+        ]
+      },
+      {
         "id": "siren_stop",
         "title": {
           "en": "Stop siren",
@@ -1820,6 +1858,7 @@
       "capabilities": [
         "onoff",
         "siren_melody",
+        "siren_duration",
         "volume_set",
         "measure_battery",
         "is_availability"
@@ -1886,10 +1925,10 @@
                 "de": "Alarmdauer"
               },
               "hint": {
-                "en": "How long the alarm plays in seconds (1–1800). Homey UI auto-resets 2 seconds after this time.",
-                "es": "Duración de la alarma en segundos (1–1800). El panel de Homey se reinicia automáticamente 2 segundos después.",
-                "it": "Durata dell'allarme in secondi (1–1800). L'interfaccia Homey si ripristina automaticamente 2 secondi dopo.",
-                "de": "Wie lange der Alarm in Sekunden läuft (1–1800). Die Homey-UI setzt sich 2 Sekunden danach automatisch zurück."
+                "en": "How long the alarm plays, in seconds (1–1800). Also selectable on the device screen: the last change wins. Homey UI auto-resets 2 seconds after this time.",
+                "es": "Duración de la alarma en segundos (1–1800). También se elige en la pantalla del dispositivo: gana el último cambio. El panel de Homey se reinicia automáticamente 2 segundos después.",
+                "it": "Durata dell'allarme in secondi (1–1800). Si sceglie anche dalla schermata del dispositivo: vale l'ultima modifica. L'interfaccia Homey si ripristina automaticamente 2 secondi dopo.",
+                "de": "Wie lange der Alarm in Sekunden läuft (1–1800). Auch auf dem Gerätebildschirm wählbar: die letzte Änderung gilt. Die Homey-UI setzt sich 2 Sekunden danach automatisch zurück."
               },
               "value": 10,
               "min": 1,
@@ -3349,6 +3388,101 @@
       "decimals": 0,
       "min": 0,
       "max": 100
+    },
+    "siren_duration": {
+      "type": "enum",
+      "title": {
+        "en": "Alarm duration",
+        "de": "Alarmdauer",
+        "es": "Duración de la alarma",
+        "it": "Durata allarme"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "values": [
+        {
+          "id": "3",
+          "title": {
+            "en": "3 sec",
+            "de": "3 Sek.",
+            "es": "3 s",
+            "it": "3 s"
+          }
+        },
+        {
+          "id": "5",
+          "title": {
+            "en": "5 sec",
+            "de": "5 Sek.",
+            "es": "5 s",
+            "it": "5 s"
+          }
+        },
+        {
+          "id": "10",
+          "title": {
+            "en": "10 sec",
+            "de": "10 Sek.",
+            "es": "10 s",
+            "it": "10 s"
+          }
+        },
+        {
+          "id": "30",
+          "title": {
+            "en": "30 sec",
+            "de": "30 Sek.",
+            "es": "30 s",
+            "it": "30 s"
+          }
+        },
+        {
+          "id": "60",
+          "title": {
+            "en": "1 min",
+            "de": "1 Min.",
+            "es": "1 min",
+            "it": "1 min"
+          }
+        },
+        {
+          "id": "120",
+          "title": {
+            "en": "2 min",
+            "de": "2 Min.",
+            "es": "2 min",
+            "it": "2 min"
+          }
+        },
+        {
+          "id": "300",
+          "title": {
+            "en": "5 min",
+            "de": "5 Min.",
+            "es": "5 min",
+            "it": "5 min"
+          }
+        },
+        {
+          "id": "600",
+          "title": {
+            "en": "10 min",
+            "de": "10 Min.",
+            "es": "10 min",
+            "it": "10 min"
+          }
+        },
+        {
+          "id": "1800",
+          "title": {
+            "en": "30 min",
+            "de": "30 Min.",
+            "es": "30 min",
+            "it": "30 min"
+          }
+        }
+      ]
     },
     "siren_melody": {
       "type": "enum",
