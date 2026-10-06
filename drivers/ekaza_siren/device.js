@@ -7,6 +7,11 @@ const { TimeServerBoundCluster } = require('../../lib/TimeCluster');
 
 const DRIVER_NAME = 'Ekaza Smart Siren';
 
+// Same device family as the NEO NAS-AB02B2 (Zigbee2MQTT lists _TZE200_t1blo2bj, _TZE204_t1blo2bj and
+// _TZE204_q76rtoa9 as one model; Hubitat uses these same DPs for _TZE204_t1blo2bj). Hardware:
+// _TZE204_q76rtoa9 (Ekaza) is the one this driver was developed on; _TZE204_t1blo2bj (MOES) has been
+// used with it by a MOES owner (Homey community). _TZE200_t1blo2bj is listed by DP-map and cluster
+// equivalence only and is untested.
 // ─── Tuya Datapoints ─────────────────────────────────────────────────────────
 // Confirmed by ZigBee sniffer (TS0601 / _TZE204_q76rtoa9)
 const DP = {

@@ -74,7 +74,7 @@
     }
   ],
   "zigbee": {
-    "manufacturerName": ["_TZE204_q76rtoa9"],
+    "manufacturerName": ["_TZE204_q76rtoa9", "_TZE204_t1blo2bj", "_TZE200_t1blo2bj"],
     "productId": ["TS0601"],
     "endpoints": {
       "1": { "clusters": [0, 4, 5, 61184], "bindings": [61184] }

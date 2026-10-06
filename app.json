@@ -1941,7 +1941,9 @@
       ],
       "zigbee": {
         "manufacturerName": [
-          "_TZE204_q76rtoa9"
+          "_TZE204_q76rtoa9",
+          "_TZE204_t1blo2bj",
+          "_TZE200_t1blo2bj"
         ],
         "productId": [
           "TS0601"
