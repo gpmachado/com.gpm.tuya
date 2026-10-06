@@ -3361,7 +3361,6 @@
       "getable": true,
       "setable": true,
       "uiComponent": "picker",
-      "icon": "/assets/capabilities/siren_melody.svg",
       "values": [
         {
           "id": "0",
