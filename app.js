@@ -18,7 +18,8 @@ debug(ZCL_DEBUG);
 class MyTuyaApp extends Homey.App {
 
   async onInit() {
-    this.log('My Tuya Devices initiating...');
+    // First line of every log: which build is running (and whether frame dumps are on).
+    this.log(`My Tuya Devices v${this.homey.manifest?.version ?? '?'} started (ZCL_DEBUG ${ZCL_DEBUG ? 'on' : 'off'})`);
     this._registerFlowCards();
 
     // Baseline for the settings-page "Rejoins" counter - only set once;
