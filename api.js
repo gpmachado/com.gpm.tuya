@@ -36,7 +36,6 @@ module.exports = {
           previousHour: fullStats.previousHour,
           last24h: fullStats.last24h,
           lastMessageAt: fullStats.lastMessageAt,
-          bySource: fullStats.bySource,
         };
 
         const row = {
