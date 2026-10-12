@@ -32,7 +32,7 @@ class WaterTankMonitorDevice extends TuyaSpecificClusterDevice {
     });
     await this._availability.install();
 
-    try { this.zclNode?.endpoints?.[this.tuyaEndpoint]?.bind('time', new TimeServerBoundCluster()); } catch {}
+    try { this.zclNode?.endpoints?.[this.tuyaEndpoint]?.bind('time', new TimeServerBoundCluster({ getTimeZone: () => this.homey.clock.getTimezone() })); } catch {}
 
     const tuyaCluster = this.zclNode?.endpoints?.[this.tuyaEndpoint]?.clusters?.tuya;
     if (!tuyaCluster) {

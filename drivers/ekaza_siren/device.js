@@ -67,7 +67,7 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
     await super.onNodeInit({ zclNode });
 
     this.log(`${DRIVER_NAME} v${APP_VERSION}`);
-    try { zclNode.endpoints[1].bind('time', new TimeServerBoundCluster()); } catch {}
+    try { zclNode.endpoints[1].bind('time', new TimeServerBoundCluster({ getTimeZone: () => this.homey.clock.getTimezone() })); } catch {}
     this.printNode();
 
     this._alarmAutoResetTimer = null;

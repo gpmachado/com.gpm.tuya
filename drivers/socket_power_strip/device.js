@@ -70,7 +70,7 @@ class PowerStripDevice extends TuyaZclBase {
       for (const ep of [1, 2, 3, 4, 5]) {
         try {
           if (zclNode.endpoints[ep]) {
-            zclNode.endpoints[ep].bind('time', new TimeServerBoundCluster());
+            zclNode.endpoints[ep].bind('time', new TimeServerBoundCluster({ getTimeZone: () => this.homey.clock.getTimezone() }));
           }
         } catch {}
       }

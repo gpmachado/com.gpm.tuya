@@ -44,6 +44,7 @@ class TempHumidClock extends TuyaSpecificClusterDevice {
     try {
       zclNode.endpoints[1].bind('time', new TimeServerBoundCluster({
         onReadAttributes: () => this._handleZclTimeRead(),
+        getTimeZone: () => this.homey.clock.getTimezone(),
       }));
     } catch {}
 

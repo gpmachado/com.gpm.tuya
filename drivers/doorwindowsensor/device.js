@@ -276,7 +276,7 @@ class DoorWindowSensorDevice extends ZigBeeDevice {
     try {
       const endpoint = zclNode.endpoints[ENDPOINT_ID];
       if (!endpoint) return;
-      endpoint.bind('time', new TimeServerBoundCluster());
+      endpoint.bind('time', new TimeServerBoundCluster({ getTimeZone: () => this.homey.clock.getTimezone() }));
       this.log('[Time] Silent bound cluster installed');
     } catch (err) {
       this.log('[Time] Silent bind skipped:', err.message);

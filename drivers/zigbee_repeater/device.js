@@ -31,7 +31,7 @@ class ZigbeeRepeaterDevice extends ZigBeeDevice {
       .catch(readAttrCatch(this, '[basic] readAttributes', { markOffline: true }));
 
     // Silence ZCL time cluster frames (repeater probes coordinator's time cluster)
-    try { zclNode.endpoints[1].bind('time', new TimeServerBoundCluster()); } catch {}
+    try { zclNode.endpoints[1].bind('time', new TimeServerBoundCluster({ getTimeZone: () => this.homey.clock.getTimezone() })); } catch {}
 
     // TS0207 sends no spontaneous ZCL frames - active ping every 30 min keeps
     // the availability watchdog alive (same pattern as Hubitat generic repeater).

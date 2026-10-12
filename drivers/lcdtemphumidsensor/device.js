@@ -50,7 +50,7 @@ class LCDTempHumidSensor extends ZigBeeDevice {
 
     // Silence ZCL time cluster frames (device probes coordinator's time cluster;
     // not used here - suppress binding_unavailable log noise)
-    try { zclNode.endpoints[1].bind('time', new TimeServerBoundCluster()); } catch {}
+    try { zclNode.endpoints[1].bind('time', new TimeServerBoundCluster({ getTimeZone: () => this.homey.clock.getTimezone() })); } catch {}
 
     this.log(`${DRIVER_NAME} - ready`);
   }

@@ -43,7 +43,7 @@ class WirelessSwitchRemote2Gang extends ZigBeeDevice {
     this._buttonTrigger = this.homey.flow.getDeviceTriggerCard('wireless_switch_remote_2_gang_button')
       .registerRunListener((args, state) => Number(args.button) === state.ep && args.action === state.pressType);
 
-    try { zclNode.endpoints[1].bind('time', new TimeServerBoundCluster()); } catch {}
+    try { zclNode.endpoints[1].bind('time', new TimeServerBoundCluster({ getTimeZone: () => this.homey.clock.getTimezone() })); } catch {}
 
     // Wrap node.handleFrame (don't replace it): intercept the button commands on
     // cluster 6, but forward every other frame to the original handler so battery
