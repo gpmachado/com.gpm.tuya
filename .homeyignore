@@ -4,3 +4,9 @@ analise/
 *.pcapng
 .claude/
 .*
+docs/
+scripts/
+test/
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+SUPPORTED_DEVICES.md
