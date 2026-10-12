@@ -15,7 +15,7 @@
  *   Bit 1 (0x0002) alarm2   -> alarm_contact (open = true, secondary check)
  *   Bit 3 (0x0008) battery  -> alarm_battery (low battery = true)
  *
- * Availability: AvailabilityManagerPassive (passive handleFrame hook, 24 h timeout —
+ * Availability: AvailabilityManagerPassive (passive handleFrame hook, 24 h timeout -
  * field-confirmed ~14 h overnight gaps between contact events are normal for this
  * device, not a fault; own tier, DOOR_SENSOR_HEARTBEAT_MS, not shared HEARTBEAT_SLOW_MS).
  * Any inbound Zigbee frame counts as activity, including:
@@ -27,7 +27,7 @@
  * Battery reporting is configured with minChange=1 so the device reports
  * periodically (up to maxInterval) and on small battery-level changes.
  * No active polling fallback: this is a sleepy end-device (Receive when idle:
- * false) that does not answer readAttributes while asleep — field-tested,
+ * false) that does not answer readAttributes while asleep - field-tested,
  * ~100% timeout rate during genuine idle stretches (only responds around real
  * wake events, e.g. a contact change or rejoin). Polling it was pure dead
  * Zigbee traffic/error noise with no working heartbeat benefit, so
@@ -38,23 +38,23 @@
  * and a Zigbee2MQTT instance (3 independent captures) confirmed it sends
  * real spontaneous reports once its ZDO binding for Power Configuration
  * (0x0001) is established. iHost and Z2M (both zigbee-herdsman) do this
- * explicitly and identically — Bind Request, then configReport for
- * batteryPercentageRemaining AND batteryVoltage separately — before
- * touching reporting. Homey does not expose that step —
+ * explicitly and identically - Bind Request, then configReport for
+ * batteryPercentageRemaining AND batteryVoltage separately - before
+ * touching reporting. Homey does not expose that step -
  * configureAttributeReporting() only sends the ZCL command (verified in
  * homey-zigbeedriver's source), never a binding. Binding-from-manifest
  * (`bindings: [1, 1280]`) runs once at pairing time, on Homey's closed
  * platform layer, with no retry if the device was asleep. Not actionable
- * from driver code — documented to avoid re-diagnosing.
+ * from driver code - documented to avoid re-diagnosing.
  *
  * Enrollment:
  *   zoneEnrollResponse sent on every init (via IASZoneHelper).
  *   onZoneEnrollRequest handles re-enrollment after factory reset.
  *   IASZoneHelper.retryOnWake() re-attempts enrollment on later wake-ups
- *   (not only on a full network rejoin) — sleepy end-devices often reject
+ *   (not only on a full network rejoin) - sleepy end-devices often reject
  *   the CIE write / miss the enroll response while asleep at app boot.
  *   Without a valid enroll response, some TS0203 units stop sending
- *   zoneStatusChangeNotification entirely — causing silent false-unavailable.
+ *   zoneStatusChangeNotification entirely - causing silent false-unavailable.
  */
 
 const { ZigBeeDevice } = require('homey-zigbeedriver');
@@ -64,7 +64,7 @@ const { TimeServerBoundCluster } = require('../../lib/TimeCluster');
 const IASZoneHelper = require('../../lib/IASZoneHelper');
 const { APP_VERSION, DOOR_SENSOR_HEARTBEAT_MS } = require('../../lib/constants');
 
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 
 const DRIVER_NAME  = 'Door & Window Sensor';
 const ENDPOINT_ID  = 1;
@@ -77,15 +77,15 @@ const IAS_BIT_BATTERY  = 0x0008; // low battery
 
 // Battery reporting: keep a gentle periodic report and report on 1 raw-unit change.
 // TS0203 availability is tracked from any inbound frame, not only battery reports.
-const BATTERY_REPORT_MAX_INTERVAL_S = 600;   // TESTE: 10 min (produção: 14400 = 4 h)
-const BATTERY_REPORT_MIN_INTERVAL_S = 60;    // TESTE: 1 min (produção: 3600 = 1 h)
+const BATTERY_REPORT_MAX_INTERVAL_S = 600;   // TESTE: 10 min (producao: 14400 = 4 h)
+const BATTERY_REPORT_MIN_INTERVAL_S = 60;    // TESTE: 1 min (producao: 3600 = 1 h)
 const BATTERY_REPORT_MIN_CHANGE = 1;
 
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 
 class DoorWindowSensorDevice2 extends ZigBeeDevice {
 
-  // ─── Init ──────────────────────────────────────────────────────────────
+  // --- Init --------------------------------------------------------------
 
   /**
    * @param {object} params
@@ -116,7 +116,7 @@ class DoorWindowSensorDevice2 extends ZigBeeDevice {
     this.log(`${DRIVER_NAME} - ready`);
   }
 
-  // ─── IAS Zone ──────────────────────────────────────────────────────────
+  // --- IAS Zone ----------------------------------------------------------
 
   /**
    * Configure IAS Zone cluster: enroll, listen for status changes, write CIE Address.
@@ -137,7 +137,7 @@ class DoorWindowSensorDevice2 extends ZigBeeDevice {
     this._iasZone = await this._iasHelper.init(zclNode);
   }
 
-  // ─── Battery ───────────────────────────────────────────────────────────
+  // --- Battery -----------------------------------------------------------
 
   /**
    * Listen for battery percentage reports and configure periodic reporting.
@@ -205,7 +205,7 @@ class DoorWindowSensorDevice2 extends ZigBeeDevice {
     }
   }
 
-  // ─── Zone status ───────────────────────────────────────────────────────
+  // --- Zone status -------------------------------------------------------
 
   /**
    * Parse IAS zoneStatus bitmap and update capabilities.
@@ -225,7 +225,7 @@ class DoorWindowSensorDevice2 extends ZigBeeDevice {
     this._setCapSafe('alarm_battery', batteryLow);
   }
 
-  // ─── Availability ──────────────────────────────────────────────────────
+  // --- Availability ------------------------------------------------------
 
   onEndDeviceAnnounce() {
     this.log('Device rejoined network (End Device Announce)');
@@ -242,7 +242,7 @@ class DoorWindowSensorDevice2 extends ZigBeeDevice {
     this.log(`Device became unavailable (${reason})`);
   }
 
-  // ─── Helpers ───────────────────────────────────────────────────────────
+  // --- Helpers -----------------------------------------------------------
 
   /**
    * Set capability only when value changes; silently skip missing capabilities.
@@ -319,7 +319,7 @@ class DoorWindowSensorDevice2 extends ZigBeeDevice {
     }
   }
 
-  // ─── Lifecycle ─────────────────────────────────────────────────────────
+  // --- Lifecycle ---------------------------------------------------------
 
   async onUninit() {
     this._iasHelper?.dispose();

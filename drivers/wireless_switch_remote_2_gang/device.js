@@ -3,7 +3,7 @@
 // Tuya TS0042 2-button wireless remote (_TZ3000_tzvbimpq).
 // Driver seeded from JohanBendz/com.tuya.zigbee; button protocol confirmed via
 // sniffer (capture "wireless remote switch 2 botoes.pcapng") and cross-checked
-// against zigbee2mqtt (fz.tuya_on_off_action). Assets (icon/images) © Johan Bendz.
+// against zigbee2mqtt (fz.tuya_on_off_action). Assets (icon/images) (c) Johan Bendz.
 //
 // Each button = an endpoint (1 = left, 2 = right). A press is an onOff
 // (cluster 6) cluster-specific command 0xFD; the press type is byte frame[3]:

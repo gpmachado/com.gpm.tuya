@@ -4,7 +4,7 @@
  * @file device.js
  * @description Power Strip 4 Sockets + USB (TS011F / _TZ3000_cfnprab5)
  *
- * Extends TuyaZclBase — reuses:
+ * Extends TuyaZclBase - reuses:
  *   _onCapabilityOnOff      retry + _markAllUnreachable
  *   _attachBacklightListener          (TuyaZclBase)
  *   _attachPowerOnGlobalListener      (TuyaZclBase)
@@ -13,13 +13,13 @@
  *   onRenamed / onDeleted / onBecameUnavailable  (TuyaZclBase)
  *
  * Overrides:
- *   _installAvailability  → HEARTBEAT_FAST_MS
- *   _updateSiblingNames   → SOCKET_ORDER sort via updateSiblingNames
- *   onBecameAvailable     → re-sync onOff state on rejoin
- *   onDeleted             → clear handleFrame override
+ *   _installAvailability  -> HEARTBEAT_FAST_MS
+ *   _updateSiblingNames   -> SOCKET_ORDER sort via updateSiblingNames
+ *   onBecameAvailable     -> re-sync onOff state on rejoin
+ *   onDeleted             -> clear handleFrame override
  *
  * ExtendedOnOffCluster (backlightControl, powerOnStateGlobal, childLock) is
- * registered globally by clusterRegistry.js — no monkey-patching needed.
+ * registered globally by clusterRegistry.js - no monkey-patching needed.
  */
 
 const { CLUSTER } = require('zigbee-clusters');
@@ -29,7 +29,7 @@ const { AvailabilityManagerPassive } = require('../../lib/AvailabilityManager');
 const { updateSiblingNames } = require('../../lib/connectedDevices');
 const { HEARTBEAT_FAST_MS, ONOFF_REPORT_MAX_INTERVAL_S } = require('../../lib/constants');
 
-/** subDeviceId → Zigbee endpoint number */
+/** subDeviceId -> Zigbee endpoint number */
 const ENDPOINT_MAP = Object.freeze({ socket2: 2, socket3: 3, socket4: 4, usb: 5 });
 
 /** Sort order for sibling label sync */
@@ -47,13 +47,13 @@ class PowerStripDevice extends TuyaZclBase {
 
     this.log(`[Init] ${this._gangLabel} (ep${this._endpoint})`);
 
-    // ── On/Off ──────────────────────────────────────────────────────────────
+    // -- On/Off --------------------------------------------------------------
     // registerCapability intentionally omitted: it causes double "handle report"
     // entries. Attribute reports still reach the capability via configureAttributeReporting
-    // below. registerCapabilityListener alone is sufficient for UI → device commands.
+    // below. registerCapabilityListener alone is sufficient for UI -> device commands.
     this.registerCapabilityListener('onoff', v => this._onCapabilityOnOff(v));
 
-    // ── Main device only (EP1) ───────────────────────────────────────────────
+    // -- Main device only (EP1) -----------------------------------------------
     if (this._isMainDevice) {
 
       // Install availability watchdog FIRST so any ZCL response during init reads
@@ -61,7 +61,7 @@ class PowerStripDevice extends TuyaZclBase {
       await this._installAvailability();
 
       // tuyaE000 boot listener: inchingTime (0xD001) fires on power-restore/reconnect.
-      // TS011F reports this only on reconnect — zero false positives since countdown
+      // TS011F reports this only on reconnect - zero false positives since countdown
       // is not implemented in Homey.
       this._attachTuyaBootListener(zclNode);
 
@@ -88,7 +88,7 @@ class PowerStripDevice extends TuyaZclBase {
         try { if (zclNode.endpoints[ep]) zclNode.endpoints[ep].bind(CLUSTER.ON_OFF.NAME, silent); } catch {}
       }
 
-      // Reduce heartbeat traffic — deferred 30 s to let mesh stabilise after restart
+      // Reduce heartbeat traffic - deferred 30 s to let mesh stabilise after restart
       this.homey.setTimeout(() => {
         if (!this.zclNode) return;
         this.configureAttributeReporting(
@@ -99,13 +99,13 @@ class PowerStripDevice extends TuyaZclBase {
         ).catch(err => this.log('[Reporting] deferred config failed:', err.message));
       }, 30 * 1000);
 
-      // ── Settings listeners ───────────────────────────────────────────────
+      // -- Settings listeners -----------------------------------------------
       // ExtendedOnOffCluster is already registered globally (clusterRegistry.js),
       // so clusters.onOff is an instance of ExtendedOnOffCluster with all vendor attrs.
-      // NOTE: TS011F does NOT support backlightControl (0x5000) — omitted.
+      // NOTE: TS011F does NOT support backlightControl (0x5000) - omitted.
       const onOffCluster = zclNode.endpoints[1].clusters.onOff;
 
-      // powerOnStateGlobal — inline listener (base class version also re-enforces
+      // powerOnStateGlobal - inline listener (base class version also re-enforces
       // backlight which is not applicable to this device)
       this._onPowerOnStateGlobal ??= value => {
         this.log('[EP1] powerOnStateGlobal:', value);
@@ -114,7 +114,7 @@ class PowerStripDevice extends TuyaZclBase {
           power_on_current_global:  POWER_ON_DISPLAY[value] || String(value),
         }).catch(err => this.error('setSettings powerOnStateGlobal:', err));
         // Rejoin is signalled via onEndDeviceAnnounce (ZDO Device Announce).
-        // powerOnStateGlobal can be reported periodically — not a reliable rejoin signal.
+        // powerOnStateGlobal can be reported periodically - not a reliable rejoin signal.
       };
       this._onIndicatorMode ??= value => {
         this.log('[EP1] indicatorMode:', value);
@@ -131,7 +131,7 @@ class PowerStripDevice extends TuyaZclBase {
       onOffCluster.removeListener('attr.childLock', this._onChildLock);
       onOffCluster.on('attr.childLock', this._onChildLock);
 
-      // Read initial powerOnStateGlobal + indicatorMode — first pairing only.
+      // Read initial powerOnStateGlobal + indicatorMode - first pairing only.
       // Non-volatile settings; no need to re-read on every boot.
       if (this.isFirstInit() || !this.getSetting('power_on_behavior_global'))
       await onOffCluster.readAttributes(['powerOnStateGlobal', 'indicatorMode'])
@@ -152,7 +152,7 @@ class PowerStripDevice extends TuyaZclBase {
 
     }
 
-    // ── Sibling labels ─────────────────────────────────────────────────────
+    // -- Sibling labels -----------------------------------------------------
     // Called by every sub-device so siblings that initialise after the main
     // device are still included in each other's "Connected Sockets" label.
     await this._updateSiblingNames();
@@ -161,7 +161,7 @@ class PowerStripDevice extends TuyaZclBase {
     this.log(`[Init] ${this._gangLabel} ready`);
   }
 
-  // ── Settings write ─────────────────────────────────────────────────────────
+  // -- Settings write ---------------------------------------------------------
 
   async onSettings({ oldSettings, newSettings, changedKeys }) {
     for (const key of changedKeys) {
@@ -197,7 +197,7 @@ class PowerStripDevice extends TuyaZclBase {
     }
   }
 
-  // ── Rejoin state sync ──────────────────────────────────────────────────────
+  // -- Rejoin state sync ------------------------------------------------------
 
   /**
    * Re-reads onOff state from all endpoints after device rejoins the network.
@@ -231,7 +231,7 @@ class PowerStripDevice extends TuyaZclBase {
     ).catch(err => this.log('[Reporting] rejoin re-enforce failed:', err.message));
   }
 
-  // ── Overrides ──────────────────────────────────────────────────────────────
+  // -- Overrides --------------------------------------------------------------
 
   async _installAvailability() {
     this._availability = new AvailabilityManagerPassive(this, {

@@ -12,7 +12,7 @@ const VERSION = APP_VERSION;
 
 // Tuya datapoints for temperature/humidity/battery sensor
 const dataPoints = {
-  temperature: 1,  // Temperature in 0.1°C (value/10)
+  temperature: 1,  // Temperature in 0.1 degC (value/10)
   humidity: 2,     // Humidity in %
   battery: 3,      // Battery enum: 0=33%, 1=66%, 2=100%
   tempUnit: 9      // Temperature unit: 0=Celsius, 1=Fahrenheit
@@ -34,7 +34,7 @@ class TempHumidClock extends TuyaSpecificClusterDevice {
     if (!this.hasCapability('alarm_battery'))
       await this.addCapability('alarm_battery').catch(err => this.error('addCapability alarm_battery:', err));
 
-    // Availability watchdog — install FIRST so inbound wake/rejoin frames mark
+    // Availability watchdog - install FIRST so inbound wake/rejoin frames mark
     // the sleepy device as available without needing active polling.
     this._availability = new AvailabilityManagerPassive(this, {
       timeout: HEARTBEAT_VERY_SLOW_MS,
@@ -81,14 +81,14 @@ class TempHumidClock extends TuyaSpecificClusterDevice {
       try {
         await this.sendTimeResponse(request, { timeout: 3000 });
       } catch (err) {
-        if (isDeviceUnreachable(err)) this.log('Time sync skipped — device sleeping');
+        if (isDeviceUnreachable(err)) this.log('Time sync skipped - device sleeping');
         else this.error('Time sync failed:', err.message);
       }
 
       try {
         await this._sendClockHandshake('time-request');
       } catch (err) {
-        if (isDeviceUnreachable(err)) this.log('Clock handshake skipped — device sleeping');
+        if (isDeviceUnreachable(err)) this.log('Clock handshake skipped - device sleeping');
         else this.error('Clock handshake failed:', err.message);
       }
     });
@@ -113,7 +113,7 @@ class TempHumidClock extends TuyaSpecificClusterDevice {
       return;
     }
 
-    // Skip if value hasn't changed — device sends bursts of repeated frames on wake
+    // Skip if value hasn't changed - device sends bursts of repeated frames on wake
     if (this._lastReported[dp] === value) return;
     this._lastReported[dp] = value;
 
@@ -190,7 +190,7 @@ class TempHumidClock extends TuyaSpecificClusterDevice {
         await this._sendClockHandshake('zcl-time-fallback');
         this.log('ZCL time fallback sync sent');
       } catch (err) {
-        if (isDeviceUnreachable(err)) this.log('ZCL time fallback skipped — device sleeping');
+        if (isDeviceUnreachable(err)) this.log('ZCL time fallback skipped - device sleeping');
         else this.error('ZCL time fallback failed:', err.message);
       }
     }, 250);

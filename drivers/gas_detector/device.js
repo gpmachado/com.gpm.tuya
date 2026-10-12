@@ -31,7 +31,7 @@ const { CLUSTER } = require('zigbee-clusters');
 const { AvailabilityManagerCallback } = require('../../lib/AvailabilityManager');
 const IASZoneHelper = require('../../lib/IASZoneHelper');
 
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 
 // IAS Zone enroll ID assigned to this device
 const IAS_ZONE_ID = 1;
@@ -46,11 +46,11 @@ const IAS_BIT_ALARM1 = 0x0001; // gas detected
 const IAS_BIT_TROUBLE = 0x0040; // fault / trouble
 const IAS_BIT_TEST = 0x0100; // test button
 
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 
 class GasDetector extends ZigBeeDevice {
 
-  // ─── Init ──────────────────────────────────────────────────────────────
+  // --- Init --------------------------------------------------------------
 
   async onNodeInit({ zclNode }) {
     this.log(`${DRIVER_NAME} v${APP_VERSION} - init`);
@@ -80,7 +80,7 @@ class GasDetector extends ZigBeeDevice {
     this.log(`${DRIVER_NAME} - ready`);
   }
 
-  // ─── IAS Zone ──────────────────────────────────────────────────────────
+  // --- IAS Zone ----------------------------------------------------------
 
   async _setupIASZone(zclNode) {
     const iasZone = zclNode.endpoints[ENDPOINT_ID].clusters[CLUSTER.IAS_ZONE.NAME];
@@ -125,14 +125,14 @@ class GasDetector extends ZigBeeDevice {
     }
   }
 
-  // ─── Availability ────────────────────────────────────────────────────────
+  // --- Availability --------------------------------------------------------
 
   onEndDeviceAnnounce() {
     this.log('Device rejoined network (End Device Announce)');
     this._markAliveFromAvailability?.('end-device-announce');
   }
 
-  // ─── Zone status ───────────────────────────────────────────────────────
+  // --- Zone status -------------------------------------------------------
 
   /**
    * Parse IAS zoneStatus bitmap and update capabilities.
@@ -172,7 +172,7 @@ class GasDetector extends ZigBeeDevice {
     }
   }
 
-  // ─── Helpers ───────────────────────────────────────────────────────────
+  // --- Helpers -----------------------------------------------------------
 
   /** Set capability only when value changes; silently skip missing capabilities. */
   _setCapSafe(capability, value) {
@@ -182,7 +182,7 @@ class GasDetector extends ZigBeeDevice {
       .catch(err => this.error(`Failed to set ${capability}:`, err.message));
   }
 
-  // ─── Lifecycle ─────────────────────────────────────────────────────────
+  // --- Lifecycle ---------------------------------------------------------
 
   // onUninit fires on re-init/restart (onDeleted only on user removal).
   // Both must restore handleFrame + uninstall to avoid an orphaned frame hook.
@@ -195,7 +195,7 @@ class GasDetector extends ZigBeeDevice {
     this.log(`${DRIVER_NAME} - removed`);
   }
 
-  /** Idempotent cleanup — safe to call from both onUninit and onDeleted. */
+  /** Idempotent cleanup - safe to call from both onUninit and onDeleted. */
   async _teardown() {
     // Restore zclNode.handleFrame to the original before our mfg-specific filter was installed.
     if (this.zclNode && this._origZclHandle !== undefined) {

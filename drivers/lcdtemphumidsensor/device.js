@@ -40,7 +40,7 @@ class LCDTempHumidSensor extends ZigBeeDevice {
     if (!this.hasCapability('alarm_battery'))
       await this.addCapability('alarm_battery').catch(err => this.error('addCapability alarm_battery:', err));
 
-    // Availability: Callback watchdog — resets on each reportParser call.
+    // Availability: Callback watchdog - resets on each reportParser call.
     // cluster.on('report') is unreliable in some homey-zigbeedriver versions;
     // calling _markAliveFromAvailability inside reportParser is more robust.
     this._availability = new AvailabilityManagerCallback(this, {
@@ -49,7 +49,7 @@ class LCDTempHumidSensor extends ZigBeeDevice {
     await this._availability.install();
 
     // Silence ZCL time cluster frames (device probes coordinator's time cluster;
-    // not used here — suppress binding_unavailable log noise)
+    // not used here - suppress binding_unavailable log noise)
     try { zclNode.endpoints[1].bind('time', new TimeServerBoundCluster()); } catch {}
 
     this.log(`${DRIVER_NAME} - ready`);
@@ -155,7 +155,7 @@ class LCDTempHumidSensor extends ZigBeeDevice {
     this.log(`${DRIVER_NAME} - removed`);
   }
 
-  /** Idempotent cleanup — safe to call from both onUninit and onDeleted. */
+  /** Idempotent cleanup - safe to call from both onUninit and onDeleted. */
   async _teardown() {
     await this._availability?.uninstall().catch(() => {});
   }

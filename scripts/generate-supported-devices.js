@@ -16,7 +16,7 @@ function escapeCell(value) {
 function formatList(values) {
   return values.length
     ? values.map(value => `\`${escapeCell(value)}\``).join('<br>')
-    : '—';
+    : '-';
 }
 
 function generateIndex(app) {
@@ -66,7 +66,7 @@ if (current.includes(begin) && current.includes(end)) {
     next = [
       '# Supported Devices',
       '',
-      'Auto-generated from `app.json` — do not edit the generated section by hand. '
+      'Auto-generated from `app.json` - do not edit the generated section by hand. '
         + 'Run `npm run update:supported-devices` after adding or changing a driver.',
       '',
       generated,

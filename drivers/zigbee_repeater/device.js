@@ -17,7 +17,7 @@ class ZigbeeRepeaterDevice extends ZigBeeDevice {
     if (!this.hasCapability('is_availability'))
       await this.addCapability('is_availability').catch(err => this.error('addCapability is_availability:', err));
 
-    // Passive availability watchdog — install FIRST so the ZCL response to
+    // Passive availability watchdog - install FIRST so the ZCL response to
     // readAttributes below counts as a frame and restores availability if needed.
     this._availability = new AvailabilityManagerPassive(this, {
       timeout: HEARTBEAT_MEDIUM_MS,
@@ -33,7 +33,7 @@ class ZigbeeRepeaterDevice extends ZigBeeDevice {
     // Silence ZCL time cluster frames (repeater probes coordinator's time cluster)
     try { zclNode.endpoints[1].bind('time', new TimeServerBoundCluster()); } catch {}
 
-    // TS0207 sends no spontaneous ZCL frames — active ping every 30 min keeps
+    // TS0207 sends no spontaneous ZCL frames - active ping every 30 min keeps
     // the availability watchdog alive (same pattern as Hubitat generic repeater).
     this._pingInterval = this.homey.setInterval(() => {
       if (!this.zclNode) return;
@@ -49,10 +49,10 @@ class ZigbeeRepeaterDevice extends ZigBeeDevice {
 
   onEndDeviceAnnounce() {
     // ZDO Device Announce is a reliable "I'm back" signal. Actively restore
-    // availability instead of waiting for a spontaneous frame — a quiet router
+    // availability instead of waiting for a spontaneous frame - a quiet router
     // (further silenced by TimeServerBoundCluster) may not send one, leaving it
     // stuck as unavailable after it physically returns to the network.
-    this.log('Rejoined (ZDO announce) — restoring availability');
+    this.log('Rejoined (ZDO announce) - restoring availability');
     this._availability?.notifyActivity('rejoin').catch(() => {});
   }
 
@@ -66,7 +66,7 @@ class ZigbeeRepeaterDevice extends ZigBeeDevice {
     this.log('Repeater removed');
   }
 
-  /** Idempotent cleanup — safe to call from both onUninit and onDeleted. */
+  /** Idempotent cleanup - safe to call from both onUninit and onDeleted. */
   async _teardown() {
     if (this._pingInterval) {
       this.homey.clearInterval(this._pingInterval);

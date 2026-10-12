@@ -12,20 +12,20 @@ const DRIVER_NAME = 'Ekaza Smart Siren';
 // _TZE204_q76rtoa9 (Ekaza) is the one this driver was developed on; _TZE204_t1blo2bj (MOES) has been
 // used with it by a MOES owner (Homey community). _TZE200_t1blo2bj is listed by DP-map and cluster
 // equivalence only and is untested.
-// ─── Tuya Datapoints ─────────────────────────────────────────────────────────
+// --- Tuya Datapoints ---------------------------------------------------------
 // Confirmed by ZigBee sniffer (TS0601 / _TZE204_q76rtoa9)
 const DP = {
   VOLUME:   5,   // enum    0=low  1=medium  2=high  (sniffer originally noted inverse; corrected by user testing)
-  DURATION: 7,   // value   alarm duration in seconds (0–1800)
+  DURATION: 7,   // value   alarm duration in seconds (0-1800)
   ALARM:    13,  // bool    alarm active (true=on, false=off)
-  BATTERY:  15,  // value   battery level 0–100 %
-  MELODY:   21,  // enum    sound type 0–17 (18 melodies)
+  BATTERY:  15,  // value   battery level 0-100 %
+  MELODY:   21,  // enum    sound type 0-17 (18 melodies)
 };
 
-// ─── Melody name lookup (mirrors alarmtune dropdown labels in driver.compose.json) ──
+// --- Melody name lookup (mirrors alarmtune dropdown labels in driver.compose.json) --
 const MELODY_NAMES = [
   'Doorbell Chime',           // 0
-  'Für Elise',                // 1
+  'Fuer Elise',                // 1
   'Westminster Chimes',       // 2
   'Fast Double Doorbell',     // 3
   'William Tell Overture',    // 4
@@ -59,7 +59,7 @@ const nearestDuration = sec => String(DURATION_PRESETS.reduce(
 const volumeToWire = v => (v < 0.34 ? 0 : v < 0.67 ? 1 : 2);
 const wireToVolume = w => w / 2;
 
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 
 class EkazaSiren extends TuyaSpecificClusterDevice {
 
@@ -122,7 +122,7 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
     this.log('Ekaza Siren ready');
   }
 
-  // ─── Tuya cluster listeners ────────────────────────────────────────────────
+  // --- Tuya cluster listeners ------------------------------------------------
 
   _setupTuyaListeners(zclNode) {
     const tuya = zclNode.endpoints[1]?.clusters?.tuya;
@@ -138,7 +138,7 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
     this.log('Tuya listeners attached');
   }
 
-  // ─── Datapoint → capability / setting ────────────────────────────────────
+  // --- Datapoint -> capability / setting ------------------------------------
 
   async _processDatapoint(data) {
     const value = this._parseDataValue(data);
@@ -146,7 +146,7 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
 
     switch (data.dp) {
 
-      // ── alarm active ──────────────────────────────────────────────────────
+      // -- alarm active ------------------------------------------------------
       case DP.ALARM:
         // The OFF reported for the stop we send while retrying a start is not a real stop.
         if (!value && this._retryingStart) { this.log('Alarm: OFF (start retry)'); break; }
@@ -154,16 +154,16 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
         if (this.getCapabilityValue('onoff') !== value)
           await this.setCapabilityValue('onoff', value)
             .catch(e => this.error('alarm update:', e));
-        // Device reports stopped → cancel auto-reset + fire deactivated trigger
+        // Device reports stopped -> cancel auto-reset + fire deactivated trigger
         if (!value) {
-          clearTimeout(this._alarmAutoResetTimer);
+          this.homey.clearTimeout(this._alarmAutoResetTimer);
           this._alarmAutoResetTimer = null;
           this._triggerFlow('siren_deactivated', { reason: 'auto' });
         }
         this.log(`Alarm: ${value ? 'ON' : 'OFF'}`);
         break;
 
-      // ── battery level ─────────────────────────────────────────────────────
+      // -- battery level -----------------------------------------------------
       case DP.BATTERY:
         if (typeof value === 'number' && value >= 0 && value <= 100)
           await this.setCapabilityValue('measure_battery', value)
@@ -171,7 +171,7 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
         this.log(`Battery: ${value}%`);
         break;
 
-      // ── volume (volume_set slider, wire 0-2 -> 0 / 0.5 / 1) ──
+      // -- volume (volume_set slider, wire 0-2 -> 0 / 0.5 / 1) --
       // Volume, duration and melody reports are only logged. Homey (screen, Settings or a
       // "Set ..." flow action) is the source of truth, and every start re-sends the three, so
       // the device never overwrites what you chose (a flow's siren_play is a one-shot).
@@ -189,7 +189,7 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
     }
   }
 
-  // ─── Capability → device ──────────────────────────────────────────────────
+  // --- Capability -> device --------------------------------------------------
 
   async _onCapabilityOnOff(value) {
     if (value) {
@@ -213,9 +213,9 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
 
   /**
    * Play siren with explicit parameters (used by flow action).
-   * @param {number} melody   Wire melody 0–17
-   * @param {number} volume   Wire volume 0–2
-   * @param {number} duration Seconds 1–1800
+   * @param {number} melody   Wire melody 0-17
+   * @param {number} volume   Wire volume 0-2
+   * @param {number} duration Seconds 1-1800
    */
   async _playSiren(melody, volume, duration) {
     this.log(`Siren: melody=${melody}, volume=${volume}, duration=${duration}s`);
@@ -236,7 +236,7 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
 
     // Schedule UI auto-reset (device does not send DP13=false automatically)
     if (duration > 0) {
-      clearTimeout(this._alarmAutoResetTimer);
+      this.homey.clearTimeout(this._alarmAutoResetTimer);
       this._alarmAutoResetTimer = this.homey.setTimeout(async () => {
         await this.setCapabilityValue('onoff', false).catch(() => {});
         this._triggerFlow('siren_deactivated', { reason: 'auto' });
@@ -334,7 +334,7 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
    */
   async _stopSiren() {
     await this.writeBool(DP.ALARM, false);
-    clearTimeout(this._alarmAutoResetTimer);
+    this.homey.clearTimeout(this._alarmAutoResetTimer);
     this._alarmAutoResetTimer = null;
     this._triggerFlow('siren_deactivated', { reason: 'manual' });
     this.log('Siren stopped');
@@ -352,7 +352,7 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
     }
   }
 
-  // ─── Settings → device ────────────────────────────────────────────────────
+  // --- Settings -> device ----------------------------------------------------
 
   async onSettings({ changedKeys, newSettings }) {
     for (const key of changedKeys) {
@@ -360,24 +360,24 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
 
         case 'alarmsoundtime': {
           const duration = Number(newSettings.alarmsoundtime);
-          if (duration < 1 || duration > 1800) throw new Error('Duration must be 1–1800s');
+          if (duration < 1 || duration > 1800) throw new Error('Duration must be 1-1800s');
           await this.writeValue(DP.DURATION, duration)
             .catch(err => { this.error('Duration write:', err.message); throw err; });
           await this.setCapabilityValue('siren_duration', nearestDuration(duration)).catch(() => {});
-          this.log(`Duration → ${duration}s`);
+          this.log(`Duration -> ${duration}s`);
           break;
         }
       }
     }
   }
 
-  // ─── Lifecycle ────────────────────────────────────────────────────────────
+  // --- Lifecycle ------------------------------------------------------------
 
   // _teardown is invoked by both onUninit (re-init/restart) and onDeleted
   // (user removal) via TuyaSpecificClusterDevice. Clearing the timer here
   // prevents a leaked auto-reset timeout on app restart.
   async _teardown() {
-    clearTimeout(this._alarmAutoResetTimer);
+    this.homey.clearTimeout(this._alarmAutoResetTimer);
     await super._teardown();
   }
 
