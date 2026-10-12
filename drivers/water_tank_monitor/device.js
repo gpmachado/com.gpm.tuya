@@ -24,6 +24,9 @@ class WaterTankMonitorDevice extends TuyaSpecificClusterDevice {
 
   async onNodeInit(props) {
     await super.onNodeInit(props);
+    // The node's address next to the device id of every log line: ties a Zigbee frame, a sniffer
+    // capture or a binding error to the device it came from.
+    this.log(`[Node] ieee=${this.getData()?.ieeeAddress ?? '-'} nwk=${this.node?.networkAddress ?? '-'}`);
 
     // The device can be quiet for long periods when the surface is stable.
     // A 12-hour timeout avoids treating normal end-device silence as offline.

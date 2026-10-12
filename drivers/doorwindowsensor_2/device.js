@@ -94,6 +94,9 @@ class DoorWindowSensorDevice2 extends ZigBeeDevice {
   async onNodeInit({ zclNode }) {
     this.log(`${DRIVER_NAME} v${APP_VERSION} - init`);
     this.printNode();
+    // The node's address next to the device id of every log line: ties a Zigbee frame, a sniffer
+    // capture or a binding error to the device it came from.
+    this.log(`[Node] ieee=${this.getData()?.ieeeAddress ?? '-'} nwk=${this.node?.networkAddress ?? '-'}`);
     this._zclNode = zclNode;
     this._batteryReportingConfigured = false;
     this._batteryReportingConfiguring = false;

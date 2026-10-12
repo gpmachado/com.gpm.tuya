@@ -69,6 +69,9 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
     this.log(`${DRIVER_NAME} v${APP_VERSION}`);
     try { zclNode.endpoints[1].bind('time', new TimeServerBoundCluster({ getTimeZone: () => this.homey.clock.getTimezone() })); } catch {}
     this.printNode();
+    // The node's address next to the device id of every log line: ties a Zigbee frame, a sniffer
+    // capture or a binding error to the device it came from.
+    this.log(`[Node] ieee=${this.getData()?.ieeeAddress ?? '-'} nwk=${this.node?.networkAddress ?? '-'}`);
 
     this._alarmAutoResetTimer = null;
 

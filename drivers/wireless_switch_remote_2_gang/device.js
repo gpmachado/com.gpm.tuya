@@ -20,6 +20,9 @@ const ACTION = { 0: 'single', 1: 'double', 2: 'long' };
 class WirelessSwitchRemote2Gang extends ZigBeeDevice {
 
   async onNodeInit({ zclNode }) {
+  // The node's address next to the device id of every log line: ties a Zigbee frame, a sniffer
+  // capture or a binding error to the device it came from.
+  this.log(`[Node] ieee=${this.getData()?.ieeeAddress ?? '-'} nwk=${this.node?.networkAddress ?? '-'}`);
 
     // Migrate existing paired devices: add alarm_battery if missing
     if (!this.hasCapability('alarm_battery'))

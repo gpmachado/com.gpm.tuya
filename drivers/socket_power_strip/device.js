@@ -39,6 +39,9 @@ class PowerStripDevice extends TuyaZclBase {
 
   async onNodeInit({ zclNode }) {
     this.printNode();
+    // The node's address next to the device id of every log line: ties a Zigbee frame, a sniffer
+    // capture or a binding error to the device it came from.
+    this.log(`[Node] ieee=${this.getData()?.ieeeAddress ?? '-'} nwk=${this.node?.networkAddress ?? '-'}`);
 
     const { subDeviceId } = this.getData();
     this._endpoint     = ENDPOINT_MAP[subDeviceId] || 1;

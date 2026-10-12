@@ -25,6 +25,10 @@ class TempHumidClock extends TuyaSpecificClusterDevice {
 
     this.printNode();
 
+    // The node's address next to the device id of every log line: ties a Zigbee frame, a sniffer
+    // capture or a binding error to the device it came from.
+    this.log(`[Node] ieee=${this.getData()?.ieeeAddress ?? '-'} nwk=${this.node?.networkAddress ?? '-'}`);
+
     this.log(`Tuya Temp/Hum Clock [v${VERSION}]`);
     this.log('Battery optimized - Auto timezone');
 
