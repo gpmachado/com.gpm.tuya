@@ -9,6 +9,7 @@ This section is generated from the Homey manifest. It is the easiest place to ch
 
 | Driver | Product ID(s) | Manufacturer name(s) |
 | --- | --- | --- |
+| 1CH Relay Module (`switch_1_ch`) | `TS0001` | `_TZ3000_4rbqgcuv`<br>`_TZ3000_5ng23zjs`<br>`_TZ3000_hktqahrq`<br>`_TZ3000_mx3vgyea`<br>`_TZ3000_npzfdcof`<br>`_TZ3000_oex7egmt`<br>`_TZ3000_qsp2pwtf`<br>`_TZ3000_rmjr4ufz`<br>`_TZ3000_tqlv4ug4`<br>`_TZ3000_v7gnj3ad` |
 | 2 Gang Wireless Remote (`wireless_switch_remote_2_gang`) | `TS0042` | `_TZ3000_tzvbimpq` |
 | Door & Window Sensor (`doorwindowsensor`) | `TS0203` | `_TZ3000_7tbsruql`<br>`_TZ3000_osu834un` |
 | Door & Window Sensor 2 (`doorwindowsensor_2`) | `TS0203` | `_TZ3000_6zvw8ham`<br>`_TZ3000_decxrtwa` |

@@ -4,5 +4,8 @@
   },
   "1.0.1": {
     "en": "Low-battery alert (configurable threshold) for the LCD temperature/humidity sensor, the temperature/humidity clock and the 2-gang wireless remote. Internal frame-handling refactor (FrameMiddleware). New 2-gang wireless remote driver."
+  },
+  "1.0.2": {
+    "en": "Lighter availability tracking: a device is marked unavailable after a long silence or after repeated failed commands, with a new on/off switch on the app settings page. Ekaza siren: melody, volume and alarm duration on the device screen, new flow actions to set them, and the start is confirmed with one retry. Adds the MOES Smart Siren (same hardware family). The siren battery is now 2x CR123A. Adds the 1-channel relay module (TS0001)."
   }
 }

@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.gpm.tuya",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "compatibility": ">=12.4.0",
   "sdk": 3,
   "platforms": [
@@ -1437,6 +1437,116 @@
         ]
       },
       {
+        "id": "switch_1_ch_availability_turned_on",
+        "title": {
+          "en": "Became available",
+          "de": "Wurde verfügbar",
+          "es": "Pasó a estar disponible",
+          "it": "Disponibile"
+        },
+        "hint": {
+          "en": "Fires when this device becomes available.",
+          "de": "Wird ausgelöst, wenn dieses Gerät verfügbar wird.",
+          "es": "Se activa cuando este dispositivo pasa a estar disponible.",
+          "it": "Si attiva quando questo dispositivo diventa disponibile."
+        },
+        "tokens": [
+          {
+            "name": "device_name",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "de": "Gerätename",
+              "es": "Nombre del dispositivo",
+              "it": "Nome del dispositivo"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "title": {
+              "en": "Timestamp",
+              "de": "Zeitstempel",
+              "es": "Marca de tiempo",
+              "it": "Data e ora"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=switch_1_ch"
+          }
+        ]
+      },
+      {
+        "id": "switch_1_ch_availability_turned_off",
+        "title": {
+          "en": "Became unavailable",
+          "de": "Wurde nicht verfügbar",
+          "es": "Pasó a no estar disponible",
+          "it": "Non più disponibile"
+        },
+        "hint": {
+          "en": "Fires when this device becomes unavailable.",
+          "de": "Wird ausgelöst, wenn dieses Gerät nicht mehr verfügbar ist.",
+          "es": "Se activa cuando este dispositivo deja de estar disponible.",
+          "it": "Si attiva quando questo dispositivo non è più disponibile."
+        },
+        "tokens": [
+          {
+            "name": "device_name",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "de": "Gerätename",
+              "es": "Nombre del dispositivo",
+              "it": "Nome del dispositivo"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "string",
+            "title": {
+              "en": "Timestamp",
+              "de": "Zeitstempel",
+              "es": "Marca de tiempo",
+              "it": "Data e ora"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=switch_1_ch"
+          }
+        ]
+      },
+      {
+        "id": "switch_1_ch_device_rejoined",
+        "title": {
+          "en": "Reconnected after power cut",
+          "de": "Nach Stromausfall wieder verbunden",
+          "es": "Reconectado tras un corte de energía",
+          "it": "Riconnesso dopo un'interruzione di corrente"
+        },
+        "hint": {
+          "en": "Fires when this device reconnects to the Zigbee network after a power cut.",
+          "de": "Wird ausgelöst, wenn sich dieses Gerät nach einem Stromausfall erneut mit dem Zigbee-Netzwerk verbindet.",
+          "es": "Se activa cuando este dispositivo se reconecta a la red Zigbee tras un corte de energía.",
+          "it": "Si attiva quando questo dispositivo si riconnette alla rete Zigbee dopo un'interruzione di corrente."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=switch_1_ch"
+          }
+        ]
+      },
+      {
         "id": "temphumidclock_availability_turned_on",
         "title": {
           "en": "Became available",
@@ -2675,6 +2785,294 @@
         "approximation": {
           "usageOn": 1,
           "usageOff": 0.5
+        }
+      }
+    },
+    {
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "zigbee"
+      ],
+      "images": {
+        "xlarge": "/drivers/switch_1_ch/assets/images/xlarge.png",
+        "large": "/drivers/switch_1_ch/assets/images/large.png",
+        "small": "/drivers/switch_1_ch/assets/images/small.png"
+      },
+      "id": "switch_1_ch",
+      "name": {
+        "en": "1CH Relay Module",
+        "es": "Módulo relé 1 canal",
+        "it": "Modulo relè 1 canale",
+        "de": "1-Kanal-Relaismodul"
+      },
+      "class": "socket",
+      "capabilities": [
+        "onoff",
+        "is_availability"
+      ],
+      "energy": {
+        "approximation": {
+          "usageOn": 0,
+          "usageOff": 0
+        }
+      },
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Switch Settings",
+            "es": "Configuración del interruptor",
+            "it": "Impostazioni interruttore",
+            "de": "Schaltereinstellungen"
+          },
+          "children": [
+            {
+              "id": "switch_mode_global",
+              "type": "dropdown",
+              "label": {
+                "en": "Switch Mode",
+                "es": "Modo del interruptor",
+                "it": "Modalità interruttore",
+                "de": "Schaltmodus"
+              },
+              "hint": {
+                "en": "Physical button behavior",
+                "es": "Comportamiento del botón físico",
+                "it": "Comportamento del pulsante fisico",
+                "de": "Verhalten der physischen Taste"
+              },
+              "value": "toggle",
+              "values": [
+                {
+                  "id": "toggle",
+                  "label": {
+                    "en": "Toggle (Standard)",
+                    "es": "Alternante (estándar)",
+                    "it": "Alternante (standard)",
+                    "de": "Umschalten (Standard)"
+                  }
+                },
+                {
+                  "id": "momentary",
+                  "label": {
+                    "en": "Momentary (Pulse)",
+                    "es": "Momentáneo (pulso)",
+                    "it": "Momentaneo (impulso)",
+                    "de": "Momentan (Impuls)"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "switch_mode_current",
+              "type": "label",
+              "label": {
+                "en": "Current Mode",
+                "es": "Modo actual",
+                "it": "Modalità attuale",
+                "de": "Aktueller Modus"
+              },
+              "hint": {
+                "en": "Read from device",
+                "es": "Leído del dispositivo",
+                "it": "Letto dal dispositivo",
+                "de": "Vom Gerät gelesen"
+              },
+              "value": "-"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Power-On Global",
+            "es": "Encendido global",
+            "it": "Accensione globale",
+            "de": "Globales Einschalten"
+          },
+          "children": [
+            {
+              "id": "power_on_behavior_global",
+              "type": "dropdown",
+              "label": {
+                "en": "Default behavior",
+                "es": "Comportamiento predeterminado",
+                "it": "Comportamento predefinito",
+                "de": "Standardverhalten"
+              },
+              "hint": {
+                "en": "Applies and propagates to individual setting when changed",
+                "es": "Se aplica y propaga al ajuste individual al cambiar",
+                "it": "Si applica e si propaga all'impostazione individuale quando viene modificato",
+                "de": "Wird bei Änderung auf die individuelle Einstellung angewendet und weitergegeben"
+              },
+              "value": "lastState",
+              "values": [
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Always Off",
+                    "es": "Siempre apagado",
+                    "it": "Sempre spento",
+                    "de": "Immer aus"
+                  }
+                },
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "Always On",
+                    "es": "Siempre encendido",
+                    "it": "Sempre acceso",
+                    "de": "Immer ein"
+                  }
+                },
+                {
+                  "id": "lastState",
+                  "label": {
+                    "en": "Last State",
+                    "es": "Último estado",
+                    "it": "Ultimo stato",
+                    "de": "Letzter Zustand"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "power_on_current_global",
+              "type": "label",
+              "label": {
+                "en": "Current (Global)",
+                "es": "Actual (global)",
+                "it": "Attuale (globale)",
+                "de": "Aktuell (global)"
+              },
+              "hint": {
+                "en": "Read from device",
+                "es": "Leído del dispositivo",
+                "it": "Letto dal dispositivo",
+                "de": "Vom Gerät gelesen"
+              },
+              "value": "-"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Power-On Individual",
+            "es": "Encendido individual",
+            "it": "Accensione individuale",
+            "de": "Individuelles Einschalten"
+          },
+          "children": [
+            {
+              "id": "power_on_behavior_gang1",
+              "type": "dropdown",
+              "label": {
+                "en": "Override",
+                "es": "Anular",
+                "it": "Ignora",
+                "de": "Überschreiben"
+              },
+              "hint": {
+                "en": "Individual override (cluster 0xE001) -- overrides global",
+                "es": "Anulación individual (cluster 0xE001) -- anula el ajuste global",
+                "it": "Ignoranza individuale (cluster 0xE001) -- ignora il globale",
+                "de": "Individuelle Überschreibung (Cluster 0xE001) -- überschreibt global"
+              },
+              "value": "lastState",
+              "values": [
+                {
+                  "id": "off",
+                  "label": {
+                    "en": "Always Off",
+                    "es": "Siempre apagado",
+                    "it": "Sempre spento",
+                    "de": "Immer aus"
+                  }
+                },
+                {
+                  "id": "on",
+                  "label": {
+                    "en": "Always On",
+                    "es": "Siempre encendido",
+                    "it": "Sempre acceso",
+                    "de": "Immer ein"
+                  }
+                },
+                {
+                  "id": "lastState",
+                  "label": {
+                    "en": "Last State",
+                    "es": "Último estado",
+                    "it": "Ultimo stato",
+                    "de": "Letzter Zustand"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "power_on_current_gang1",
+              "type": "label",
+              "label": {
+                "en": "Current (Individual)",
+                "es": "Actual (individual)",
+                "it": "Attuale (individuale)",
+                "de": "Aktuell (individuell)"
+              },
+              "hint": {
+                "en": "Read from device",
+                "es": "Leído del dispositivo",
+                "it": "Letto dal dispositivo",
+                "de": "Vom Gerät gelesen"
+              },
+              "value": "-"
+            }
+          ]
+        }
+      ],
+      "zigbee": {
+        "manufacturerName": [
+          "_TZ3000_npzfdcof",
+          "_TZ3000_hktqahrq",
+          "_TZ3000_mx3vgyea",
+          "_TZ3000_5ng23zjs",
+          "_TZ3000_rmjr4ufz",
+          "_TZ3000_v7gnj3ad",
+          "_TZ3000_qsp2pwtf",
+          "_TZ3000_oex7egmt",
+          "_TZ3000_tqlv4ug4",
+          "_TZ3000_4rbqgcuv"
+        ],
+        "productId": [
+          "TS0001"
+        ],
+        "endpoints": {
+          "1": {
+            "clusters": [
+              0,
+              3,
+              4,
+              5,
+              6,
+              57344,
+              57345
+            ],
+            "bindings": [
+              6
+            ]
+          }
+        },
+        "learnmode": {
+          "image": "/drivers/switch_1_ch/assets/icon.svg",
+          "instruction": {
+            "en": "Press and hold the side reset button for ~10 seconds, OR switch the connected wall switch on/off 5 times, until the LED blinks rapidly.",
+            "es": "Mantén pulsado el botón lateral de reinicio ~10 segundos, O enciende/apaga el interruptor conectado 5 veces, hasta que el LED parpadee rápidamente.",
+            "it": "Tieni premuto il pulsante laterale di reset per ~10 secondi, OPPURE accendi/spegni l'interruttore collegato 5 volte, finché il LED lampeggia rapidamente.",
+            "de": "Halte die seitliche Reset-Taste ~10 Sekunden gedrückt, ODER schalte den angeschlossenen Schalter 5-mal ein/aus, bis die LED schnell blinkt."
+          }
         }
       }
     },
