@@ -10,5 +10,8 @@
   },
   "1.0.3": {
     "en": "Devices that ask the hub for the time (relay module, repeater, siren) now get the local time of your Homey instead of UTC. The app logs its version and each device's Zigbee address at start-up, and the store package is smaller. Adds another 1-channel relay module variant (_TZ3000_46t1rvdu)."
+  },
+  "1.0.4": {
+    "en": "Adds another 1-channel relay module variant (_TZ3000_46t1rvdu)."
   }
 }
