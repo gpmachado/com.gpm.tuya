@@ -9,13 +9,14 @@ This section is generated from the Homey manifest. It is the easiest place to ch
 
 | Driver | Product ID(s) | Manufacturer name(s) |
 | --- | --- | --- |
-| 1CH Relay Module (`switch_1_ch`) | `TS0001` | `_TZ3000_4rbqgcuv`<br>`_TZ3000_5ng23zjs`<br>`_TZ3000_hktqahrq`<br>`_TZ3000_mx3vgyea`<br>`_TZ3000_npzfdcof`<br>`_TZ3000_oex7egmt`<br>`_TZ3000_qsp2pwtf`<br>`_TZ3000_rmjr4ufz`<br>`_TZ3000_tqlv4ug4`<br>`_TZ3000_v7gnj3ad` |
+| 1CH Relay Module (`switch_1_ch`) | `TS0001` | `_TZ3000_46t1rvdu`<br>`_TZ3000_4rbqgcuv`<br>`_TZ3000_5ng23zjs`<br>`_TZ3000_hktqahrq`<br>`_TZ3000_mx3vgyea`<br>`_TZ3000_npzfdcof`<br>`_TZ3000_oex7egmt`<br>`_TZ3000_qsp2pwtf`<br>`_TZ3000_rmjr4ufz`<br>`_TZ3000_tqlv4ug4`<br>`_TZ3000_v7gnj3ad` |
 | 2 Gang Wireless Remote (`wireless_switch_remote_2_gang`) | `TS0042` | `_TZ3000_tzvbimpq` |
 | Door & Window Sensor (`doorwindowsensor`) | `TS0203` | `_TZ3000_7tbsruql`<br>`_TZ3000_osu834un` |
 | Door & Window Sensor 2 (`doorwindowsensor_2`) | `TS0203` | `_TZ3000_6zvw8ham`<br>`_TZ3000_decxrtwa` |
 | Ekaza Smart Siren (`ekaza_siren`) | `TS0601` | `_TZE200_t1blo2bj`<br>`_TZE204_q76rtoa9`<br>`_TZE204_t1blo2bj` |
 | LCD Temperature & Humidity Sensor (`lcdtemphumidsensor`) | `TS0201` | `_TZ3000_ywagc4rj` |
 | Power Strip 4 Sockets + USB (`socket_power_strip`) | `TS011F` | `_TZ3000_cfnprab5` |
+| Rain Sensor (`rain_sensor`) | `TS0207` | `_TZ3000_u9mio4qb` |
 | Smart Gas Detector (`gas_detector`) | `TS0204` | `_TYZB01_0w3d5uw3` |
 | Tuya Temperature & Humidity Sensor with Clock (`temphumidclock`) | `TS0601` | `_TZE200_cirvgep4`<br>`_TZE204_cirvgep4` |
 | Ultrasonic Liquid Level Sensor (`water_tank_monitor`) | `TS0601` | `_TZE200_lvkk0hdg` |
