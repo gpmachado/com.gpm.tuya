@@ -20,14 +20,14 @@
  * (field log: 9 changes in 13 s). alarm_water turns on at once and only turns
  * off after the plate stayed dry for `rain_clear_delay` minutes (setting).
  *
- * Availability: AvailabilityManagerPassive with the 24 h door-sensor tier. The
+ * Availability: lib/availability passive mode with the 24 h door-sensor tier. The
  * sensor can stay quiet for days without rain, so the tier still has to be
  * checked against a real log (battery reports or check-ins inside 24 h).
  */
 
 const { ZigBeeDevice } = require('homey-zigbeedriver');
 const { CLUSTER } = require('zigbee-clusters');
-const { AvailabilityManagerPassive } = require('../../lib/AvailabilityManager');
+const availability = require('../../lib/availability');
 const { TimeServerBoundCluster } = require('../../lib/TimeCluster');
 const IASZoneHelper = require('../../lib/IASZoneHelper');
 const { APP_VERSION, DOOR_SENSOR_HEARTBEAT_MS } = require('../../lib/constants');
@@ -71,10 +71,7 @@ class RainSensorDevice extends ZigBeeDevice {
       await this.addCapability('is_availability')
         .catch(err => this.error('addCapability is_availability:', err));
 
-    this._availability = new AvailabilityManagerPassive(this, {
-      timeout: DOOR_SENSOR_HEARTBEAT_MS,
-    });
-    await this._availability.install();
+    this._availability = await availability.install(this, { timeout: DOOR_SENSOR_HEARTBEAT_MS });
 
     this._bindTimeServerCluster(zclNode);
     await this._setupIASZone(zclNode);

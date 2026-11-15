@@ -15,7 +15,7 @@
 
 const { ZigBeeDevice } = require('homey-zigbeedriver');
 const { CLUSTER } = require('zigbee-clusters');
-const { AvailabilityManagerCallback } = require('../../lib/AvailabilityManager');
+const availability = require('../../lib/availability');
 const { TimeServerBoundCluster } = require('../../lib/TimeCluster');
 const { HEARTBEAT_SLOW_MS, APP_VERSION } = require('../../lib/constants');
 const { applyBatteryAlarm, reapplyBatteryAlarm } = require('../../lib/batteryAlarm');
@@ -47,10 +47,7 @@ class LCDTempHumidSensor extends ZigBeeDevice {
     // Availability: Callback watchdog - resets on each reportParser call.
     // cluster.on('report') is unreliable in some homey-zigbeedriver versions;
     // calling _markAliveFromAvailability inside reportParser is more robust.
-    this._availability = new AvailabilityManagerCallback(this, {
-      timeout: HEARTBEAT_SLOW_MS,
-    });
-    await this._availability.install();
+    this._availability = await availability.install(this, { timeout: HEARTBEAT_SLOW_MS, passive: false });
 
     // Silence ZCL time cluster frames (device probes coordinator's time cluster;
     // not used here - suppress binding_unavailable log noise)

@@ -25,9 +25,8 @@
 const { CLUSTER } = require('zigbee-clusters');
 const { TuyaZclBase, POWER_ON_DISPLAY } = require('../../lib/TuyaZclBase');
 const { normalizeIndicatorMode } = require('../../lib/ZclOnOffSettings');
-const { AvailabilityManagerPassive } = require('../../lib/AvailabilityManager');
 const { updateSiblingNames } = require('../../lib/connectedDevices');
-const { HEARTBEAT_FAST_MS, ONOFF_REPORT_MAX_INTERVAL_S } = require('../../lib/constants');
+const { ONOFF_REPORT_MAX_INTERVAL_S } = require('../../lib/constants');
 
 /** subDeviceId -> Zigbee endpoint number */
 const ENDPOINT_MAP = Object.freeze({ socket2: 2, socket3: 3, socket4: 4, usb: 5 });
@@ -235,13 +234,6 @@ class PowerStripDevice extends TuyaZclBase {
   }
 
   // -- Overrides --------------------------------------------------------------
-
-  async _installAvailability() {
-    this._availability = new AvailabilityManagerPassive(this, {
-      timeout: HEARTBEAT_FAST_MS,
-    });
-    await this._availability.install();
-  }
 
   async _updateSiblingNames() {
     await updateSiblingNames(this, {

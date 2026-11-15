@@ -1,7 +1,7 @@
 'use strict';
 
 const TuyaSpecificClusterDevice = require('../../lib/TuyaSpecificClusterDevice');
-const { AvailabilityManagerPassive } = require('../../lib/AvailabilityManager');
+const availability = require('../../lib/availability');
 const { HEARTBEAT_FAST_MS, APP_VERSION } = require('../../lib/constants');
 const { TimeServerBoundCluster } = require('../../lib/TimeCluster');
 
@@ -79,16 +79,8 @@ class EkazaSiren extends TuyaSpecificClusterDevice {
     if (!this.hasCapability('is_availability'))
       await this.addCapability('is_availability').catch(err => this.error('addCapability is_availability:', err));
 
-    // Availability management (non-fatal: getNode() may fail on first pairing)
-    try {
-      this._availability = new AvailabilityManagerPassive(this, {
-        timeout: HEARTBEAT_FAST_MS,
-      });
-      await this._availability.install();
-    } catch (err) {
-      this.error('[Siren] AvailabilityManager install failed (non-fatal):', err.message);
-      this._availability = null;
-    }
+    // Non-fatal by design: install() returns null when getNode() fails (first pairing).
+    this._availability = await availability.install(this, { timeout: HEARTBEAT_FAST_MS });
 
     this._setupTuyaListeners(zclNode);
 

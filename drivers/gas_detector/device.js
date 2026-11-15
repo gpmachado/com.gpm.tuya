@@ -15,9 +15,9 @@
  * Use a native Homey Flow condition ("alarm stays ON for X seconds") to
  * filter out short test activations -- no driver-level suppression needed.
  *
- * Availability: uses AvailabilityManagerCallback (callback-driven) with a
+ * Availability: uses lib/availability in callback mode with a
  * 4-hour timeout. IAS Zone devices are silent when no alarm is active, so
- * AvailabilityManagerPassive (handleFrame / 5 min) would give false negatives.
+ * passive mode (handleFrame / 5 min) would give false negatives.
  * _markAliveFromAvailability() is called on every inbound IAS report and on
  * onEndDeviceAnnounce (device rejoining the network).
  *
@@ -28,7 +28,7 @@
 
 const { ZigBeeDevice } = require('homey-zigbeedriver');
 const { CLUSTER } = require('zigbee-clusters');
-const { AvailabilityManagerCallback } = require('../../lib/AvailabilityManager');
+const availability = require('../../lib/availability');
 const IASZoneHelper = require('../../lib/IASZoneHelper');
 
 // -----------------------------------------------------------------------------
@@ -74,10 +74,7 @@ class GasDetector extends ZigBeeDevice {
     await this._setupIASZone(zclNode);
 
     // Availability: callback-driven (IAS Zone only reports on alarm, not periodically).
-    this._availability = new AvailabilityManagerCallback(this, {
-      timeout: HEARTBEAT_SLOW_MS,
-    });
-    await this._availability.install();
+    this._availability = await availability.install(this, { timeout: HEARTBEAT_SLOW_MS, passive: false });
 
     await this.ready();
     this.log(`${DRIVER_NAME} - ready`);

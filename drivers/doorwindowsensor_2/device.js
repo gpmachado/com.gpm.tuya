@@ -15,7 +15,7 @@
  *   Bit 1 (0x0002) alarm2   -> alarm_contact (open = true, secondary check)
  *   Bit 3 (0x0008) battery  -> alarm_battery (low battery = true)
  *
- * Availability: AvailabilityManagerPassive (passive handleFrame hook, 24 h timeout -
+ * Availability: lib/availability passive mode (passive handleFrame hook, 24 h timeout -
  * field-confirmed ~14 h overnight gaps between contact events are normal for this
  * device, not a fault; own tier, DOOR_SENSOR_HEARTBEAT_MS, not shared HEARTBEAT_SLOW_MS).
  * Any inbound Zigbee frame counts as activity, including:
@@ -59,7 +59,7 @@
 
 const { ZigBeeDevice } = require('homey-zigbeedriver');
 const { CLUSTER } = require('zigbee-clusters');
-const { AvailabilityManagerPassive } = require('../../lib/AvailabilityManager');
+const availability = require('../../lib/availability');
 const { TimeServerBoundCluster } = require('../../lib/TimeCluster');
 const IASZoneHelper = require('../../lib/IASZoneHelper');
 const { APP_VERSION, DOOR_SENSOR_HEARTBEAT_MS } = require('../../lib/constants');
@@ -106,10 +106,7 @@ class DoorWindowSensorDevice2 extends ZigBeeDevice {
       await this.addCapability('is_availability')
         .catch(err => this.error('addCapability is_availability:', err));
 
-    this._availability = new AvailabilityManagerPassive(this, {
-      timeout: DOOR_SENSOR_HEARTBEAT_MS,
-    });
-    await this._availability.install();
+    this._availability = await availability.install(this, { timeout: DOOR_SENSOR_HEARTBEAT_MS });
 
     this._bindTimeServerCluster(zclNode);
     await this._setupIASZone(zclNode);

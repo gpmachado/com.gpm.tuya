@@ -152,7 +152,7 @@ gateway, Sonoff iHost, Zigbee2MQTT).
 
 ### Measuring Zigbee traffic per device
 
-`lib/AvailabilityManager.js` counts raw inbound Zigbee frames per device in
+`lib/availability.js` counts raw inbound Zigbee frames per device in
 hourly buckets, before any driver filtering. The app's settings page (Traffic
 tab) shows the current hour and the last 24 h per device. This is how the
 water tank monitor's ~200k frames/day was measured, and it is a quick way to

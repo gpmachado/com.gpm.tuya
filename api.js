@@ -3,12 +3,12 @@
 /**
  * App Settings API.
  *
- * Only devices with an AvailabilityManager are returned. Multi-gang drivers
+ * Only devices with an availability manager (lib/availability.js) are returned. Multi-gang drivers
  * install the manager on their main/EP1 device only, producing one row per
  * physical Zigbee node.
  *
  * getAvailabilitySetting/setAvailabilitySetting cover the app-wide on/off switch (see
- * lib/AvailabilityManager.js, "Global on/off switch"). Turning it off also restores every
+ * lib/availability.js, "Global switch"). Turning it off also restores every
  * device that is currently unavailable. Same contract as com.gpm.sonoff.
  */
 const { AVAILABILITY_ENABLED_SETTING_KEY } = require('./lib/constants');

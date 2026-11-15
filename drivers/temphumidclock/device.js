@@ -1,8 +1,7 @@
 'use strict';
 
 const TuyaSpecificClusterDevice = require('../../lib/TuyaSpecificClusterDevice');
-const AvailabilityManager = require('../../lib/AvailabilityManager');
-const { AvailabilityManagerPassive } = AvailabilityManager;
+const availability = require('../../lib/availability');
 const { isDeviceUnreachable } = require('../../lib/errorUtils');
 const { TimeServerBoundCluster } = require('../../lib/TimeCluster');
 const { APP_VERSION, HEARTBEAT_VERY_SLOW_MS } = require('../../lib/constants');
@@ -40,10 +39,7 @@ class TempHumidClock extends TuyaSpecificClusterDevice {
 
     // Availability watchdog - install FIRST so inbound wake/rejoin frames mark
     // the sleepy device as available without needing active polling.
-    this._availability = new AvailabilityManagerPassive(this, {
-      timeout: HEARTBEAT_VERY_SLOW_MS,
-    });
-    await this._availability.install();
+    this._availability = await availability.install(this, { timeout: HEARTBEAT_VERY_SLOW_MS });
 
     try {
       zclNode.endpoints[1].bind('time', new TimeServerBoundCluster({
@@ -163,13 +159,13 @@ class TempHumidClock extends TuyaSpecificClusterDevice {
   async onBecameAvailable() {
     this.log('Device became available');
     if (super.onBecameAvailable) await super.onBecameAvailable();
-    // AvailabilityManager._markAllAvailable already fires the flow trigger.
+    // markAvailable() in lib/availability.js already fires the flow trigger.
   }
 
   async onBecameUnavailable(reason) {
     this.log(`Device became unavailable (${reason})`);
     if (super.onBecameUnavailable) await super.onBecameUnavailable(reason);
-    // AvailabilityManager._markAllUnavailable already fires the flow trigger.
+    // markUnavailable() in lib/availability.js already fires the flow trigger.
   }
 
   onEndDeviceAnnounce() {

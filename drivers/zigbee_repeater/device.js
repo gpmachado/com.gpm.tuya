@@ -1,8 +1,7 @@
 'use strict';
 
 const { ZigBeeDevice } = require('homey-zigbeedriver');
-const AvailabilityManager = require('../../lib/AvailabilityManager');
-const { AvailabilityManagerPassive } = AvailabilityManager;
+const availability = require('../../lib/availability');
 const { readAttrCatch } = require('../../lib/errorUtils');
 const { HEARTBEAT_MEDIUM_MS, ZIGBEE_REPEATER_PING_INTERVAL_MS } = require('../../lib/constants');
 const { TimeServerBoundCluster } = require('../../lib/TimeCluster');
@@ -22,10 +21,7 @@ class ZigbeeRepeaterDevice extends ZigBeeDevice {
 
     // Passive availability watchdog - install FIRST so the ZCL response to
     // readAttributes below counts as a frame and restores availability if needed.
-    this._availability = new AvailabilityManagerPassive(this, {
-      timeout: HEARTBEAT_MEDIUM_MS,
-    });
-    await this._availability.install();
+    this._availability = await availability.install(this, { timeout: HEARTBEAT_MEDIUM_MS });
 
     // Read basic attributes once to confirm communication on first contact.
     await zclNode.endpoints[1].clusters.basic
@@ -85,13 +81,13 @@ class ZigbeeRepeaterDevice extends ZigBeeDevice {
   async onBecameAvailable() {
     this.log('Device became available');
     if (super.onBecameAvailable) await super.onBecameAvailable();
-    // AvailabilityManager._markAllAvailable already fires the flow trigger.
+    // markAvailable() in lib/availability.js already fires the flow trigger.
   }
 
   async onBecameUnavailable(reason) {
     this.log(`Device became unavailable (${reason})`);
     if (super.onBecameUnavailable) await super.onBecameUnavailable(reason);
-    // AvailabilityManager._markAllUnavailable already fires the flow trigger.
+    // markUnavailable() in lib/availability.js already fires the flow trigger.
   }
 }
 
