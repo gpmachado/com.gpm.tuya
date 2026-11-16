@@ -10,21 +10,11 @@
   "platforms": ["local"],
   "connectivity": ["zigbee"],
   "capabilities": [
-    "alarm_water",
+    "alarm_rain",
     "measure_battery",
     "alarm_battery",
     "is_availability"
   ],
-  "capabilitiesOptions": {
-    "alarm_water": {
-      "title": {
-        "en": "Rain",
-        "de": "Regen",
-        "es": "Lluvia",
-        "it": "Pioggia"
-      }
-    }
-  },
   "energy": {
     "batteries": [
       "OTHER"

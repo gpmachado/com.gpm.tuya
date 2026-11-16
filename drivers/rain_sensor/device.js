@@ -13,11 +13,11 @@
  * device: no polling, enrollment and battery reporting retried on wake-up).
  *
  * IAS Zone zoneStatus bitmap (ZCL spec 8.2.2.2.1.6):
- *   Bit 0 (0x0001) alarm1   -> alarm_water (raining = true)
+ *   Bit 0 (0x0001) alarm1   -> alarm_rain (raining = true)
  *   Bit 3 (0x0008) battery  -> alarm_battery (low battery = true)
  *
  * Dry delay: the plate flickers between wet and dry while drops land on it
- * (field log: 9 changes in 13 s). alarm_water turns on at once and only turns
+ * (field log: 9 changes in 13 s). alarm_rain turns on at once and only turns
  * off after the plate stayed dry for `rain_clear_delay` minutes (setting).
  *
  * Availability: lib/availability passive mode with the 24 h door-sensor tier. The
@@ -70,6 +70,16 @@ class RainSensorDevice extends ZigBeeDevice {
     if (!this.hasCapability('is_availability'))
       await this.addCapability('is_availability')
         .catch(err => this.error('addCapability is_availability:', err));
+
+    // Sensors paired with v1.0.4 and earlier use alarm_water, which HomeKit shows as a leak
+    // sensor. alarm_rain is Homey's own rain capability (Homey 12.11+).
+    if (this.hasCapability('alarm_water')) {
+      await this.removeCapability('alarm_water')
+        .catch(err => this.error('removeCapability alarm_water:', err));
+    }
+    if (!this.hasCapability('alarm_rain'))
+      await this.addCapability('alarm_rain')
+        .catch(err => this.error('addCapability alarm_rain:', err));
 
     this._availability = await availability.install(this, { timeout: DOOR_SENSOR_HEARTBEAT_MS });
 
@@ -197,13 +207,13 @@ class RainSensorDevice extends ZigBeeDevice {
         this._dryTimer = null;
         this.log('[Rain] wet again, dry cancelled');
       }
-      this._setCapSafe('alarm_water', true);
+      this._setCapSafe('alarm_rain', true);
       return;
     }
 
     const delayMin = Number(this.getSetting('rain_clear_delay')) || 0;
-    if (delayMin <= 0 || this.getCapabilityValue('alarm_water') !== true) {
-      this._setCapSafe('alarm_water', false);
+    if (delayMin <= 0 || this.getCapabilityValue('alarm_rain') !== true) {
+      this._setCapSafe('alarm_rain', false);
       return;
     }
     if (this._dryTimer) return;
@@ -212,7 +222,7 @@ class RainSensorDevice extends ZigBeeDevice {
     this._dryTimer = this.homey.setTimeout(() => {
       this._dryTimer = null;
       this.log('[Rain] stayed dry, rain off');
-      this._setCapSafe('alarm_water', false);
+      this._setCapSafe('alarm_rain', false);
     }, delayMin * 60_000);
   }
 

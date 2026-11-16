@@ -1,7 +1,7 @@
 {
   "id": "com.gpm.tuya",
   "version": "1.0.5",
-  "compatibility": ">=12.4.0",
+  "compatibility": ">=12.11.0",
   "sdk": 3,
   "platforms": [
     "local"

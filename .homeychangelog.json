@@ -15,6 +15,6 @@
     "en": "Adds another 1-channel relay module variant (_TZ3000_46t1rvdu)."
   },
   "1.0.5": {
-    "en": "Adds the Tuya rain sensor (TS0207): rain turns on at once and turns off after the sensor has stayed dry for a delay you set (5 minutes by default). More reliable availability: a device that stops answering commands is marked unavailable sooner, and a device brought back is no longer marked unavailable again a minute later. Updated Zigbee libraries."
+    "en": "Now requires Homey 12.11 or newer. Adds the Tuya rain sensor (TS0207), shown as a rain alarm: rain turns on at once and turns off after the sensor has stayed dry for a delay you set (5 minutes by default). More reliable availability: a device that stops answering commands is marked unavailable sooner, and a device brought back is no longer marked unavailable again a minute later. Updated Zigbee libraries."
   }
 }
